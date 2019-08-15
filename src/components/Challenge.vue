@@ -60,6 +60,8 @@
 </style>
 
 <script>
+import { date } from 'quasar'
+
 export default {
   name: 'Challenge',
   data () {
@@ -199,7 +201,7 @@ export default {
     log: function (status) {
       this.$store.commit('app/noteDay', {
         day: {
-          date: this.activeDay.toISOString().substring(0, 10).replace(/-/g, '/'),
+          date: date.formatDate(this.activeDay.date, 'YYYY/MM/DD'),
           status
         },
         challengeId: this.options.id

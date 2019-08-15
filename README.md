@@ -1,6 +1,6 @@
 # Challenge me (challenge-me)
 
-A Quasar Framework app
+A Quasar Framework app automatically deployed to https://habit-run.netlify.com
 
 ## Install the dependencies
 ```bash

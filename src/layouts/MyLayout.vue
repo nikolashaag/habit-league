@@ -26,7 +26,7 @@
     >
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable @click="my-habits">
+        <q-item clickable @click="myHabits">
           <q-item-section avatar>
             <q-icon name="school" />
           </q-item-section>
