@@ -1,17 +1,21 @@
 <template>
   <q-page class="">
     <div class="q-pa-md">
+      <q-form
+        @submit="onSubmit"
+        @reset="onReset"
+        class="q-gutter-md"
+      >
         <q-stepper
           v-model="step"
-          vertical
+          ref="stepper"
           color="primary"
           animated
+          dark
+          class="bg-grey-10"
+          active-color="secondary"
+          done-color="secondary"
         >
-          <q-form
-            @submit="onSubmit"
-            @reset="onReset"
-            class="q-gutter-md"
-          >
             <q-step
               :name="1"
               title="Select habits for challange"
@@ -21,15 +25,18 @@
               <label for="title">
                 Select how the challange should look like. You can select one or multiple habits. Select the frequency.
               </label>
-              <q-input outlined v-model="title" label="Habit title" />
-              <q-input outlined v-model="description" label="Description (Optional)" />
+              <div class="spacing"></div>
+              <q-input dark standout counter v-model="title" label="Habit title" />
+              <q-input dark standout counter v-model="description" label="Description (Optional)" />
               <div class="row">
-                frequency
-
+                <label for="">
+                  Choose frequency
+                </label>
               </div>
               <q-btn-toggle
                 v-model="frequency"
                 toggle-color="primary"
+                push
                 :options="[
                   {label: 'Daily', value: 'daily'},
                   {label: 'Specific Days', value: 'specific'},
@@ -40,16 +47,62 @@
               <q-option-group
                 v-if="frequency === 'specific'"
                 :options="days"
+                dark
                 label="Choose days"
                 type="checkbox"
                 v-model="specificDays"
               />
-              <q-select v-if="frequency === 'per-week'" outlined v-model="perWeek" :options="perWeekOptions" label="Days per Week" />
-              <q-select v-if="frequency === 'per-month'" outlined v-model="perMonth" :options="perMonthOptions" label="Days per Month" />
-
-              <q-stepper-navigation>
-                <q-btn @click="step = 2" color="primary" label="Continue" />
-              </q-stepper-navigation>
+              <q-select dark standout v-if="frequency === 'per-week'" v-model="perWeek" :options="perWeekOptions" label="Days per Week" />
+              <q-select dark standout v-if="frequency === 'per-month'" v-model="perMonth" :options="perMonthOptions" label="Days per Month" />
+              <div class="row">
+                <label for="">
+                  Choose category
+                </label>
+              </div>
+              <q-btn-toggle
+                v-model="frequency"
+                toggle-color="primary"
+                push
+                :options="[
+                  {label: 'Exercise', value: 'exercise', slot: 'exercise'},
+                  {label: 'Meditate', value: 'meditate', slot: 'meditate'},
+                  {label: 'Journal', value: 'journal', slot: 'journal'},
+                  {label: 'Run', value: 'run', slot: 'run'},
+                  {label: 'Bike', value: 'bike', slot: 'bike'},
+                  {label: 'Swim', value: 'swim', slot: 'swim'},
+                ]"
+              >
+                <template v-slot:exercise>
+                  <div class="row items-center no-wrap">
+                    <q-icon right name="fas fa-dumbbell" />
+                  </div>
+                </template>
+                <template v-slot:meditate>
+                  <div class="row items-center no-wrap">
+                    <q-icon right name="fas fa-om" />
+                  </div>
+                </template>
+                <template v-slot:journal>
+                  <div class="row items-center no-wrap">
+                    <q-icon right name="fas fa-feather-alt" />
+                  </div>
+                </template>
+                <template v-slot:run>
+                  <div class="row items-center no-wrap">
+                    <q-icon right name="fas fa-running" />
+                  </div>
+                </template>
+                <template v-slot:swim>
+                  <div class="row items-center no-wrap">
+                    <q-icon right name="fas fa-swimmer" />
+                  </div>
+                </template>
+                <template v-slot:bike>
+                  <div class="row items-center no-wrap">
+                    <q-icon right name="fas fa-biking" />
+                  </div>
+                </template>
+              </q-btn-toggle>
             </q-step>
 
             <q-step
@@ -58,8 +111,12 @@
               icon="create_new_folder"
               :done="step > 2"
             >
-              Select a goal for the challenge to stay motivated. How long should it last? What will the winner get?
-              <q-input filled v-model="startDate" mask="date" :rules="['date']">
+              <div class="row">
+                <label>
+                  Select a goal for the challenge to stay motivated. How long should it last? What will the winner get?
+                </label>
+              </div>
+              <q-input dark standout counter v-model="startDate" mask="date" :rules="['date']" label="Start date" >
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -68,13 +125,8 @@
                   </q-icon>
                 </template>
               </q-input>
-              <q-input outlined v-model="duration" label="Challenge duration" />
-              <q-input outlined v-model="stake" label="Stake (Optional)" />
-
-              <q-stepper-navigation>
-                <q-btn @click="step = 3" color="primary" label="Continue" />
-                <q-btn flat @click="step = 1" color="primary" label="Back" class="q-ml-sm" />
-              </q-stepper-navigation>
+              <q-input dark standout counter v-model="duration" label="Challenge duration" />
+              <q-input dark standout counter v-model="stake" label="Stake (Optional)" />
             </q-step>
 
             <q-step
@@ -85,14 +137,14 @@
             >
               Set the privacy of the challenge. Will it be only for you and your friends? Or make it public and let anybody in the world join in.
                 <div class="q-gutter-sm">
+                  <q-toggle
+                    color="blue"
+                    dark
+                    v-model="blue"
+                  />
                   <q-radio v-model="privacy" val="public" label="Public" />
                   <q-radio v-model="privacy" val="private" label="Private" />
                 </div>
-
-              <q-stepper-navigation>
-                <q-btn @click="step = 4" color="primary" label="Continue" />
-                <q-btn flat @click="step = 2" color="primary" label="Back" class="q-ml-sm" />
-              </q-stepper-navigation>
             </q-step>
 
             <q-step
@@ -101,17 +153,16 @@
               icon="add_comment"
             >
               Your challenge is ready to go. Good luck
-
-              <q-stepper-navigation>
-                <!-- <router-link to="/"> -->
-                  <q-btn type="submit" color="primary" label="Finish" />
-                <!-- </router-link> -->
-                <q-btn flat @click="step = 3" color="primary" label="Back" class="q-ml-sm" />
-              </q-stepper-navigation>
             </q-step>
-            </q-form>
+            <template v-slot:navigation>
+              <q-stepper-navigation>
+                <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 4 ? 'Finish' : 'Continue'" />
+                <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
+              </q-stepper-navigation>
+            </template>
         </q-stepper>
-      </div>
+      </q-form>
+    </div>
   </q-page>
 </template>
 
@@ -233,5 +284,13 @@ export default {
   position: absolute;
   bottom: 50px;
   right: 50px;
+}
+
+.spacing {
+  height: 16px;
+  width: 100%;
+}
+label {
+  margin-bottom: 16px;
 }
 </style>

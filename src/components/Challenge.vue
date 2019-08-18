@@ -119,9 +119,6 @@ export default {
     },
     calculateDays: function () {
       let startDate = new Date(this.options.startDate)
-      console.log('1', this.options.startDate)
-      console.log('1', startDate)
-      console.log('1', startDate.getDay())
       let endDate = new Date(this.options.startDate)
       const split = startDate.getDay() - 1
       this.firstWeek = this.days
@@ -140,7 +137,6 @@ export default {
       endDate.setDate(startDate.getDate() + this.options.duration)
       const lastWeekSplit = endDate.getDay() - 1
       this.lastWeek = this.days.slice(0, lastWeekSplit > -1 ? lastWeekSplit : 6)
-      console.log('1', endDate)
 
       // // Add dates to last Week
       this.lastWeek = this.lastWeek.map((day, index) => {
@@ -153,7 +149,6 @@ export default {
         }
       })
       const leftOverDays = this.options.duration - (7 - split) - (lastWeekSplit)
-      console.log('leftOverDays', this.options.duration, split, lastWeekSplit, leftOverDays)
       const prototype = [...new Array(leftOverDays / 7)]
       this.leftOverWeeks = prototype.map((week, weekIndex) => {
         return this.days.map((day, index) => {
@@ -171,9 +166,9 @@ export default {
     },
     isCurrentWeek: function (week) {
       const today = new Date()
-      console.log('weeek', week[0].date, today, week[week.length - 1].date, week.length > 0 && week[0].date <= today && week[week.length - 1].date >= today)
-
-      return week.length > 0 && week[0].date <= today && week[week.length - 1].date >= today
+      const startOfWeek = week[0].date
+      const endOfWeek = date.addToDate(week[0].date, { days: 7 })
+      return week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true })
     },
     getColor: function (day) {
       const log = this.loggedDays.find(loggedDay => {
@@ -182,7 +177,6 @@ export default {
       if (!log) {
         return 'amber'
       }
-      console.log('FOUND', log)
       switch (log.status) {
         case 'complete':
           return 'green'
