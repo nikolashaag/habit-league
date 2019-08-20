@@ -3,8 +3,14 @@
       <q-icon :name="expanded === true ? 'expand_less' : 'expand_more'" class="caret">
       </q-icon>
       <q-card-section>
-        <div class="text-h6">{{options.title}}</div>
-        <div class="text-subtitle2">by John Doe</div>
+        <div class="icon-wrapper">
+          <q-icon :name="getIconName(options.category)" class="category-icon">
+          </q-icon>
+        </div>
+        <div class="header">
+          <div class="text-h6">{{options.title}}</div>
+          <div class="text-subtitle2">by John Doe</div>
+        </div>
       </q-card-section>
 
       <q-card-section v-if="expanded !== true">
@@ -22,7 +28,7 @@
       <!-- <q-separator dark /> -->
 
       <q-card-actions>
-        <div class="row week-wrapper justify-between" v-if="expanded === true">
+        <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || expanded === true">
           <q-btn class="invisible-buttons" v-for="(day, key) in 7 - firstWeek.length" :key="key + 'first'" size="m" round color="amber" text-color="black">{{day.label}}</q-btn>
           <q-btn v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="noteProgressForDay(day)">{{day.label}}</q-btn>
         </div>
@@ -33,7 +39,7 @@
             </div>
           </div>
         </div>
-        <div class="row week-wrapper justify-between" v-if="expanded === true">
+        <div class="row week-wrapper justify-between" v-if="isCurrentWeek(lastWeek) || expanded === true">
           <q-btn :disabled="day.isInFuture" v-for="(day, key) in lastWeek" :key="key + 'last' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="noteProgressForDay(day)">{{day.label}}</q-btn>
           <q-btn class="invisible-buttons" v-for="(day, key) in 7 - lastWeek.length" :key="key + 'invisible-last'" size="m" round color="amber" text-color="black">{{day.label}}</q-btn>
         </div>
@@ -61,6 +67,7 @@
 
 <script>
 import { date } from 'quasar'
+import { ICON_MAP } from '../helpers/constants'
 
 export default {
   name: 'Challenge',
@@ -97,7 +104,7 @@ export default {
   computed: {
     loggedDays: {
       get () {
-        return this.$store.state.app.challenges.find(challenge => challenge.id === this.options.id).loggedDays
+        return this.$store.state.app.challenges.find(challenge => challenge.id === this.options.id).loggedDays || []
       },
       set (val) {
         // this.$store.commit('showcase/updateDrawerState', val)
@@ -114,6 +121,10 @@ export default {
     }
   },
   methods: {
+    getIconName: function (value) {
+      console.log('hhhhhhhh', ICON_MAP[value])
+      return ICON_MAP[value]
+    },
     getDisplayName: function (id) {
       return this.$store.state.user.users.find(user => user.uid === id).displayName
     },
@@ -134,7 +145,7 @@ export default {
         })
 
       // const lastDay =
-      endDate.setDate(startDate.getDate() + this.options.duration)
+      endDate.setDate(startDate.getDate() + Number(this.options.duration))
       const lastWeekSplit = endDate.getDay() - 1
       this.lastWeek = this.days.slice(0, lastWeekSplit > -1 ? lastWeekSplit : 6)
 
@@ -149,6 +160,10 @@ export default {
         }
       })
       const leftOverDays = this.options.duration - (7 - split) - (lastWeekSplit)
+      console.log('this.firstWeek', this.firstWeek)
+      console.log('this.lastWeek', this.lastWeek)
+      console.log('endDate', endDate)
+      console.log('leftOverDays', leftOverDays)
       const prototype = [...new Array(leftOverDays / 7)]
       this.leftOverWeeks = prototype.map((week, weekIndex) => {
         return this.days.map((day, index) => {
@@ -168,6 +183,11 @@ export default {
       const today = new Date()
       const startOfWeek = week[0].date
       const endOfWeek = date.addToDate(week[0].date, { days: 7 })
+      if (this.options.title === 'Meditation') {
+        console.log('isCurrentWeek ++++++', week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true }))
+        console.log('isCurrentWeek ++++++', startOfWeek)
+        console.log('isCurrentWeek ++++++', endOfWeek)
+      }
       return week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true })
     },
     getColor: function (day) {
@@ -272,5 +292,25 @@ export default {
 
 .invisible-buttons {
   visibility: hidden;
+}
+
+.icon-wrapper {
+  display: inline-block;
+  width: 48px;
+  font-size: 32px;
+  height: 54px;
+  position: relative;
+}
+
+.icon-wrapper i {
+  position:absolute; /*it can be fixed too*/
+  left:0; right:0;
+  top:0; bottom:0;
+  margin:auto;
+}
+
+.header {
+  display: inline-block;
+  height: 54px;
 }
 </style>

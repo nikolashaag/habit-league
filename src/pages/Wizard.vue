@@ -60,46 +60,15 @@
                 </label>
               </div>
               <q-btn-toggle
-                v-model="frequency"
+                v-model="category"
                 toggle-color="primary"
                 push
-                :options="[
-                  {label: 'Exercise', value: 'exercise', slot: 'exercise'},
-                  {label: 'Meditate', value: 'meditate', slot: 'meditate'},
-                  {label: 'Journal', value: 'journal', slot: 'journal'},
-                  {label: 'Run', value: 'run', slot: 'run'},
-                  {label: 'Bike', value: 'bike', slot: 'bike'},
-                  {label: 'Swim', value: 'swim', slot: 'swim'},
-                ]"
+                :options="icons"
               >
-                <template v-slot:exercise>
-                  <div class="row items-center no-wrap">
-                    <q-icon right name="fas fa-dumbbell" />
-                  </div>
-                </template>
-                <template v-slot:meditate>
-                  <div class="row items-center no-wrap">
-                    <q-icon right name="fas fa-om" />
-                  </div>
-                </template>
-                <template v-slot:journal>
-                  <div class="row items-center no-wrap">
-                    <q-icon right name="fas fa-feather-alt" />
-                  </div>
-                </template>
-                <template v-slot:run>
-                  <div class="row items-center no-wrap">
-                    <q-icon right name="fas fa-running" />
-                  </div>
-                </template>
-                <template v-slot:swim>
-                  <div class="row items-center no-wrap">
-                    <q-icon right name="fas fa-swimmer" />
-                  </div>
-                </template>
-                <template v-slot:bike>
-                  <div class="row items-center no-wrap">
-                    <q-icon right name="fas fa-biking" />
+
+                <template v-for="(value, key) in icons" v-slot:[value.slot] >
+                  <div class="row items-center no-wrap" :key="key">
+                    <q-icon right :name="iconMap[value.slot]" />
                   </div>
                 </template>
               </q-btn-toggle>
@@ -137,11 +106,6 @@
             >
               Set the privacy of the challenge. Will it be only for you and your friends? Or make it public and let anybody in the world join in.
                 <div class="q-gutter-sm">
-                  <q-toggle
-                    color="blue"
-                    dark
-                    v-model="blue"
-                  />
                   <q-radio v-model="privacy" val="public" label="Public" />
                   <q-radio v-model="privacy" val="private" label="Private" />
                 </div>
@@ -156,7 +120,8 @@
             </q-step>
             <template v-slot:navigation>
               <q-stepper-navigation>
-                <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 4 ? 'Finish' : 'Continue'" />
+                <q-btn v-if="step !== 4" @click="$refs.stepper.next()" color="primary" label="Continue" />
+                <q-btn type="submit" v-if="step === 4" color="primary" label="Finish" />
                 <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
               </q-stepper-navigation>
             </template>
@@ -170,15 +135,26 @@
 </style>
 
 <script>
+import { ICON_MAP } from '../helpers/constants'
+
 export default {
   name: 'Wizard',
   data () {
     return {
       step: 1,
       title: '',
+      iconMap: ICON_MAP,
       description: '',
       frequency: null,
       specificDays: [],
+      icons: [
+        { label: 'Exercise', value: 'exercise', slot: 'exercise' },
+        { label: 'Meditate', value: 'meditate', slot: 'meditate' },
+        { label: 'Journal', value: 'journal', slot: 'journal' },
+        { label: 'Run', value: 'run', slot: 'run' },
+        { label: 'Bike', value: 'bike', slot: 'bike' },
+        { label: 'Swim', value: 'swim', slot: 'swim' }
+      ],
       days: [
         {
           label: 'Monday',
@@ -218,6 +194,7 @@ export default {
       ],
       perWeek: null,
       perMonth: null,
+      category: '',
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
       perMonthOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       duration: '',
@@ -251,17 +228,17 @@ export default {
             duration: this.duration,
             startDate: this.startDate,
             stake: this.stake,
-            privacy: this.privacy
+            privacy: this.privacy,
+            category: this.category
           }
           console.log('app/addChallenge', challenge)
-          this.$store.commit('app/addChallenge', challenge)
+          this.$store.dispatch('app/addChallenge', challenge)
           this.$router.push({ path: '/' })
           return true
         }
       }
 
       // this.errors = [];
-
       // if (!this.name) {
       //   this.errors.push('Name required.');
       // }
@@ -275,6 +252,10 @@ export default {
     },
     onReset () {
     }
+  },
+  created () {
+    console.log('this.icons', this.icons)
+    console.log('this.icons', this.iconMap)
   }
 }
 </script>

@@ -3,6 +3,11 @@ export function addChallenge (state, newChallange) {
   state.challenges = [...state.challenges, newChallange]
 }
 
+export function setSyncStatus (state, status) {
+  console.log('setSyncStatus', status)
+  state.syncStatus = status
+}
+
 export function noteDay (state, data) {
   state.challenges = state.challenges.map(challenge => {
     console.log('HIT', data, data.challengeId, challenge.id)
