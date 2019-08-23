@@ -25,6 +25,16 @@ const routes = [
     }
   },
   {
+    path: '/daily',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Daily.vue') }
+    ],
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/history',
     component: () => import('layouts/MyLayout.vue'),
     children: [

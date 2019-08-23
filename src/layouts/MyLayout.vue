@@ -26,6 +26,15 @@
     >
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
+        <q-item clickable @click="daliy">
+          <q-item-section avatar>
+            <q-icon name="school" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Daily view</q-item-label>
+            <q-item-label caption>Complete your daily tasks</q-item-label>
+          </q-item-section>
+        </q-item>
         <q-item clickable @click="myHabits">
           <q-item-section avatar>
             <q-icon name="school" />
@@ -98,6 +107,9 @@ export default {
     },
     history: function () {
       this.$router.replace('history')
+    },
+    daily: function () {
+      this.$router.replace('daily')
     }
   }
 }
