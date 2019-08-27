@@ -206,16 +206,12 @@ export default {
   },
   methods: {
     onSubmit (e) {
-      console.log('onsubmit', e)
       if (this.title && this.frequency && this.privacy) {
         if (this.frequency === 'specific' && this.specificDays.length === 0) {
-          console.log('specificDays', this.specificDays)
           this.errors.push('Select at least 1 day.')
         } else if (this.frequency === 'per-week' && !this.perWeek) {
-          console.log('specificDays', this.specificDays)
           this.errors.push('Select at least 1 day per week.')
         } else if (this.frequency === 'per-month' && !this.perMonth) {
-          console.log('specificDays', this.specificDays)
           this.errors.push('Select at least 1 day per month.')
         } else {
           const challenge = {

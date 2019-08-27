@@ -24,7 +24,6 @@ export function fetchUsers ({ commit, state }) {
     console.log('querySnapshot', querySnapshot)
     querySnapshot.forEach((doc) => {
       console.log(`${doc.id} => ${doc.data()}`)
-      console.log(doc.data())
       const user = doc.data()
       commit('addUserToState', user)
     })

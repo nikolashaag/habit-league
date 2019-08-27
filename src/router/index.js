@@ -24,7 +24,6 @@ export default function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from, next) => {
     const currentUser = firebase.auth().currentUser
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-    console.log('router ------', requiresAuth, currentUser)
     if (requiresAuth && !currentUser) next('login')
     else if (!requiresAuth && currentUser) next('/')
     else next()

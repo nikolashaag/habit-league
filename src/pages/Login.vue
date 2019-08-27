@@ -67,7 +67,6 @@ export default {
 </script>
 
 <style scoped>
-/* 'scoped' attribute limit the CSS to this component only */
 .login {
   margin-top: 40px;
 }

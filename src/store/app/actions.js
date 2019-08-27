@@ -1,7 +1,6 @@
 import firebase from 'firebase'
 
 export function fetchChallenges ({ commit, state }) {
-  console.log('context ----------', state)
   if (!state.syncStatus) {
     var db = firebase.firestore()
     db.collection('challenges').get().then((querySnapshot) => {

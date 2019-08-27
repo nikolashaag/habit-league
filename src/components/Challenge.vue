@@ -115,14 +115,12 @@ export default {
         let dt1 = new Date(this.options.startDate)
         let dt2 = new Date()
         const diff = Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) / (1000 * 60 * 60 * 24))
-        console.log('diff', diff)
         return this.options.duration / diff / 10
       }
     }
   },
   methods: {
     getIconName: function (value) {
-      console.log('hhhhhhhh', ICON_MAP[value])
       return ICON_MAP[value]
     },
     getDisplayName: function (id) {
@@ -214,7 +212,6 @@ export default {
     }
   },
   created: function () {
-    console.log('created', this)
     this.calculateDays()
   }
 }
