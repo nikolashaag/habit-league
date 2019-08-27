@@ -132,6 +132,7 @@ export default {
       let startDate = new Date(this.options.startDate)
       let endDate = new Date(this.options.startDate)
       const split = startDate.getDay() - 1
+      // Add dates to first Week
       this.firstWeek = this.days
         .slice(split > -1 ? split : 6)
         .map((day, index) => {
@@ -144,12 +145,11 @@ export default {
           }
         })
 
-      // const lastDay =
       endDate.setDate(startDate.getDate() + Number(this.options.duration))
       const lastWeekSplit = endDate.getDay() - 1
       this.lastWeek = this.days.slice(0, lastWeekSplit > -1 ? lastWeekSplit : 6)
 
-      // // Add dates to last Week
+      // Add dates to last Week
       this.lastWeek = this.lastWeek.map((day, index) => {
         let newDate = new Date(endDate)
         newDate.setDate(endDate.getDate() - (this.lastWeek.length - index))
@@ -159,11 +159,8 @@ export default {
           isInFuture: newDate > new Date()
         }
       })
+      // Calculate all other weeks
       const leftOverDays = this.options.duration - (7 - split) - (lastWeekSplit)
-      console.log('this.firstWeek', this.firstWeek)
-      console.log('this.lastWeek', this.lastWeek)
-      console.log('endDate', endDate)
-      console.log('leftOverDays', leftOverDays)
       const prototype = [...new Array(leftOverDays / 7)]
       this.leftOverWeeks = prototype.map((week, weekIndex) => {
         return this.days.map((day, index) => {
@@ -177,17 +174,11 @@ export default {
           }
         })
       })
-      // console.log('this.prototype', prototype)
     },
     isCurrentWeek: function (week) {
       const today = new Date()
       const startOfWeek = week[0].date
       const endOfWeek = date.addToDate(week[0].date, { days: 7 })
-      if (this.options.title === 'Meditation') {
-        console.log('isCurrentWeek ++++++', week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true }))
-        console.log('isCurrentWeek ++++++', startOfWeek)
-        console.log('isCurrentWeek ++++++', endOfWeek)
-      }
       return week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true })
     },
     getColor: function (day) {

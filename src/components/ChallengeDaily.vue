@@ -95,84 +95,6 @@ export default {
     getDisplayName: function (id) {
       return this.$store.state.user.users.find(user => user.uid === id).displayName
     },
-    calculateDays: function () {
-      let startDate = new Date(this.options.startDate)
-      let endDate = new Date(this.options.startDate)
-      const split = startDate.getDay() - 1
-      this.firstWeek = this.days
-        .slice(split > -1 ? split : 6)
-        .map((day, index) => {
-          let newDate = new Date(startDate)
-          newDate.setDate(newDate.getDate() + index)
-          return {
-            label: day.label,
-            date: newDate,
-            isInFuture: newDate > new Date()
-          }
-        })
-
-      // const lastDay =
-      endDate.setDate(startDate.getDate() + Number(this.options.duration))
-      const lastWeekSplit = endDate.getDay() - 1
-      this.lastWeek = this.days.slice(0, lastWeekSplit > -1 ? lastWeekSplit : 6)
-
-      // // Add dates to last Week
-      this.lastWeek = this.lastWeek.map((day, index) => {
-        let newDate = new Date(endDate)
-        newDate.setDate(endDate.getDate() - (this.lastWeek.length - index))
-        return {
-          label: day.label,
-          date: newDate,
-          isInFuture: newDate > new Date()
-        }
-      })
-      const leftOverDays = this.options.duration - (7 - split) - (lastWeekSplit)
-      console.log('this.firstWeek', this.firstWeek)
-      console.log('this.lastWeek', this.lastWeek)
-      console.log('endDate', endDate)
-      console.log('leftOverDays', leftOverDays)
-      const prototype = [...new Array(leftOverDays / 7)]
-      this.leftOverWeeks = prototype.map((week, weekIndex) => {
-        return this.days.map((day, index) => {
-          let startDate = new Date(this.options.startDate)
-          let newDate = new Date(this.options.startDate)
-          newDate.setDate(startDate.getDate() + (7 - split + index) + (weekIndex * 7))
-          return {
-            label: day.label,
-            date: newDate,
-            isInFuture: newDate > new Date()
-          }
-        })
-      })
-      // console.log('this.prototype', prototype)
-    },
-    isCurrentWeek: function (week) {
-      const today = new Date()
-      const startOfWeek = week[0].date
-      const endOfWeek = date.addToDate(week[0].date, { days: 7 })
-      if (this.options.title === 'Meditation') {
-        console.log('isCurrentWeek ++++++', week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true }))
-        console.log('isCurrentWeek ++++++', startOfWeek)
-        console.log('isCurrentWeek ++++++', endOfWeek)
-      }
-      return week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true })
-    },
-    getColor: function (day) {
-      const log = this.loggedDays.find(loggedDay => {
-        return new Date(loggedDay.date).getTime() === day.date.getTime()
-      })
-      if (!log) {
-        return 'amber'
-      }
-      switch (log.status) {
-        case 'complete':
-          return 'green'
-        case 'fail':
-          return 'red'
-        default:
-          return 'amber'
-      }
-    },
     noteProgressForDay: function (day, e) {
       this.activeDay = day
       this.noteProgress = true
@@ -188,10 +110,6 @@ export default {
         challengeId: this.options.id
       })
     }
-  },
-  created: function () {
-    console.log('created', this)
-    this.calculateDays()
   }
 }
 </script>
