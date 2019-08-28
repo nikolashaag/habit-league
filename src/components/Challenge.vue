@@ -114,8 +114,10 @@ export default {
       get () {
         let dt1 = new Date(this.options.startDate)
         let dt2 = new Date()
-        const diff = Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) / (1000 * 60 * 60 * 24))
-        return this.options.duration / diff / 10
+        let diff = Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) / (1000 * 60 * 60 * 24))
+        // If diff is 0, set to 1 (In case the challenge started today)
+        diff = diff || 1
+        return (diff / (this.options.duration / 100)) / 100
       }
     }
   },
@@ -128,7 +130,7 @@ export default {
     },
     calculateDays: function () {
       let startDate = new Date(this.options.startDate)
-      let endDate = new Date(this.options.startDate)
+      this.endDate = new Date(this.options.startDate)
       const split = startDate.getDay() - 1
       // Add dates to first Week
       this.firstWeek = this.days
@@ -143,14 +145,14 @@ export default {
           }
         })
 
-      endDate.setDate(startDate.getDate() + Number(this.options.duration))
-      const lastWeekSplit = endDate.getDay() - 1
+      this.endDate.setDate(startDate.getDate() + Number(this.options.duration))
+      const lastWeekSplit = this.endDate.getDay() - 1
       this.lastWeek = this.days.slice(0, lastWeekSplit > -1 ? lastWeekSplit : 6)
 
       // Add dates to last Week
       this.lastWeek = this.lastWeek.map((day, index) => {
-        let newDate = new Date(endDate)
-        newDate.setDate(endDate.getDate() - (this.lastWeek.length - index))
+        let newDate = new Date(this.endDate)
+        newDate.setDate(this.endDate.getDate() - (this.lastWeek.length - index))
         return {
           label: day.label,
           date: newDate,
