@@ -30,7 +30,7 @@
       <q-card-actions>
         <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || expanded === true">
           <q-btn class="invisible-buttons" v-for="(day, key) in 7 - firstWeek.length" :key="key + 'first'" size="m" round color="amber" text-color="black">{{day.label}}</q-btn>
-          <q-btn v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
+          <q-btn :disabled="day.isInFuture" v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
         </div>
         <div class="leftover-wrapper">
           <div v-for="(week, key) in leftOverWeeks" :key="key + 'leftOverWeeks' + options.title" class="row week-wrapper justify-between" >
