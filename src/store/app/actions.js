@@ -1,15 +1,22 @@
 import firebase from 'firebase'
 
-export function fetchChallenges ({ commit, state }) {
+export function fetchChallenges ({ commit, state, rootState }) {
   if (!state.syncStatus) {
     var db = firebase.firestore()
     db.collection('challenges').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const challenge = doc.data()
-        commit('addChallenge', {
+        commit('addChallengeToState', {
           ...challenge,
           id: doc.id
         })
+        console.log('state.user', rootState)
+        if (challenge.members.includes(rootState.user.currentUser.uid)) {
+          commit('addMyChallengeToState', {
+            ...challenge,
+            id: doc.id
+          })
+        }
         commit('setSyncStatus', true)
       })
     })

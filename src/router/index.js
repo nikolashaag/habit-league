@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import firebase from 'firebase'
 import routes from './routes'
-
+import Store from '../store/index'
 Vue.use(VueRouter)
 
 /*
@@ -21,8 +21,19 @@ export default function (/* { store, ssrContext } */) {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
+
   Router.beforeEach((to, from, next) => {
     const currentUser = firebase.auth().currentUser
+
+    // TODO: Refactor to set the user only on application enter instead of every route change
+    if (currentUser) {
+      Store().commit('user/setUser', {
+        displayName: currentUser.displayName,
+        email: currentUser.email,
+        uid: currentUser.uid,
+        emailVerified: currentUser.emailVerified
+      })
+    }
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     if (requiresAuth && !currentUser) next('login')
     else if (!requiresAuth && currentUser) next('/')

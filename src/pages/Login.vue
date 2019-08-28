@@ -52,10 +52,6 @@ export default {
           console.log('google success saveUser', result)
           this.$store.dispatch('user/saveUser', result.user)
 
-          this.$store.commit('user/setUser', {
-            ...result.additionalUserInfo.profile,
-            uid: result.user.uid
-          })
           this.$router.replace('/')
         })
         .catch(err => {

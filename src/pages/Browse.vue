@@ -28,7 +28,7 @@ export default {
   computed: {
     challenges: {
       get () {
-        return this.$store.state.app.myChallenges
+        return this.$store.state.app.challenges
       },
       set (val) {
         // this.$store.commit('showcase/updateDrawerState', val)

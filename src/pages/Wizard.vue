@@ -225,7 +225,12 @@ export default {
             startDate: this.startDate,
             stake: this.stake,
             privacy: this.privacy,
-            category: this.category
+            category: this.category,
+            members: [{
+              name: this.$store.state.user.currentUser.displayName,
+              id: this.$store.state.user.currentUser.uid,
+              completedDays: 0
+            }]
           }
           console.log('app/addChallenge', challenge)
           this.$store.dispatch('app/addChallenge', challenge)
@@ -234,15 +239,6 @@ export default {
         }
       }
 
-      // this.errors = [];
-      // if (!this.name) {
-      //   this.errors.push('Name required.');
-      // }
-      // if (!this.age) {
-      //   this.errors.push('Age required.');
-      // }
-
-      // this.$router.push({ path: '/' })
       console.log('errors', this.errors)
       e.preventDefault()
     },
