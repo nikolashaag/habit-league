@@ -18,7 +18,7 @@ const routes = [
     path: '/browse',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/Browse.vue') }
     ],
     meta: {
       requiresAuth: true

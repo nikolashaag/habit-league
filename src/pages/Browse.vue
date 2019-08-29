@@ -1,10 +1,10 @@
 <template>
   <q-page class="flex flex-center">
-    <div v-if="challenges.length === 0">
-      You don't have any challenges yet. Quick start one by clicking the plus button
+    <div>
+      Browse public challenges and join other people in their habits.
     </div>
     <div class="q-pa-md wrapper">
-      <challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
+      <public-challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
     </div>
     <!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
     <div class="add-button">
@@ -19,11 +19,11 @@
 </style>
 
 <script>
-import Challenge from 'components/Challenge.vue'
+import PublicChallenge from 'components/PublicChallenge.vue'
 export default {
   name: 'PageIndex',
   components: {
-    Challenge
+    PublicChallenge
   },
   computed: {
     challenges: {
