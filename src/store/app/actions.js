@@ -10,8 +10,7 @@ export function fetchChallenges ({ commit, state, rootState }) {
           ...challenge,
           id: doc.id
         })
-        console.log('state.user', rootState)
-        if (challenge.members.includes(rootState.user.currentUser.uid)) {
+        if (challenge.members.find(member => member.id === rootState.user.currentUser.uid)) {
           commit('addMyChallengeToState', {
             ...challenge,
             id: doc.id
