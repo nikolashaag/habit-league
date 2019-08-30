@@ -1,7 +1,5 @@
 <template>
     <q-card class="challenge text-white" @click="() => expanded = !expanded">
-      <q-icon :name="expanded === true ? 'expand_less' : 'expand_more'" class="caret">
-      </q-icon>
       <q-card-section>
         <div class="icon-wrapper">
           <q-icon :name="getIconName(options.category)" class="category-icon">
@@ -13,16 +11,8 @@
         </div>
       </q-card-section>
 
-      <q-card-section v-if="expanded !== true">
-         Current Leader: John
-      </q-card-section>
-      <q-card-section v-if="expanded === true">
-         Leaderboard:
-         <div class="row leaderboard-row" v-for="(member, key) in options.members" :key="key + 'member'">
-           <div class="number">{{key + 1}}</div>
-           <div class="name">{{getDisplayName(member.id)}}</div>
-           <div class="status">Completed days: {{member.completedDays}}</div>
-         </div>
+      <q-card-section class="justify-end row">
+         <q-btn color="amber" label="Join Challenge" @click="e => joinChallenge(e)"/>
       </q-card-section>
 
       <!-- <q-separator dark /> -->
@@ -34,12 +24,11 @@
       <q-dialog v-model="noteProgress">
         <q-card>
           <q-card-section>
-            <div class="text-h6">Note day</div>
+            <div class="text-h6">Are you sure you want to join this challenge?</div>
           </q-card-section>
           <q-card-actions align="center">
-            <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
-            <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
-            <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
+            <q-btn label="Confirm" color="primary" @click="confirm()" v-close-popup />
+            <q-btn label="Cancel" color="primary" @click="cancel()" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -51,7 +40,6 @@
 </style>
 
 <script>
-import { date } from 'quasar'
 import { ICON_MAP } from '../helpers/constants'
 
 export default {
@@ -59,30 +47,7 @@ export default {
   data () {
     return {
       noteProgress: false,
-      expanded: false,
-      days: [
-        {
-          label: 'M'
-        },
-        {
-          label: 'T'
-        },
-        {
-          label: 'W'
-        },
-        {
-          label: 'T'
-        },
-        {
-          label: 'F'
-        },
-        {
-          label: 'S'
-        },
-        {
-          label: 'S'
-        }
-      ]
+      expanded: false
     }
   },
   props: ['options'],
@@ -110,96 +75,18 @@ export default {
     getIconName: function (value) {
       return ICON_MAP[value]
     },
-    getDisplayName: function (id) {
-      return this.$store.state.user.users.find(user => user.uid === id).displayName
-    },
-    calculateDays: function () {
-      let startDate = new Date(this.options.startDate)
-      this.endDate = new Date(this.options.startDate)
-      const split = startDate.getDay() - 1
-      // Add dates to first Week
-      this.firstWeek = this.days
-        .slice(split > -1 ? split : 6)
-        .map((day, index) => {
-          let newDate = new Date(startDate)
-          newDate.setDate(newDate.getDate() + index)
-          return {
-            label: day.label,
-            date: newDate,
-            isInFuture: newDate > new Date()
-          }
-        })
-
-      this.endDate.setDate(startDate.getDate() + Number(this.options.duration))
-      const lastWeekSplit = this.endDate.getDay() - 1
-      this.lastWeek = this.days.slice(0, lastWeekSplit > -1 ? lastWeekSplit : 6)
-
-      // Add dates to last Week
-      this.lastWeek = this.lastWeek.map((day, index) => {
-        let newDate = new Date(this.endDate)
-        newDate.setDate(this.endDate.getDate() - (this.lastWeek.length - index))
-        return {
-          label: day.label,
-          date: newDate,
-          isInFuture: newDate > new Date()
-        }
-      })
-      // Calculate all other weeks
-      const leftOverDays = this.options.duration - (7 - split) - (lastWeekSplit)
-      const prototype = [...new Array(leftOverDays / 7)]
-      this.leftOverWeeks = prototype.map((week, weekIndex) => {
-        return this.days.map((day, index) => {
-          let startDate = new Date(this.options.startDate)
-          let newDate = new Date(this.options.startDate)
-          newDate.setDate(startDate.getDate() + (7 - split + index) + (weekIndex * 7))
-          return {
-            label: day.label,
-            date: newDate,
-            isInFuture: newDate > new Date()
-          }
-        })
-      })
-    },
-    isCurrentWeek: function (week) {
-      const today = new Date()
-      const startOfWeek = week[0].date
-      const endOfWeek = date.addToDate(week[0].date, { days: 7 })
-      return week.length > 0 && date.isBetweenDates(today, startOfWeek, endOfWeek, { inclusiveFrom: true, inclusiveTo: true })
-    },
-    getColor: function (day) {
-      const log = this.loggedDays.find(loggedDay => {
-        return new Date(loggedDay.date).getTime() === day.date.getTime()
-      })
-      if (!log) {
-        return 'amber'
-      }
-      switch (log.status) {
-        case 'complete':
-          return 'green'
-        case 'fail':
-          return 'red'
-        default:
-          return 'amber'
-      }
-    },
-    noteProgressForDay: function (day, e) {
-      this.activeDay = day
+    joinChallenge: function (e) {
       this.noteProgress = true
       e.preventDefault()
       e.stopPropagation()
     },
-    log: function (status) {
-      this.$store.commit('app/noteDay', {
-        day: {
-          date: date.formatDate(this.activeDay.date, 'YYYY/MM/DD'),
-          status
-        },
-        challengeId: this.options.id
-      })
-    }
+    confirm: function () {
+      console.log('confirm')
+      this.$store.dispatch('app/joinChallenge', this.options.id)
+    },
+    cancel: function () {}
   },
   created: function () {
-    this.calculateDays()
   }
 }
 </script>

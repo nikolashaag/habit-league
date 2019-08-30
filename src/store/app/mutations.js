@@ -12,6 +12,12 @@ export function setSyncStatus (state, status) {
   state.syncStatus = status
 }
 
+export function clearState (state, status) {
+  console.log('setSyncStatus', status)
+  state.challenges = []
+  state.myChallenges = []
+}
+
 export function noteDay (state, data) {
   state.challenges = state.challenges.map(challenge => {
     if (challenge.id === data.challengeId) {
