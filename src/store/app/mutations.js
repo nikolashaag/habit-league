@@ -19,7 +19,7 @@ export function clearState (state, status) {
 }
 
 export function noteDay (state, data) {
-  state.challenges = state.challenges.map(challenge => {
+  state.myChallenges = state.myChallenges.map(challenge => {
     if (challenge.id === data.challengeId) {
       challenge.loggedDays = challenge.loggedDays || []
       let existingLog
