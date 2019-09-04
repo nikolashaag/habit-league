@@ -29,19 +29,19 @@
 
       <q-card-actions>
         <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || expanded === true">
-          <q-btn class="invisible-buttons" v-for="(day, key) in 7 - firstWeek.length" :key="key + 'first'" size="m" round color="amber" text-color="black">{{day.label}}</q-btn>
-          <q-btn :disabled="day.isInFuture" v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
+          <week-day class="invisible-buttons" color="amber" :noteProgressForDay="noteProgressForDay" v-for="(day, key) in 7 - firstWeek.length" :key="key + 'first'" :day="day"/>
+          <week-day :line="hasLine(day, key)" :color="getColor(day)" :noteProgressForDay="noteProgressForDay" v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" :day="day"/>
         </div>
         <div class="leftover-wrapper">
           <div v-for="(week, key) in leftOverWeeks" :key="key + 'leftOverWeeks' + options.title" class="row week-wrapper justify-between" >
             <div class="row leftover-wrapper justify-between" v-if="isCurrentWeek(week) || expanded === true">
-              <q-btn :disabled="day.isInFuture" v-for="(day, i) in week" :key="i + 'other' + key" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
+              <week-day :line="hasLine(day, i)" :color="getColor(day)" :noteProgressForDay="noteProgressForDay" v-for="(day, i) in week" :key="i + 'other' + key" :day="day"/>
             </div>
           </div>
         </div>
         <div class="row week-wrapper justify-between" v-if="isCurrentWeek(lastWeek) || expanded === true">
-          <q-btn :disabled="day.isInFuture" v-for="(day, key) in lastWeek" :key="key + 'last' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
-          <q-btn class="invisible-buttons" v-for="(day, key) in 7 - lastWeek.length" :key="key + 'invisible-last'" size="m" round color="amber" text-color="black">{{day.label}}</q-btn>
+          <week-day :line="hasLine(day, key)" :color="getColor(day)" :noteProgressForDay="noteProgressForDay" v-for="(day, key) in lastWeek" :key="key + 'last' + options.title" :day="day"/>
+          <week-day class="invisible-buttons" :color="getColor(day)" :noteProgressForDay="noteProgressForDay" v-for="(day, key) in 7 - lastWeek.length" :key="key + 'invisible-last'" :day="day"/>
         </div>
 
       </q-card-actions>
@@ -68,9 +68,13 @@
 <script>
 import { date } from 'quasar'
 import { ICON_MAP } from '../helpers/constants'
+import WeekDay from './WeekDay'
 
 export default {
   name: 'Challenge',
+  components: {
+    WeekDay
+  },
   data () {
     return {
       noteProgress: false,
@@ -183,7 +187,7 @@ export default {
     },
     getColor: function (day) {
       const log = this.loggedDays.find(loggedDay => {
-        return new Date(loggedDay.date).getTime() === day.date.getTime()
+        return day.date && new Date(loggedDay.date).getTime() === day.date.getTime()
       })
       if (!log) {
         return 'amber'
@@ -196,6 +200,11 @@ export default {
         default:
           return 'amber'
       }
+    },
+    hasLine: function (day, i) {
+      const hasCompletionBefore = this.loggedDays.find(loggedDay => loggedDay.status === 'complete' && new Date(loggedDay.date) < day.date)
+      const hasCompletionAfter = this.getColor(day) === 'green' || this.loggedDays.find(loggedDay => loggedDay.status === 'complete' && new Date(loggedDay.date) > day.date)
+      return i !== 0 && hasCompletionBefore && hasCompletionAfter
     },
     noteProgressForDay: function (day, e) {
       this.activeDay = day
