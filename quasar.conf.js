@@ -63,7 +63,9 @@ module.exports = function (ctx) {
         'QCardSection',
         'QCardActions',
         'QLinearProgress',
-        'QDialog'
+        'QDialog',
+        'QSlideItem',
+        'QAvatar'
       ],
 
       directives: [

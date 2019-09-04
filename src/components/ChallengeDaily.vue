@@ -1,7 +1,5 @@
 <template>
-    <q-card class="challenge text-white" @click="() => expanded = !expanded">
-      <q-icon :name="expanded === true ? 'expand_less' : 'expand_more'" class="caret">
-      </q-icon>
+    <q-card class="challenge text-white">
       <q-card-section>
         <div class="icon-wrapper">
           <q-icon :name="getIconName(options.category)" class="category-icon">
@@ -100,7 +98,7 @@ export default {
       e.stopPropagation()
     },
     log: function (status) {
-      this.$store.commit('app/noteDay', {
+      this.$store.dispatch('app/noteDayProgress', {
         day: {
           date: date.formatDate(this.activeDay.date, 'YYYY/MM/DD'),
           status
@@ -121,7 +119,7 @@ export default {
   color: white;
 }
 .challenge {
-  margin-bottom: 16px;
+  width: 100%;
   background: linear-gradient(to bottom, #3a404d, #181c26);
 }
 
