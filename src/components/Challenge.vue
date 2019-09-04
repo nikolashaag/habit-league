@@ -204,7 +204,7 @@ export default {
       e.stopPropagation()
     },
     log: function (status) {
-      this.$store.commit('app/noteDay', {
+      this.$store.dispatch('app/noteDayProgress', {
         day: {
           date: date.formatDate(this.activeDay.date, 'YYYY/MM/DD'),
           status
