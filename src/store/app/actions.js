@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import { unique } from '../../helpers/utils'
 
 export function fetchChallenges ({ commit, state, rootState }) {
   commit('clearState')
@@ -56,5 +57,23 @@ export function joinChallenge ({ dispatch, state, rootState }, challengeId) {
     })
     .catch(function (error) {
       console.error('Error joining challenge: ', error)
+    })
+}
+
+export function noteDayProgress ({ commit, state, rootState }, data) {
+  commit('noteDay', data)
+  const db = firebase.firestore()
+  const localLoggedDays = state.myChallenges.find(challenge => challenge.id === data.challengeId).loggedDays || []
+  db.collection('challenges').doc(data.challengeId).update({
+    loggedDays: unique(localLoggedDays ? [
+      ...localLoggedDays,
+      data.day
+    ] : [ data.day ], 'date')
+  })
+    .then(function (docRef) {
+      console.log('successfully updated loggedDays', docRef)
+    })
+    .catch(function (error) {
+      console.error('Error updating loggedDays: ', error)
     })
 }
