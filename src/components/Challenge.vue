@@ -104,10 +104,8 @@ export default {
   computed: {
     loggedDays: {
       get () {
-        return this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
-      },
-      set (val) {
-        // this.$store.commit('showcase/updateDrawerState', val)
+        const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
+        return loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid)
       }
     },
     progress: {
@@ -207,7 +205,8 @@ export default {
       this.$store.dispatch('app/noteDayProgress', {
         day: {
           date: date.formatDate(this.activeDay.date, 'YYYY/MM/DD'),
-          status
+          status,
+          user: this.$store.state.user.currentUser.uid
         },
         challengeId: this.options.id
       })

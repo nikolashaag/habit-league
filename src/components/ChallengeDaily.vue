@@ -15,19 +15,6 @@
           <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck"/>
         </div>
       </q-card-section>
-      <q-dialog v-model="noteProgress">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">Note day</div>
-          </q-card-section>
-          <q-card-actions align="center">
-            <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
-            <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
-            <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-
     </q-card>
 </template>
 
@@ -35,7 +22,6 @@
 </style>
 
 <script>
-import { date } from 'quasar'
 import { ICON_MAP } from '../helpers/constants'
 
 export default {
@@ -48,14 +34,6 @@ export default {
   },
   props: ['options', 'onComplete'],
   computed: {
-    loggedDays: {
-      get () {
-        return this.$store.state.app.challenges.find(challenge => challenge.id === this.options.id).loggedDays || []
-      },
-      set (val) {
-        // this.$store.commit('showcase/updateDrawerState', val)
-      }
-    },
     progress: {
       get () {
         let dt1 = new Date(this.options.startDate)
@@ -76,27 +54,12 @@ export default {
     },
     getDisplayName: function (id) {
       return this.$store.state.user.users.find(user => user.uid === id).displayName
-    },
-    noteProgressForDay: function (day, e) {
-      this.activeDay = day
-      this.noteProgress = true
-      e.preventDefault()
-      e.stopPropagation()
-    },
-    log: function (status) {
-      this.$store.dispatch('app/noteDayProgress', {
-        day: {
-          date: date.formatDate(this.activeDay.date, 'YYYY/MM/DD'),
-          status
-        },
-        challengeId: this.options.id
-      })
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .caret {
   position: absolute;
   right: 0.5rem;

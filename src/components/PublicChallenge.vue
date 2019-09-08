@@ -52,14 +52,6 @@ export default {
   },
   props: ['options'],
   computed: {
-    loggedDays: {
-      get () {
-        return this.$store.state.app.challenges.find(challenge => challenge.id === this.options.id).loggedDays || []
-      },
-      set (val) {
-        // this.$store.commit('showcase/updateDrawerState', val)
-      }
-    },
     progress: {
       get () {
         let dt1 = new Date(this.options.startDate)

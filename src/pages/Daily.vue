@@ -51,7 +51,7 @@ export default {
         return this.$store.state.app.myChallenges
           .filter(chal => {
             const loggedDays = chal.loggedDays || []
-            return !loggedDays.find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD'))
+            return !loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD'))
           })
       }
     }
@@ -80,7 +80,8 @@ export default {
       this.$store.dispatch('app/noteDayProgress', {
         day: {
           date: date.formatDate(new Date(), 'YYYY/MM/DD'),
-          status
+          status,
+          user: this.$store.state.user.currentUser.uid
         },
         challengeId
       })
