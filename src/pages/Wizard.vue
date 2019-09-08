@@ -23,7 +23,7 @@
               :done="step > 1"
             >
               <label for="title">
-                Select how the challange should look like. You can select one or multiple habits. Select the frequency.
+                Select how the challenge should look like. You can select one or multiple habits. Select the frequency.
               </label>
               <div class="spacing"></div>
               <q-input dark standout counter v-model="title" label="Habit title" />
@@ -94,8 +94,10 @@
                   </q-icon>
                 </template>
               </q-input>
-              <q-input dark standout counter v-model="duration" label="Challenge duration" />
-              <q-input dark standout counter v-model="stake" label="Stake (Optional)" />
+              <q-select dark standout v-model="challengeDuration" :options="challengeDurationOptions" label="Challenge duration" />
+              <div class="spacing"></div>
+              <q-input v-if="challengeDuration === 'Custom'" dark standout counter v-model="duration" label="Custom duration (number of days)" />
+              <q-input dark standout counter v-model="stake" label="Stake or reward (Optional)" />
             </q-step>
 
             <q-step
@@ -136,6 +138,7 @@
 
 <script>
 import { ICON_MAP } from '../helpers/constants'
+import { date } from 'quasar'
 
 export default {
   name: 'Wizard',
@@ -197,14 +200,32 @@ export default {
       category: '',
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
       perMonthOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+      challengeDurationOptions: ['1 Week', '2 Weeks', '3 Weeks', '1 Month', '3 Months', 'Custom'],
+      challengeDuration: null,
       duration: '',
-      startDate: '2019/08/01',
+      startDate: date.formatDate(new Date(), 'YYYY/MM/DD'),
       stake: '',
       privacy: 'public',
       errors: []
     }
   },
   methods: {
+    getDuration () {
+      switch (this.challengeDuration) {
+        case '1 Week':
+          return 7
+        case '2 Weeks':
+          return 14
+        case '3 Weeks':
+          return 21
+        case '1 Month':
+          return 31
+        case '3 Months':
+          return 63
+        case 'Custom':
+          return this.duration
+      }
+    },
     onSubmit (e) {
       if (this.title && this.frequency && this.privacy) {
         if (this.frequency === 'specific' && this.specificDays.length === 0) {
@@ -221,7 +242,7 @@ export default {
             specificDays: this.specificDays,
             perWeek: this.perWeek,
             perMonth: this.perMonth,
-            duration: this.duration,
+            duration: this.getDuration(),
             startDate: this.startDate,
             stake: this.stake,
             privacy: this.privacy,
