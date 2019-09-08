@@ -1,15 +1,19 @@
 <template>
-    <q-card class="challenge text-white">
+    <q-card :class="['challenge text-white', complete ?  'was-completed' : '']">
       <q-card-section>
         <div class="icon-wrapper">
-          <q-icon :name="getIconName(options.category)" class="category-icon">
+          <q-icon :name="getIconName(options.category)" class="category-icon" >
           </q-icon>
         </div>
         <div class="header">
           <div class="text-h6">{{options.title}}</div>
           <div class="text-subtitle2">by John Doe</div>
         </div>
-        <q-checkbox dark v-model="complete" color="teal" class="checkbox"/>
+      </q-card-section>
+      <q-card-section>
+        <div class="checkbox-wrapper">
+          <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck"/>
+        </div>
       </q-card-section>
       <q-dialog v-model="noteProgress">
         <q-card>
@@ -39,33 +43,10 @@ export default {
   data () {
     return {
       noteProgress: false,
-      complete: false,
-      days: [
-        {
-          label: 'M'
-        },
-        {
-          label: 'T'
-        },
-        {
-          label: 'W'
-        },
-        {
-          label: 'T'
-        },
-        {
-          label: 'F'
-        },
-        {
-          label: 'S'
-        },
-        {
-          label: 'S'
-        }
-      ]
+      complete: false
     }
   },
-  props: ['options'],
+  props: ['options', 'onComplete'],
   computed: {
     loggedDays: {
       get () {
@@ -85,6 +66,11 @@ export default {
     }
   },
   methods: {
+    onCheck: function (e) {
+      if (e) {
+        this.onComplete(this.options.id)
+      }
+    },
     getIconName: function (value) {
       return ICON_MAP[value]
     },
@@ -121,6 +107,9 @@ export default {
 .challenge {
   width: 100%;
   background: linear-gradient(to bottom, #3a404d, #181c26);
+  display: flex;
+  justify-content: space-between;
+  transition: transform 0.2s ease-in;
 }
 
 .leaderboard-row {
@@ -194,4 +183,20 @@ export default {
   display: inline-block;
   height: 54px;
 }
+
+.checkbox-wrapper {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.was-completed {
+  transform: translate3d(2000px,0,0);
+}
+
+.hidden {
+  visibility: none;
+}
+
 </style>

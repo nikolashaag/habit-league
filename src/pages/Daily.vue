@@ -14,8 +14,7 @@
       </div>
 
     <q-list class="list" bordered separator>
-
-      <q-slide-item class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge, key) in challenges" :key="key">
+      <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge, key) in challenges" :key="key">
         <template v-slot:left>
           <q-icon name="done" /> Complete for today
         </template>
@@ -26,7 +25,7 @@
         </template>
 
         <q-item>
-          <challenge-daily :options="challenge"/>
+          <challenge-daily :options="challenge" :onComplete="onComplete"/>
         </q-item>
       </q-slide-item>
     </q-list>
@@ -69,9 +68,14 @@ export default {
 
     finalize (reset, challengeId, status) {
       this.timer = setTimeout(() => {
-        this.log(status, challengeId)
         reset()
+        this.log(status, challengeId)
       }, 1000)
+    },
+    onComplete (challengeId) {
+      this.secondTimer = setTimeout(() => {
+        this.log('complete', challengeId)
+      }, 500)
     },
     log: function (status, challengeId) {
       this.$store.dispatch('app/noteDayProgress', {
@@ -85,6 +89,7 @@ export default {
   },
   beforeDestroy () {
     clearTimeout(this.timer)
+    clearTimeout(this.secondTimer)
   },
   created () {
     if (!this.$store.state.app.syncStatus) {
@@ -117,7 +122,15 @@ export default {
   border: none !important;
 }
 
+.item-wrapper .q-item {
+  padding: 0;
+}
+
 .list {
   border: none;
+}
+
+.was-completed {
+  transform: translate3d(2000px,0,0);
 }
 </style>
