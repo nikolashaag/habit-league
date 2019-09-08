@@ -27,7 +27,7 @@ export function addChallenge ({ commit, state }, challenge) {
   var db = firebase.firestore()
   db.collection('challenges').add(challenge)
     .then(function (docRef) {
-      commit('addChallenge', {
+      commit('addMyChallengeToState', {
         ...challenge,
         id: docRef.id
       })

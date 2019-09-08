@@ -46,7 +46,7 @@ export default {
 
 <style>
 .add-button {
-  position: absolute;
+  position: fixed;
   bottom: 50px;
   right: 50px;
 }
