@@ -14,7 +14,7 @@
       </div>
 
     <q-list class="list" bordered separator>
-      <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge, key) in challenges" :key="key">
+      <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge) in challenges" :key="challenge.id">
         <template v-slot:left>
           <q-icon name="done" /> Complete for today
         </template>
@@ -68,7 +68,6 @@ export default {
 
     finalize (reset, challengeId, status) {
       this.timer = setTimeout(() => {
-        reset()
         this.log(status, challengeId)
       }, 1000)
     },
