@@ -12,8 +12,10 @@
       </q-card-section>
       <q-card-section>
         <div class="checkbox-wrapper">
-          <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck"/>
-        </div>
+          <q-card-section class="justify-end row">
+            <q-btn color="grey" label="Undo" @click="e => undoChallenge(e)"/>
+          </q-card-section>
+      </div>
       </q-card-section>
     </q-card>
 </template>
@@ -23,6 +25,7 @@
 
 <script>
 import { ICON_MAP } from '../helpers/constants'
+import { date } from 'quasar'
 
 export default {
   name: 'Challenge',
@@ -49,6 +52,16 @@ export default {
         this.onComplete(this.options.id)
       }
     },
+    undoChallenge: function () {
+      this.$store.dispatch('app/noteDayProgress', {
+        day: {
+          date: date.formatDate(new Date(), 'YYYY/MM/DD'),
+          status: 'skip',
+          user: this.$store.state.user.currentUser.uid
+        },
+        challengeId: this.options.id
+      })
+    },
     getIconName: function (value) {
       return ICON_MAP[value]
     },
@@ -68,6 +81,8 @@ export default {
   color: white;
 }
 .challenge {
+  margin-bottom: 16px;
+  opacity: 0.5;
   width: 100%;
   background: linear-gradient(to bottom, #3a404d, #181c26);
   display: flex;

@@ -25,10 +25,16 @@
         </template>
 
         <q-item>
-          <challenge-daily :options="challenge" :onComplete="onComplete"/>
+          <challenge-daily :options="challenge" :onComplete="onComplete" />
         </q-item>
       </q-slide-item>
     </q-list>
+
+    <div class="completed">
+      Completed:
+    </div>
+    <challenge-daily-completed :options="challenge" :onComplete="onComplete" v-for="(challenge) in completedToday" :key="challenge.id + 'completed'"/>
+
   </div>
   </q-page>
 </template>
@@ -38,12 +44,14 @@
 
 <script>
 import ChallengeDaily from 'components/ChallengeDaily.vue'
+import ChallengeDailyCompleted from 'components/ChallengeDailyCompleted.vue'
 import { date } from 'quasar'
 
 export default {
   name: 'PageIndex',
   components: {
-    ChallengeDaily
+    ChallengeDaily,
+    ChallengeDailyCompleted
   },
   computed: {
     challenges: {
@@ -51,7 +59,16 @@ export default {
         return this.$store.state.app.myChallenges
           .filter(chal => {
             const loggedDays = chal.loggedDays || []
-            return !loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD'))
+            return !loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD') && day.status === 'complete')
+          })
+      }
+    },
+    completedToday: {
+      get () {
+        return this.$store.state.app.myChallenges
+          .filter(chal => {
+            const loggedDays = chal.loggedDays || []
+            return loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD') && day.status === 'complete')
           })
       }
     }
@@ -114,6 +131,12 @@ export default {
 
 .title {
   text-align: center;
+}
+
+.completed {
+  text-align: center;
+  margin-top: 48px;
+  margin-bottom: 16px;
 }
 
 .item-wrapper {
