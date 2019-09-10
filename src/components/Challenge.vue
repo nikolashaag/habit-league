@@ -13,12 +13,9 @@
         </div>
       </q-card-section>
 
-      <q-card-section v-if="expanded !== true">
-         Current Leader: John
-      </q-card-section>
       <q-card-section v-if="expanded === true && options.members.length > 1">
          Leaderboard:
-         <div class="row leaderboard-row" v-for="(member, key) in sortMembers(options.members)" :key="key + 'member'">
+         <div class="row leaderboard-row" v-for="(member, key) in sortedMembers" :key="key + 'member'">
            <div class="number">{{key + 1}}</div>
            <div class="name">{{getDisplayName(member.id)}}</div>
            <div class="status">Completed days: {{member.completedDays}}</div>
@@ -107,6 +104,11 @@ export default {
       get () {
         const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
         return loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid)
+      }
+    },
+    sortedMembers: {
+      get () {
+        return this.sortMembers(this.options.members)
       }
     },
     progress: {
