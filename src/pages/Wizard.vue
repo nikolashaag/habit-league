@@ -221,7 +221,7 @@ export default {
         case '1 Month':
           return 31
         case '3 Months':
-          return 63
+          return 62
         case 'Custom':
           return this.duration
       }
@@ -247,28 +247,23 @@ export default {
             stake: this.stake,
             privacy: this.privacy,
             category: this.category,
+            author: this.$store.state.user.currentUser.displayName,
             members: [{
               name: this.$store.state.user.currentUser.displayName,
               id: this.$store.state.user.currentUser.uid,
               completedDays: 0
             }]
           }
-          console.log('app/addChallenge', challenge)
           this.$store.dispatch('app/addChallenge', challenge)
           this.$router.push({ path: '/' })
           return true
         }
       }
 
-      console.log('errors', this.errors)
       e.preventDefault()
     },
     onReset () {
     }
-  },
-  created () {
-    console.log('this.icons', this.icons)
-    console.log('this.icons', this.iconMap)
   }
 }
 </script>

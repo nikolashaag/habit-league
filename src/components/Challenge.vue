@@ -9,16 +9,16 @@
         </div>
         <div class="header">
           <div class="text-h6">{{options.title}}</div>
-          <div class="text-subtitle2">by John Doe</div>
+          <div class="text-subtitle2">by {{options.author}}</div>
         </div>
       </q-card-section>
 
       <q-card-section v-if="expanded !== true">
          Current Leader: John
       </q-card-section>
-      <q-card-section v-if="expanded === true">
+      <q-card-section v-if="expanded === true && options.members.length > 1">
          Leaderboard:
-         <div class="row leaderboard-row" v-for="(member, key) in options.members" :key="key + 'member'">
+         <div class="row leaderboard-row" v-for="(member, key) in sortMembers(options.members)" :key="key + 'member'">
            <div class="number">{{key + 1}}</div>
            <div class="name">{{getDisplayName(member.id)}}</div>
            <div class="status">Completed days: {{member.completedDays}}</div>
@@ -68,6 +68,7 @@
 <script>
 import { date } from 'quasar'
 import { ICON_MAP } from '../helpers/constants'
+import { sort } from '../helpers/utils'
 
 export default {
   name: 'Challenge',
@@ -120,6 +121,18 @@ export default {
     }
   },
   methods: {
+    getloggedDaysForUser: function (uid) {
+      const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
+      return loggedDays.filter(day => day.user === uid)
+    },
+    sortMembers: function (members) {
+      return sort(members.map(member => {
+        return {
+          ...member,
+          completedDays: this.getloggedDaysForUser(member.id).length
+        }
+      }), 'completedDays')
+    },
     getIconName: function (value) {
       return ICON_MAP[value]
     },
