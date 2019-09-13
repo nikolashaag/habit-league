@@ -1,19 +1,15 @@
 export function addChallengeToState (state, newChallange) {
-  console.log('context', state, newChallange)
   state.challenges = [...state.challenges, newChallange]
 }
 export function addMyChallengeToState (state, newChallange) {
-  console.log('context', state, newChallange)
   state.myChallenges = [...state.myChallenges, newChallange]
 }
 
 export function setSyncStatus (state, status) {
-  console.log('setSyncStatus', status)
   state.syncStatus = status
 }
 
 export function clearState (state, status) {
-  console.log('setSyncStatus', status)
   state.challenges = []
   state.myChallenges = []
 }

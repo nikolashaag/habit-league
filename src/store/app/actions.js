@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import { unique } from '../../helpers/utils'
+import { isChallengePast } from '../../helpers/calendar'
 
 export function fetchChallenges ({ commit, state, rootState }) {
   commit('clearState')
@@ -7,19 +8,21 @@ export function fetchChallenges ({ commit, state, rootState }) {
   db.collection('challenges').get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       const challenge = doc.data()
-      if (challenge.members.find(member => member.id === rootState.user.currentUser.uid)) {
+      const isPast = isChallengePast(challenge)
+
+      if (challenge.members.find(member => member.id === rootState.user.currentUser.uid) && !isPast) {
         commit('addMyChallengeToState', {
           ...challenge,
           id: doc.id
         })
-      } else {
+      } else if (!isPast) {
         commit('addChallengeToState', {
           ...challenge,
           id: doc.id
         })
       }
-      commit('setSyncStatus', true)
     })
+    commit('setSyncStatus', true)
   })
 }
 
@@ -39,7 +42,6 @@ export function addChallenge ({ commit, state }, challenge) {
 
 export function joinChallenge ({ dispatch, state, rootState }, challengeId) {
   const db = firebase.firestore()
-  console.log('challengeId', state.challenges)
   const localChallengeMembers = state.challenges.find(challenge => challenge.id === challengeId).members
   db.collection('challenges').doc(challengeId).update({
     members: [

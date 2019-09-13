@@ -26,19 +26,17 @@
 
       <q-card-actions>
         <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || expanded === true">
-          <q-btn class="invisible-buttons" v-for="(day, key) in 7 - firstWeek.length" :key="key + 'first'" size="m" round color="amber" text-color="black">{{day.label}}</q-btn>
-          <q-btn :disabled="day.isInFuture" v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
+          <q-btn :title="day.date" :disabled="day.isInFuture || day.isBeforeHabitStart" v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
         </div>
         <div class="leftover-wrapper">
           <div v-for="(week, key) in leftOverWeeks" :key="key + 'leftOverWeeks' + options.title" class="row week-wrapper justify-between" >
             <div class="row leftover-wrapper justify-between" v-if="isCurrentWeek(week) || expanded === true">
-              <q-btn :disabled="day.isInFuture" v-for="(day, i) in week" :key="i + 'other' + key" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
+              <q-btn :title="day.date" :disabled="day.isInFuture" v-for="(day, i) in week" :key="i + 'other' + key" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
             </div>
           </div>
         </div>
         <div class="row week-wrapper justify-between" v-if="isCurrentWeek(lastWeek) || expanded === true">
-          <q-btn :disabled="day.isInFuture" v-for="(day, key) in lastWeek" :key="key + 'last' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
-          <q-btn class="invisible-buttons" v-for="(day, key) in 7 - lastWeek.length" :key="key + 'invisible-last'" size="m" round color="amber" text-color="black">{{day.label}}</q-btn>
+          <q-btn :title="day.date" :disabled="day.isInFuture || day.isAfterHabitEnds" v-for="(day, key) in lastWeek" :key="key + 'last' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
         </div>
 
       </q-card-actions>
@@ -66,36 +64,14 @@
 import { date } from 'quasar'
 import { ICON_MAP } from '../helpers/constants'
 import { sort } from '../helpers/utils'
+import { getFirstWeek, getLastWeek, getAllOtherWeeks } from '../helpers/calendar'
 
 export default {
   name: 'Challenge',
   data () {
     return {
       noteProgress: false,
-      expanded: false,
-      days: [
-        {
-          label: 'M'
-        },
-        {
-          label: 'T'
-        },
-        {
-          label: 'W'
-        },
-        {
-          label: 'T'
-        },
-        {
-          label: 'F'
-        },
-        {
-          label: 'S'
-        },
-        {
-          label: 'S'
-        }
-      ]
+      expanded: false
     }
   },
   props: ['options'],
@@ -144,48 +120,14 @@ export default {
     calculateDays: function () {
       let startDate = new Date(this.options.startDate)
       this.endDate = new Date(this.options.startDate)
-      const split = startDate.getDay() - 1
-      // Add dates to first Week
-      this.firstWeek = this.days
-        .slice(split > -1 ? split : 6)
-        .map((day, index) => {
-          let newDate = new Date(startDate)
-          newDate.setDate(newDate.getDate() + index)
-          return {
-            label: day.label,
-            date: newDate,
-            isInFuture: newDate > new Date()
-          }
-        })
-
       this.endDate.setDate(startDate.getDate() + Number(this.options.duration))
-      const lastWeekSplit = this.endDate.getDay() - 1
-      this.lastWeek = this.days.slice(0, lastWeekSplit > -1 ? lastWeekSplit : 6)
 
-      // Add dates to last Week
-      this.lastWeek = this.lastWeek.map((day, index) => {
-        let newDate = new Date(this.endDate)
-        newDate.setDate(this.endDate.getDate() - (this.lastWeek.length - index))
-        return {
-          label: day.label,
-          date: newDate,
-          isInFuture: newDate > new Date()
-        }
-      })
-      // Calculate all other weeks
-      const leftOverDays = this.options.duration - (7 - split) - (lastWeekSplit)
-      const prototype = [...new Array(leftOverDays / 7)]
-      this.leftOverWeeks = prototype.map((week, weekIndex) => {
-        return this.days.map((day, index) => {
-          let startDate = new Date(this.options.startDate)
-          let newDate = new Date(this.options.startDate)
-          newDate.setDate(startDate.getDate() + (7 - split + index) + (weekIndex * 7))
-          return {
-            label: day.label,
-            date: newDate,
-            isInFuture: newDate > new Date()
-          }
-        })
+      this.firstWeek = getFirstWeek({ startDate })
+      this.lastWeek = getLastWeek({ endDate: this.endDate })
+      this.leftOverWeeks = getAllOtherWeeks({
+        duration: this.options.duration,
+        startDate,
+        endDate: this.endDate
       })
     },
     isCurrentWeek: function (week) {
