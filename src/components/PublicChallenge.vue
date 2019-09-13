@@ -73,7 +73,6 @@ export default {
       e.stopPropagation()
     },
     confirm: function () {
-      console.log('confirm')
       this.$store.dispatch('app/joinChallenge', this.options.id)
     },
     cancel: function () {}
