@@ -108,8 +108,8 @@
             >
               Set the privacy of the challenge. Will it be only for you and your friends? Or make it public and let anybody in the world join in.
                 <div class="q-gutter-sm">
-                  <q-radio v-model="privacy" val="public" label="Public" />
                   <q-radio v-model="privacy" val="private" label="Private" />
+                  <q-radio v-model="privacy" val="public" label="Public" />
                 </div>
             </q-step>
 
@@ -201,11 +201,11 @@ export default {
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
       perMonthOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       challengeDurationOptions: ['1 Week', '2 Weeks', '3 Weeks', '1 Month', '3 Months', 'Custom'],
-      challengeDuration: null,
+      challengeDuration: '1 Month',
       duration: '',
       startDate: date.formatDate(new Date(), 'YYYY/MM/DD'),
       stake: '',
-      privacy: 'public',
+      privacy: 'private',
       errors: []
     }
   },
