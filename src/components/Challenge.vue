@@ -195,13 +195,19 @@ export default {
   margin-left: -16px;
 }
 .leaderboard-row:nth-child(1) {
-  background: #fa6855;
+  background: #ffc107;
 }
 .leaderboard-row:nth-child(2) {
-  background: #e0574f;
+  background: #FFB300;
 }
 .leaderboard-row:nth-child(3) {
-  background: #d7514d;
+  background: #FFA000;
+}
+.leaderboard-row:nth-child(4) {
+  background: #FF8F00;
+}
+.leaderboard-row:nth-child(5) {
+  background: #FF5A04;
 }
 
 .number {
