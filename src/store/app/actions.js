@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-import { unique } from '../../helpers/utils'
 import { isChallengePast } from '../../helpers/calendar'
 
 export function fetchChallenges ({ commit, state, rootState }) {
@@ -62,15 +61,32 @@ export function joinChallenge ({ dispatch, state, rootState }, challengeId) {
     })
 }
 
-export function noteDayProgress ({ commit, state, rootState }, data) {
+export async function noteDayProgress ({ commit, state, rootState }, data) {
   commit('noteDay', data)
   const db = firebase.firestore()
-  const localLoggedDays = state.myChallenges.find(challenge => challenge.id === data.challengeId).loggedDays || []
-  db.collection('challenges').doc(data.challengeId).update({
-    loggedDays: unique(localLoggedDays ? [
-      ...localLoggedDays,
-      data.day
-    ] : [ data.day ], 'date')
+  var docRef = db.collection('challenges').doc(data.challengeId)
+  const doc = await docRef.get()
+  if (!doc.exists) {
+    console.log('habit was deleted')
+    return
+  }
+  const docData = doc.data()
+  let existingLoggedDays = docData.loggedDays || []
+  if (existingLoggedDays.find(log => log.date === data.day.date && log.user === data.day.user)) {
+    existingLoggedDays = existingLoggedDays.map(log => {
+      if (log.date === data.day.date && log.user === data.day.user) {
+        return {
+          ...log,
+          status: data.day.status
+        }
+      }
+      return log
+    })
+  } else {
+    existingLoggedDays.push(data.day)
+  }
+  docRef.update({
+    loggedDays: existingLoggedDays
   })
     .then(function (docRef) {
       console.log('successfully updated loggedDays', docRef)
