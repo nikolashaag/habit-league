@@ -14,7 +14,7 @@ export function fetchChallenges ({ commit, state, rootState }) {
           ...challenge,
           id: doc.id
         })
-      } else if (!isPast) {
+      } else if (!isPast && challenge.privacy === 'public') {
         commit('addChallengeToState', {
           ...challenge,
           id: doc.id
