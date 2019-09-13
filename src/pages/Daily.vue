@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div v-if="challenges.length === 0">
+    <div v-if="challenges.length === 0 && completedToday.length === 0">
       You don't have any challenges yet. Quick start one by clicking the plus button
     </div>
     <div class="add-button">
@@ -8,12 +8,12 @@
         <q-btn  size="xl" round color="amber" glossy text-color="black" icon="plus_one" />
       </router-link>
     </div>
-    <div class="q-pa-md wrapper" v-if="challenges.length !== 0">
-      <div class="title">
+    <div class="q-pa-md wrapper">
+      <div class="title" v-if="challenges.length !== 0">
         To complete a habit, swipe it to the left or to the right or tick the checkbox.
       </div>
 
-    <q-list class="list" bordered separator>
+    <q-list class="list" bordered separator v-if="challenges.length !== 0">
       <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge) in challenges" :key="challenge.id">
         <template v-slot:left>
           <q-icon name="done" /> Complete for today

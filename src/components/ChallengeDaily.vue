@@ -60,13 +60,6 @@ export default {
 </script>
 
 <style scoped>
-.caret {
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-  font-size: 3rem;
-  color: white;
-}
 .challenge {
   width: 100%;
   background: linear-gradient(to bottom, #3a404d, #181c26);
@@ -75,56 +68,8 @@ export default {
   transition: transform 0.2s ease-in;
 }
 
-.leaderboard-row {
-  width: calc(100% + 32px);
-  height: 48px;
-  line-height: 48px;
-  margin-left: -16px;
-}
-.leaderboard-row:nth-child(1) {
-  background: #fa6855;
-}
-.leaderboard-row:nth-child(2) {
-  background: #e0574f;
-}
-.leaderboard-row:nth-child(3) {
-  background: #d7514d;
-}
-
-.number {
-  background: white;
-  color: black;
-  text-align: center;
-  border-radius: 50%;
-  padding: 0;
-  min-height: 0;
-  height: 2rem;
-  width: 2rem;
-  min-width: 2rem;
-  min-height: 2rem;
-  margin-left: 1rem;
-  margin-top: 0.5rem;
-  line-height: 2rem;
-}
-
 .name {
   margin-left: 3rem;
-}
-
-.status {
-  margin-left: 10rem;
-}
-
-.week-wrapper, .leftover-wrapper {
-  width: 100%;
-}
-
-.week-wrapper {
-  margin-bottom: 16px;
-}
-
-.invisible-buttons {
-  visibility: hidden;
 }
 
 .icon-wrapper {
@@ -136,7 +81,7 @@ export default {
 }
 
 .icon-wrapper i {
-  position:absolute; /*it can be fixed too*/
+  position: absolute; /*it can be fixed too*/
   left:0; right:0;
   top:0; bottom:0;
   margin:auto;
