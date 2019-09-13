@@ -82,7 +82,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .caret {
   position: absolute;
   right: 0.5rem;
@@ -92,7 +92,7 @@ export default {
 }
 .challenge {
   margin-bottom: 16px;
-  background: linear-gradient(to bottom, #3a404d, #181c26);
+  background: linear-gradient(to left, #3a404d, #181c26);
 }
 
 .leaderboard-row {

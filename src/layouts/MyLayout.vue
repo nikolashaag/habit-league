@@ -118,6 +118,6 @@ export default {
 <style>
 
 .q-header {
-  background: linear-gradient(to bottom, #3a404d, #181c26);
+  background: linear-gradient(to left, #3a404d, #181c26);
 }
 </style>

@@ -4,7 +4,7 @@
       </q-icon>
       <q-card-section>
         <div class="icon-wrapper">
-          <q-icon :name="getIconName(options.category)" class="category-icon">
+          <q-icon :name="getIconName(options.icon)" class="category-icon">
           </q-icon>
         </div>
         <div class="header">
@@ -175,7 +175,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .caret {
   position: absolute;
   right: 0.5rem;
@@ -185,7 +185,7 @@ export default {
 }
 .challenge {
   margin-bottom: 16px;
-  background: linear-gradient(to bottom, #3a404d, #181c26);
+  background: linear-gradient(to left, #3a404d, #181c26);
 }
 
 .leaderboard-row {

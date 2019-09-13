@@ -2,7 +2,7 @@
     <q-card :class="['challenge text-white', complete ?  'was-completed' : '']">
       <q-card-section>
         <div class="icon-wrapper">
-          <q-icon :name="getIconName(options.category)" class="category-icon" >
+          <q-icon :name="getIconName(options.icon)" class="category-icon" >
           </q-icon>
         </div>
         <div class="header">
@@ -62,7 +62,7 @@ export default {
 <style scoped>
 .challenge {
   width: 100%;
-  background: linear-gradient(to bottom, #3a404d, #181c26);
+  background: linear-gradient(to left, #3a404d, #181c26);
   display: flex;
   justify-content: space-between;
   transition: transform 0.2s ease-in;

@@ -26,8 +26,10 @@
                 Select how the challenge should look like. You can select one or multiple habits. Select the frequency.
               </label>
               <div class="spacing"></div>
-              <q-input dark standout counter v-model="title" label="Habit title" />
-              <q-input dark standout counter v-model="description" label="Description (Optional)" />
+              <q-input dark standout v-model="title" label="Habit title" />
+              <div class="spacing"></div>
+              <q-input dark standout v-model="description" label="Description (Optional)" />
+              <div class="spacing"></div>
               <div class="row">
                 <label for="">
                   Choose frequency
@@ -39,11 +41,13 @@
                 push
                 :options="[
                   {label: 'Daily', value: 'daily'},
-                  {label: 'Specific Days', value: 'specific'},
                   {label: 'Per Week', value: 'per-week'},
-                  {label: 'Per Month', value: 'per-month'}
+                  {label: 'Per Month', value: 'per-month'},
+                  {label: 'Specific Days', value: 'specific'},
                 ]"
               />
+              <div class="spacing"></div>
+
               <q-option-group
                 v-if="frequency === 'specific'"
                 :options="days"
@@ -59,8 +63,28 @@
                   Choose category
                 </label>
               </div>
+
               <q-btn-toggle
                 v-model="category"
+                toggle-color="primary"
+                push
+                :options="[
+                  {label: 'Physical Health', value: 'physical-health'},
+                  {label: 'Mental Health', value: 'mental-health'},
+                  {label: 'Relationships', value: 'relationships'},
+                  {label: 'Career', value: 'career'},
+                  {label: 'Hobbies', value: 'hobbies'}
+                ]"
+              />
+              <div class="spacing"></div>
+
+              <div class="row">
+                <label for="">
+                  Choose icon
+                </label>
+              </div>
+              <q-btn-toggle
+                v-model="icon"
                 toggle-color="primary"
                 push
                 :options="icons"
@@ -85,7 +109,7 @@
                   Select a goal for the challenge to stay motivated. How long should it last? What will the winner get?
                 </label>
               </div>
-              <q-input dark standout counter v-model="startDate" mask="date" :rules="['date']" label="Start date" >
+              <q-input dark standout v-model="startDate" mask="date" :rules="['date']" label="Start date" >
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -96,8 +120,10 @@
               </q-input>
               <q-select dark standout v-model="challengeDuration" :options="challengeDurationOptions" label="Challenge duration" />
               <div class="spacing"></div>
-              <q-input v-if="challengeDuration === 'Custom'" dark standout counter v-model="duration" label="Custom duration (number of days)" />
-              <q-input dark standout counter v-model="stake" label="Stake or reward (Optional)" />
+              <q-input v-if="challengeDuration === 'Custom'" dark standout v-model="duration" label="Custom duration (number of days)" />
+              <q-input dark standout v-model="stake" label="Stake or reward (Optional)" />
+              <div class="spacing"></div>
+
             </q-step>
 
             <q-step
@@ -122,9 +148,9 @@
             </q-step>
             <template v-slot:navigation>
               <q-stepper-navigation>
-                <q-btn v-if="step !== 4" @click="$refs.stepper.next()" color="primary" label="Continue" />
-                <q-btn type="submit" v-if="step === 4" color="primary" label="Finish" />
-                <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
+                <q-btn v-if="step !== 4" @click="$refs.stepper.next()" color="amber" label="Continue" />
+                <q-btn type="submit" v-if="step === 4" color="amber" label="Finish" />
+                <q-btn v-if="step > 1" flat color="amber" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
               </q-stepper-navigation>
             </template>
         </q-stepper>
@@ -148,7 +174,7 @@ export default {
       title: '',
       iconMap: ICON_MAP,
       description: '',
-      frequency: null,
+      frequency: 'daily',
       specificDays: [],
       icons: [
         { label: 'Exercise', value: 'exercise', slot: 'exercise' },
@@ -197,7 +223,8 @@ export default {
       ],
       perWeek: null,
       perMonth: null,
-      category: '',
+      category: 'physical-health',
+      icon: 'exercise',
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
       perMonthOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       challengeDurationOptions: ['1 Week', '2 Weeks', '3 Weeks', '1 Month', '3 Months', 'Custom'],
@@ -247,6 +274,7 @@ export default {
             stake: this.stake,
             privacy: this.privacy,
             category: this.category,
+            icon: this.icon,
             author: this.$store.state.user.currentUser.displayName,
             members: [{
               name: this.$store.state.user.currentUser.displayName,
