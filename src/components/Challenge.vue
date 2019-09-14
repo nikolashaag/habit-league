@@ -28,7 +28,9 @@
           <div class="text-subtitle2">by {{options.author}}</div>
         </div>
       </q-card-section>
-
+      <q-card-section class="countdown flex flex-center" v-if="isInFuture">
+        <h5>{{countdown}}</h5>
+      </q-card-section>
       <transition name="fade">
         <q-card-section v-if="options.expanded === true && options.members.length > 1" class="leaderboard">
           Leaderboard:
@@ -115,7 +117,9 @@ export default {
     return {
       noteProgress: false,
       expanded: false,
-      deleteChallenge: false
+      deleteChallenge: false,
+      countdown: '',
+      countdownInterval: null
     }
   },
   props: ['options', 'onExpand'],
@@ -124,6 +128,13 @@ export default {
       get () {
         const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
         return loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid)
+      }
+    },
+    isInFuture: {
+      get () {
+        const startDate = new Date(this.options.startDate)
+        const today = new Date()
+        return startDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
       }
     },
     sortedMembers: {
@@ -143,6 +154,30 @@ export default {
     }
   },
   methods: {
+    createCountdown: function () {
+      // Set the date we're counting down to
+      const countDownDate = new Date(this.options.startDate).getTime()
+
+      // Update the count down every 1 second
+      this.countdownInterval = setInterval(() => {
+        // Get today's date and time
+        const now = new Date().getTime()
+        // Find the distance between now and the count down date
+        const distance = countDownDate - now
+        // Time calculations for days, hours, minutes and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+        // Output the result in an element with id="demo"
+        this.countdown = 'Starting in: ' + days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's '
+        // If the count down is over, write some text
+        if (distance < 0) {
+          clearInterval(this.countdownInterval)
+          this.countdown = 'Challenge starting'
+        }
+      }, 1000)
+    },
     editHabit: function () {
       this.$store.commit('app/setActiveChallenge', this.options)
       this.$router.replace('/create?edit=true')
@@ -224,6 +259,14 @@ export default {
   },
   created: function () {
     this.calculateDays()
+    if (this.isInFuture) {
+      this.createCountdown()
+    }
+  },
+  beforeDestroy: function () {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval)
+    }
   }
 }
 </script>
