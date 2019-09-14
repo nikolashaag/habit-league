@@ -1,5 +1,20 @@
 <template>
   <q-page class="flex flex-center">
+    <div class="progress-wrapper row flex flex-center">
+      <q-knob
+        show-value
+        readonly
+        font-size="24px"
+        v-model="progress"
+        size="150px"
+        :thickness="0.22"
+        color="teal"
+        track-color="grey-3"
+        class="q-ma-md"
+      >
+        {{ progress }}%
+      </q-knob>
+    </div>
     <h5 v-if="challenges.length === 0 && completedToday.length === 0">
       You don't have any challenges yet. Quick start one by clicking the plus button
     </h5>
@@ -50,6 +65,16 @@ export default {
     ChallengeDailyCompleted,
     AddButton
   },
+  data () {
+    return {
+      progress: null
+    }
+  },
+  watch: {
+    challenges: function () {
+      this.updateProgress()
+    }
+  },
   computed: {
     challenges: {
       get () {
@@ -71,6 +96,10 @@ export default {
     }
   },
   methods: {
+    updateProgress () {
+      const faktor = (parseInt(this.completedToday.length, 10) + parseInt(this.challenges.length, 10)) / 100
+      this.progress = Math.round(this.completedToday.length / faktor) || 0
+    },
     onLeft ({ reset }, challenge) {
       this.$q.notify('Congrats! You completed your daily habit')
       this.finalize(reset, challenge.id, 'complete')
@@ -79,7 +108,6 @@ export default {
       this.$q.notify("Skipped for today! Don't forget about it tomorrow")
       this.finalize(reset, challenge.id, 'skip')
     },
-
     finalize (reset, challengeId, status) {
       this.timer = setTimeout(() => {
         this.log(status, challengeId)
@@ -99,6 +127,7 @@ export default {
         },
         challengeId
       })
+      this.updateProgress()
     }
   },
   beforeDestroy () {
@@ -115,6 +144,10 @@ export default {
 </script>
 
 <style>
+.progress-wrapper {
+  margin-top: 16px;
+  width: 100%;
+}
 
 .wrapper {
   width: 100%;
