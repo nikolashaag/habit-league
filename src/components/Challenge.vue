@@ -10,7 +10,7 @@
               <q-item clickable @click="() => deleteChallenge = !deleteChallenge">
                 <q-item-section>Delete Habit</q-item-section>
               </q-item>
-              <q-item clickable>
+              <q-item clickable @click="editHabit">
                 <q-item-section>Edit Habit</q-item-section>
               </q-item>
             </q-list>
@@ -143,6 +143,10 @@ export default {
     }
   },
   methods: {
+    editHabit: function () {
+      this.$store.commit('app/setActiveChallenge', this.options)
+      this.$router.replace('/create?edit=true')
+    },
     getloggedDaysForUser: function (uid) {
       const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
       return loggedDays.filter(day => day.user === uid)

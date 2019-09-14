@@ -40,6 +40,18 @@ export function addChallenge ({ commit, state }, challenge) {
     })
 }
 
+export function updateChallenge ({ dispatch, state }, { challenge, challengeId }) {
+  var db = firebase.firestore()
+  db.collection('challenges').doc(challengeId).update(challenge)
+    .then(function (docRef) {
+      console.log('success', docRef)
+      dispatch('fetchChallenges')
+    })
+    .catch(function (error) {
+      console.error('Error joining challenge: ', error)
+    })
+}
+
 export function joinChallenge ({ dispatch, state, rootState }, challengeId) {
   const db = firebase.firestore()
   const localChallengeMembers = state.challenges.find(challenge => challenge.id === challengeId).members

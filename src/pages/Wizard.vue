@@ -168,6 +168,29 @@ import { date } from 'quasar'
 
 export default {
   name: 'Wizard',
+  computed: {
+    isEditMode: {
+      get () {
+        return this.$route.query.edit
+      }
+    },
+    activeHabit: {
+      get () {
+        return this.$store.state.app.activeChallenge
+      }
+    }
+  },
+  created () {
+    if (this.isEditMode) {
+      for (let key in this.activeHabit) {
+        if (key === 'duration') {
+          this.prefillDuration(this.activeHabit[key])
+        } else {
+          this[key] = (this.activeHabit.hasOwnProperty(key) && this.activeHabit[key]) || ''
+        }
+      }
+    }
+  },
   data () {
     return {
       step: 1,
@@ -248,9 +271,31 @@ export default {
         case '1 Month':
           return 31
         case '3 Months':
-          return 62
+          return 92
         case 'Custom':
           return this.duration
+      }
+    },
+    prefillDuration (duration) {
+      switch (duration) {
+        case 7:
+          this.challengeDuration = '1 Week'
+          break
+        case 14:
+          this.challengeDuration = '2 Weeks'
+          break
+        case 21:
+          this.challengeDuration = '3 Weeks'
+          break
+        case 31:
+          this.challengeDuration = '1 Month'
+          break
+        case 92:
+          this.challengeDuration = '3 Months'
+          break
+        default:
+          this.challengeDuration = 'Custom'
+          this.duration = duration
       }
     },
     onSubmit (e) {
@@ -282,7 +327,14 @@ export default {
               completedDays: 0
             }]
           }
-          this.$store.dispatch('app/addChallenge', challenge)
+          if (this.isEditMode) {
+            this.$store.dispatch('app/updateChallenge', {
+              challenge,
+              challengeId: this.activeHabit.id
+            })
+          } else {
+            this.$store.dispatch('app/addChallenge', challenge)
+          }
           this.$router.push({ path: '/' })
           return true
         }

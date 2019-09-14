@@ -14,6 +14,10 @@ export function clearState (state, status) {
   state.myChallenges = []
 }
 
+export function setActiveChallenge (state, challenge) {
+  state.activeChallenge = challenge
+}
+
 export function noteDay (state, data) {
   state.myChallenges = state.myChallenges.map(challenge => {
     if (challenge.id === data.challengeId) {
