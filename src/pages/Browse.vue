@@ -1,8 +1,8 @@
 <template>
   <q-page class="flex flex-center">
-    <div>
+    <h5>
       Browse public challenges and join other people in their habits.
-    </div>
+    </h5>
     <div class="q-pa-md wrapper">
       <public-challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
     </div>

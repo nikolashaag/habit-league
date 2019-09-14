@@ -1,8 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-    <div v-if="challenges.length === 0">
+    <h5 v-if="challenges.length === 0">
       You don't have any challenges yet. Quick start one by clicking the plus button
-    </div>
+    </h5>
+    <h5 v-if="challenges.length > 0">
+      Weekly Overview
+    </h5>
     <div class="q-pa-md wrapper">
       <challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
     </div>

@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import { isChallengePast } from '../../helpers/calendar'
+import { Notify } from 'quasar'
 
 export function fetchChallenges ({ commit, state, rootState }) {
   commit('clearState')
@@ -94,4 +95,15 @@ export async function noteDayProgress ({ commit, state, rootState }, data) {
     .catch(function (error) {
       console.error('Error updating loggedDays: ', error)
     })
+}
+
+export async function deleteHabit ({ commit, state, dispatch }, data) {
+  const db = firebase.firestore()
+  db.collection('challenges').doc(data.challengeId).delete().then(function () {
+    console.log('Document successfully deleted!')
+    Notify.create('Habit was deleted!')
+    dispatch('fetchChallenges')
+  }).catch(function (error) {
+    console.error('Error removing document: ', error)
+  })
 }

@@ -1,8 +1,25 @@
 <template>
     <q-card class="challenge text-white" @click="() => expanded = !expanded">
-      <q-icon :name="expanded === true ? 'expand_less' : 'expand_more'" class="caret">
-      </q-icon>
-      <q-card-section>
+      <q-card-section class="menus">
+        <q-btn color="white" size="lg" round flat :icon="expanded === true ? 'expand_less' : 'expand_more'">
+        </q-btn>
+        <!-- <q-icon :name="expanded === true ? 'expand_less' : 'expand_more'" class="caret">
+        </q-icon> -->
+        <q-btn color="white" size="lg" @click="e => e.stopPropagation()" round flat icon="more_vert">
+          <q-menu cover auto-close>
+            <q-list>
+              <q-item clickable @click="() => deleteChallenge = !deleteChallenge">
+                <q-item-section>Delete Habit</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Edit Habit</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-card-section>
+
+      <q-card-section class="content">
         <div class="icon-wrapper">
           <q-icon :name="getIconName(options.icon)" class="category-icon">
           </q-icon>
@@ -24,7 +41,7 @@
 
       <!-- <q-separator dark /> -->
 
-      <q-card-actions>
+      <q-card-actions class="weeks">
         <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || expanded === true">
           <q-btn :title="day.date" :disabled="day.isInFuture || day.isBeforeHabitStart" v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
         </div>
@@ -53,6 +70,17 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="deleteChallenge">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Are you sure you want to delete this Habit?</div>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn label="Delete" color="primary" @click="removeChallenge" v-close-popup />
+            <q-btn label="Cancel" color="primary" @click="e => deleteChallenge = !deleteChallenge" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
 
     </q-card>
 </template>
@@ -71,7 +99,8 @@ export default {
   data () {
     return {
       noteProgress: false,
-      expanded: false
+      expanded: false,
+      deleteChallenge: false
     }
   },
   props: ['options'],
@@ -158,6 +187,11 @@ export default {
       e.preventDefault()
       e.stopPropagation()
     },
+    removeChallenge: function () {
+      this.$store.dispatch('app/deleteHabit', {
+        challengeId: this.options.id
+      })
+    },
     log: function (status) {
       this.$store.dispatch('app/noteDayProgress', {
         day: {
@@ -176,16 +210,27 @@ export default {
 </script>
 
 <style scoped>
-.caret {
+.menus {
   position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
+  right: 0;
+  top: 0;
+  padding: 0;
   font-size: 3rem;
   color: white;
+  z-index: 2;
 }
 .challenge {
   margin-bottom: 16px;
   background: linear-gradient(to left, #3a404d, #181c26);
+}
+
+.content {
+  margin-bottom: 16px;
+}
+
+.weeks {
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .leaderboard-row {

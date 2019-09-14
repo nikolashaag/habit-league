@@ -8,34 +8,33 @@
         <q-btn  size="xl" round color="amber" glossy text-color="black" icon="plus_one" />
       </router-link>
     </div>
+    <h5 class="title" v-if="challenges.length !== 0">
+      To complete a habit, swipe it to the left or to the right or tick the checkbox.
+    </h5>
     <div class="q-pa-md wrapper">
-      <h5 class="title" v-if="challenges.length !== 0">
-        To complete a habit, swipe it to the left or to the right or tick the checkbox.
+
+      <q-list class="list" bordered separator v-if="challenges.length !== 0">
+        <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge) in challenges" :key="challenge.id">
+          <template v-slot:left>
+            <q-icon name="done" /> Complete for today
+          </template>
+          <template v-slot:right>
+            <div class="row items-center">
+              Skip for today <q-icon right name="alarm" />
+            </div>
+          </template>
+
+          <q-item>
+            <challenge-daily :options="challenge" :onComplete="onComplete" />
+          </q-item>
+        </q-slide-item>
+      </q-list>
+
+      <h5 class="completed" v-if="completedToday.length > 0">
+        Completed:
       </h5>
-
-    <q-list class="list" bordered separator v-if="challenges.length !== 0">
-      <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge) in challenges" :key="challenge.id">
-        <template v-slot:left>
-          <q-icon name="done" /> Complete for today
-        </template>
-        <template v-slot:right>
-          <div class="row items-center">
-            Skip for today <q-icon right name="alarm" />
-          </div>
-        </template>
-
-        <q-item>
-          <challenge-daily :options="challenge" :onComplete="onComplete" />
-        </q-item>
-      </q-slide-item>
-    </q-list>
-
-    <div class="completed" v-if="completedToday.length > 0">
-      Completed:
+      <challenge-daily-completed :options="challenge" :onComplete="onComplete" v-for="(challenge) in completedToday" :key="challenge.id + 'completed'"/>
     </div>
-    <challenge-daily-completed :options="challenge" :onComplete="onComplete" v-for="(challenge) in completedToday" :key="challenge.id + 'completed'"/>
-
-  </div>
   </q-page>
 </template>
 

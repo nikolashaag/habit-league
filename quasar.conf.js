@@ -65,7 +65,8 @@ module.exports = function (ctx) {
         'QLinearProgress',
         'QDialog',
         'QSlideItem',
-        'QAvatar'
+        'QAvatar',
+        'QMenu'
       ],
 
       directives: [
