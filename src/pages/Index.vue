@@ -42,13 +42,15 @@ export default {
   },
   watch: {
     challenges: function (val) {
-      this.localChallenges = val.map(challenge => {
-        return {
-          ...challenge,
-          expanded: false,
-          oneChallengeExpanded: false
-        }
-      })
+      if (val.length !== this.localChallenges.length) {
+        this.localChallenges = val.map(challenge => {
+          return {
+            ...challenge,
+            expanded: false,
+            oneChallengeExpanded: false
+          }
+        })
+      }
     }
   },
   data () {
