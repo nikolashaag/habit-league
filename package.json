@@ -21,7 +21,8 @@
     "e": "0.0.4",
     "firebase": "^6.3.5",
     "quasar": "^1.0.0",
-    "vue-i18n": "^8.0.0"
+    "vue-i18n": "^8.0.0",
+    "vue-scrollto": "^2.16.3"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0",

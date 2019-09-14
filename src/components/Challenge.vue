@@ -1,7 +1,8 @@
 <template>
-    <q-card class="challenge text-white" @click="() => expanded = !expanded">
+  <transition name="expand">
+    <q-card :class="['challenge', 'text-white', options.expanded && 'expanded']" @click="() => onExpand(options.id)" v-if="!(!options.expanded && options.oneChallengeExpanded)">
       <q-card-section class="menus">
-        <q-btn color="white" size="lg" round flat :icon="expanded === true ? 'expand_less' : 'expand_more'">
+        <q-btn color="white" size="lg" round flat :icon="options.expanded === true ? 'expand_less' : 'expand_more'">
         </q-btn>
         <q-btn color="white" size="lg" @click="e => e.stopPropagation()" round flat icon="more_vert">
           <q-menu cover auto-close>
@@ -28,32 +29,43 @@
         </div>
       </q-card-section>
 
-      <q-card-section v-if="expanded === true && options.members.length > 1">
-         Leaderboard:
-         <div class="row leaderboard-row" v-for="(member, key) in sortedMembers" :key="key + 'member'">
-           <div class="number">{{key + 1}}</div>
-           <div class="name">{{getDisplayName(member.id)}}</div>
-           <div class="status">Completed days: {{member.completedDays}}</div>
-         </div>
-      </q-card-section>
+      <transition name="fade">
+        <q-card-section v-if="options.expanded === true && options.members.length > 1" class="leaderboard">
+          Leaderboard:
+          <div class="row leaderboard-row" v-for="(member, key) in sortedMembers" :key="key + 'member'">
+            <div class="number">{{key + 1}}</div>
+            <div class="name">{{getDisplayName(member.id)}}</div>
+            <div class="status">Completed days: {{member.completedDays}}</div>
+          </div>
+        </q-card-section>
+      </transition>
 
       <q-card-actions class="weeks">
-        <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || expanded === true">
+      <transition name="fade">
+        <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || options.expanded === true">
           <q-btn :title="day.date" :disabled="day.isInFuture || day.isBeforeHabitStart" v-for="(day, key) in firstWeek" :key="key + 'first' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
         </div>
+      </transition>
+
         <div class="leftover-wrapper">
           <div v-for="(week, key) in leftOverWeeks" :key="key + 'leftOverWeeks' + options.title" class="row week-wrapper justify-between" >
-            <div class="row leftover-wrapper justify-between" v-if="isCurrentWeek(week) || expanded === true">
-              <q-btn :title="day.date" :disabled="day.isInFuture" v-for="(day, i) in week" :key="i + 'other' + key" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
-            </div>
+            <transition name="fade">
+              <div class="row leftover-wrapper justify-between" v-if="isCurrentWeek(week) || options.expanded === true">
+                <q-btn :title="day.date" :disabled="day.isInFuture" v-for="(day, i) in week" :key="i + 'other' + key" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
+              </div>
+            </transition>
+
           </div>
         </div>
-        <div class="row week-wrapper justify-between" v-if="isCurrentWeek(lastWeek) || expanded === true">
-          <q-btn :title="day.date" :disabled="day.isInFuture || day.isAfterHabitEnds" v-for="(day, key) in lastWeek" :key="key + 'last' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
-        </div>
+
+        <transition name="fade">
+          <div class="row week-wrapper justify-between" v-if="isCurrentWeek(lastWeek) || options.expanded === true">
+            <q-btn :title="day.date" :disabled="day.isInFuture || day.isAfterHabitEnds" v-for="(day, key) in lastWeek" :key="key + 'last' + options.title" size="m" round :color="getColor(day)" text-color="black" @click="e => noteProgressForDay(day, e)">{{day.label}}</q-btn>
+          </div>
+        </transition>
 
       </q-card-actions>
-      <q-linear-progress rounded stripe style="height: 10px" color="warning" :value="progress" />
+      <q-linear-progress rounded stripe class="progress" style="height: 10px" color="warning" :value="progress" />
       <q-dialog v-model="noteProgress">
         <q-card>
           <q-card-section>
@@ -79,6 +91,7 @@
       </q-dialog>
 
     </q-card>
+  </transition>
 </template>
 
 <style>
@@ -99,7 +112,7 @@ export default {
       deleteChallenge: false
     }
   },
-  props: ['options'],
+  props: ['options', 'onExpand'],
   computed: {
     loggedDays: {
       get () {
@@ -218,6 +231,36 @@ export default {
 .challenge {
   margin-bottom: 16px;
   background: linear-gradient(to left, #3a404d, #181c26);
+  transition: min-height .5s ease;
+  min-height: 192px;
+}
+
+.challenge.expanded {
+  min-height: calc(100vh - 82px);
+  transition: min-height .5s ease-in-out;
+  width: 100%;
+}
+
+.expand-enter-active, .expand-leave-active {
+  transition: min-height .5s ease-in-out;
+}
+.expand-enter, .expand-leave-to {
+  min-height: 0
+}
+
+.leaderboard, .leftover-wrapper, .week-wrapper {
+  max-height: 174px;
+  transition: all .2s ease-in-out;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .2s ease-in-out;
+  transition-delay: .3s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  max-height: 0;
+  transition-delay: 0s;
 }
 
 .content {
@@ -306,4 +349,10 @@ export default {
   display: inline-block;
   height: 54px;
 }
+
+.progress {
+  position: absolute;
+  bottom: 0;
+}
+
 </style>
