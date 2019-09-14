@@ -12,7 +12,7 @@
           color="primary"
           animated
           dark
-          class="bg-grey-10"
+          class="stepper"
           active-color="secondary"
           done-color="secondary"
         >
@@ -301,6 +301,10 @@ export default {
   position: absolute;
   bottom: 50px;
   right: 50px;
+}
+
+.stepper {
+  background: linear-gradient(to left, #3a404d, #181c26)
 }
 
 .spacing {
