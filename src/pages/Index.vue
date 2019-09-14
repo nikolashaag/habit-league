@@ -9,12 +9,7 @@
     <div class="q-pa-md wrapper">
       <challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
     </div>
-    <!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
-    <div class="add-button">
-      <router-link to="/create">
-        <q-btn  size="xl" round color="amber" glossy text-color="black" icon="plus_one" />
-      </router-link>
-    </div>
+    <add-button />
   </q-page>
 </template>
 
@@ -23,10 +18,13 @@
 
 <script>
 import Challenge from 'components/Challenge.vue'
+import AddButton from 'components/AddButton.vue'
+
 export default {
   name: 'PageIndex',
   components: {
-    Challenge
+    Challenge,
+    AddButton
   },
   computed: {
     challenges: {

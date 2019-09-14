@@ -3,11 +3,6 @@
     <h5 v-if="challenges.length === 0 && completedToday.length === 0">
       You don't have any challenges yet. Quick start one by clicking the plus button
     </h5>
-    <div class="add-button">
-      <router-link to="/create">
-        <q-btn  size="xl" round color="amber" glossy text-color="black" icon="plus_one" />
-      </router-link>
-    </div>
     <h5 class="title" v-if="challenges.length !== 0">
       To complete a habit, swipe it to the left or to the right or tick the checkbox.
     </h5>
@@ -35,6 +30,7 @@
       </h5>
       <challenge-daily-completed :options="challenge" :onComplete="onComplete" v-for="(challenge) in completedToday" :key="challenge.id + 'completed'"/>
     </div>
+    <add-button />
   </q-page>
 </template>
 
@@ -45,12 +41,14 @@
 import ChallengeDaily from 'components/ChallengeDaily.vue'
 import ChallengeDailyCompleted from 'components/ChallengeDailyCompleted.vue'
 import { date } from 'quasar'
+import AddButton from 'components/AddButton.vue'
 
 export default {
   name: 'PageIndex',
   components: {
     ChallengeDaily,
-    ChallengeDailyCompleted
+    ChallengeDailyCompleted,
+    AddButton
   },
   computed: {
     challenges: {
@@ -117,12 +115,6 @@ export default {
 </script>
 
 <style>
-.add-button {
-  position: fixed;
-  z-index: 1;
-  bottom: 50px;
-  right: 50px;
-}
 
 .wrapper {
   width: 100%;
