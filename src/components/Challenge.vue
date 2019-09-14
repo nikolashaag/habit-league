@@ -3,8 +3,6 @@
       <q-card-section class="menus">
         <q-btn color="white" size="lg" round flat :icon="expanded === true ? 'expand_less' : 'expand_more'">
         </q-btn>
-        <!-- <q-icon :name="expanded === true ? 'expand_less' : 'expand_more'" class="caret">
-        </q-icon> -->
         <q-btn color="white" size="lg" @click="e => e.stopPropagation()" round flat icon="more_vert">
           <q-menu cover auto-close>
             <q-list>
@@ -38,8 +36,6 @@
            <div class="status">Completed days: {{member.completedDays}}</div>
          </div>
       </q-card-section>
-
-      <!-- <q-separator dark /> -->
 
       <q-card-actions class="weeks">
         <div class="row week-wrapper justify-between" v-if="isCurrentWeek(firstWeek) || expanded === true">

@@ -2,7 +2,7 @@
     <q-card class="challenge text-white" @click="() => expanded = !expanded">
       <q-card-section>
         <div class="icon-wrapper">
-          <q-icon :name="getIconName(options.category)" class="category-icon">
+          <q-icon :name="getIconName(options.icon)" class="category-icon">
           </q-icon>
         </div>
         <div class="header">
