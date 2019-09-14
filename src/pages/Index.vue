@@ -42,15 +42,7 @@ export default {
   },
   watch: {
     challenges: function (val) {
-      if (val.length !== this.localChallenges.length) {
-        this.localChallenges = val.map(challenge => {
-          return {
-            ...challenge,
-            expanded: false,
-            oneChallengeExpanded: false
-          }
-        })
-      }
+      this.updateLocalChallanges(val)
     }
   },
   data () {
@@ -60,6 +52,17 @@ export default {
     }
   },
   methods: {
+    updateLocalChallanges: function (val) {
+      if (val.length !== this.localChallenges.length) {
+        this.localChallenges = val.map(challenge => {
+          return {
+            ...challenge,
+            expanded: false,
+            oneChallengeExpanded: false
+          }
+        })
+      }
+    },
     onExpand: function (challengeId) {
       this.oneChallengeExpanded = !this.oneChallengeExpanded
       this.localChallenges = this.localChallenges.map(challenge => {
@@ -86,6 +89,7 @@ export default {
       this.$store.dispatch('app/fetchChallenges')
       this.$store.dispatch('user/fetchUsers')
     }
+    this.updateLocalChallanges(this.challenges)
   }
 }
 </script>
