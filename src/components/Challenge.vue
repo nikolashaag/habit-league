@@ -33,9 +33,15 @@
         <q-card-section v-if="options.expanded === true && options.members.length > 1" class="leaderboard">
           Leaderboard:
           <div class="row leaderboard-row" v-for="(member, key) in sortedMembers" :key="key + 'member'">
-            <div class="number">{{key + 1}}</div>
-            <div class="name">{{getDisplayName(member.id)}}</div>
-            <div class="status">Completed days: {{member.completedDays}}</div>
+              <div class="col-xs-2 col-sm-2 col-md-1">
+                <div class="number">{{key + 1}}</div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-2">
+                <div class="name">{{getDisplayName(member.id)}}</div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-3">
+                <div class="status">Completed days: {{member.completedDays}}</div>
+              </div>
           </div>
         </q-card-section>
       </transition>
@@ -308,14 +314,6 @@ export default {
   margin-left: 1rem;
   margin-top: 0.5rem;
   line-height: 2rem;
-}
-
-.name {
-  margin-left: 3rem;
-}
-
-.status {
-  margin-left: 10rem;
 }
 
 .week-wrapper, .leftover-wrapper {
