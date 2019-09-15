@@ -67,7 +67,7 @@ export default {
   },
   data () {
     return {
-      progress: null
+      progress: '0'
     }
   },
   watch: {
@@ -139,6 +139,8 @@ export default {
       this.$store.dispatch('app/fetchChallenges')
       this.$store.dispatch('user/fetchUsers')
     }
+    // Set progress with timeout so that it animates
+    setTimeout(this.updateProgress, 500)
   }
 }
 </script>
