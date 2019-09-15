@@ -83,6 +83,11 @@ export default {
             const loggedDays = chal.loggedDays || []
             return !loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD') && day.status === 'complete')
           })
+          .filter(chal => {
+            const startDate = new Date(chal.startDate)
+            const today = new Date()
+            return startDate.setHours(0, 0, 0, 0) <= today.setHours(0, 0, 0, 0)
+          })
       }
     },
     completedToday: {
