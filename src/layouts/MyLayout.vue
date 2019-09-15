@@ -12,7 +12,7 @@
 
     <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-2">
       <q-list>
-        <q-item-label header>Essential Links</q-item-label>
+        <q-item-label header>Menu</q-item-label>
         <q-item clickable @click="goToPage('daily')">
           <q-item-section avatar>
             <q-icon name="school" />
@@ -27,8 +27,8 @@
             <q-icon name="school" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>My Habits / Challenges</q-item-label>
-            <q-item-label caption>Keep track of your habits</q-item-label>
+            <q-item-label>Weekly view</q-item-label>
+            <q-item-label caption>Keep the overview</q-item-label>
           </q-item-section>
         </q-item>
         <q-item clickable @click="goToPage('browse')">
@@ -37,16 +37,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Browse Challenges</q-item-label>
-            <q-item-label caption>forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable @click="goToPage('history')">
-          <q-item-section avatar>
-            <q-icon name="rss_feed" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>History</q-item-label>
-            <q-item-label caption>See your completed challenges</q-item-label>
+            <q-item-label caption>Join other people</q-item-label>
           </q-item-section>
         </q-item>
 
