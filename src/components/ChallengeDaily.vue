@@ -7,7 +7,7 @@
         </div>
         <div class="header">
           <div class="text-h6">{{options.title}}</div>
-          <div class="text-subtitle2">by {{options.author}}</div>
+          <div class="text-subtitle2">{{readableFrequency}}</div>
         </div>
       </q-card-section>
       <q-card-section>
@@ -23,6 +23,7 @@
 
 <script>
 import { ICON_MAP } from '../helpers/constants'
+import { getReadableFrequency } from '../helpers/calendar'
 
 export default {
   name: 'Challenge',
@@ -40,6 +41,11 @@ export default {
         let dt2 = new Date()
         const diff = Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) / (1000 * 60 * 60 * 24))
         return this.options.duration / diff / 10
+      }
+    },
+    readableFrequency: {
+      get () {
+        return getReadableFrequency(this.options.frequency, this.options.perWeek, this.options.perMonth, this.options.specificDays)
       }
     }
   },
