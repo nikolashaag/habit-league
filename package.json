@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A Quasar Framework app",
   "productName": "Challenge me",
-  "cordovaId": "org.cordova.quasar.app",
+  "cordovaId": "com.metanoia.swarm-habit-tracker",
   "author": "Haag, Nikolas (656) <nikolas.haag@daimler.com>",
   "private": true,
   "scripts": {
@@ -13,7 +13,8 @@
     "mobile": "quasar dev -m cordova -T android",
     "build": "quasar build",
     "build:pwa": "quasar build -m pwa",
-    "new": "cordova platform add android"
+    "new": "cordova platform add android",
+    "buildForPlayStore": "quasar build -m android"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
