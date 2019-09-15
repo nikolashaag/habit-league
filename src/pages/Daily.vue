@@ -67,7 +67,7 @@ export default {
   },
   data () {
     return {
-      progress: '0'
+      progress: 0
     }
   },
   watch: {
