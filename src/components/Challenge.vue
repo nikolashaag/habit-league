@@ -25,7 +25,7 @@
         </div>
         <div class="header">
           <div class="text-h6">{{options.title}}</div>
-          <div class="text-subtitle2">by {{options.author}}</div>
+          <div class="text-subtitle2">{{readableFrequency}}</div>
         </div>
       </q-card-section>
       <q-card-section class="countdown flex flex-center" v-if="isInFuture">
@@ -109,7 +109,7 @@
 import { date } from 'quasar'
 import { ICON_MAP } from '../helpers/constants'
 import { sort } from '../helpers/utils'
-import { getFirstWeek, getLastWeek, getAllOtherWeeks } from '../helpers/calendar'
+import { getFirstWeek, getLastWeek, getAllOtherWeeks, getReadableFrequency } from '../helpers/calendar'
 
 export default {
   name: 'Challenge',
@@ -128,6 +128,11 @@ export default {
       get () {
         const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
         return loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid)
+      }
+    },
+    readableFrequency: {
+      get () {
+        return getReadableFrequency(this.options.frequency, this.options.perWeek, this.options.perMonth, this.options.specificDays)
       }
     },
     isInFuture: {

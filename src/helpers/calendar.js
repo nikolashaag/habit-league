@@ -1,3 +1,5 @@
+import { capitalize } from './utils'
+
 const WEEK_MASK = [
   {
     label: 'M'
@@ -108,4 +110,17 @@ export const isChallengePast = (challenge) => {
   const today = new Date()
   endDate.setDate(startDate.getDate() + Number(challenge.duration))
   return endDate.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)
+}
+
+export const getReadableFrequency = (frequency, perWeek, perMonth, specificDays) => {
+  switch (frequency) {
+    case 'daily':
+      return 'Daily'
+    case 'per-week':
+      return `${perWeek} times per week`
+    case 'per-month':
+      return `${perMonth} times per month`
+    default:
+      return specificDays.map(capitalize).join(', ')
+  }
 }
