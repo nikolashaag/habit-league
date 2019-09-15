@@ -18,15 +18,13 @@ module.exports = {
   ],
 
   // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
+  plugins: ['vue'],
 
   globals: {
-    'ga': true, // Google Analytics
-    'cordova': true,
-    '__statics': true,
-    'process': true
+    ga: true, // Google Analytics
+    cordova: true,
+    __statics: true,
+    process: true
   },
 
   // add your custom rules here
@@ -46,6 +44,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
+    'space-before-function-paren': 0,
 
     // allow console.log during development only
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
