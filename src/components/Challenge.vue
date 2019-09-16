@@ -277,7 +277,7 @@ export default {
     },
     calculateDays: function() {
       let startDate = new Date(this.options.startDate)
-      this.endDate = new Date(this.options.startDate)
+      this.endDate = new Date()
       this.endDate.setDate(startDate.getDate() + Number(this.options.duration))
 
       this.firstWeek = getFirstWeek({ startDate })
