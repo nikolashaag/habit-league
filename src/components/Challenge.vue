@@ -254,19 +254,27 @@ export default {
       this.$store.commit('app/setActiveChallenge', this.options)
       this.$router.replace('/create?edit=true')
     },
-    getloggedDaysForUser: function(uid) {
-      const loggedDays =
-        this.$store.state.app.myChallenges.find(
-          challenge => challenge.id === this.options.id
-        ).loggedDays || []
-      return loggedDays.filter(day => day.user === uid)
+    getCompletedDaysForUser: function(uid) {
+      const challengeId = this.options.id
+
+      const currentChallenge = this.$store.state.app.myChallenges.find(
+        challenge => challenge.id === challengeId
+      )
+
+      return (
+        (currentChallenge &&
+          currentChallenge.loggedDays.filter(
+            day => day.user === uid && day.status === 'complete'
+          ).length) ||
+        0
+      )
     },
-    sortMembers: function(members) {
+    sortMembers: function(users) {
       return sort(
-        members.map(member => {
+        users.map(user => {
           return {
-            ...member,
-            completedDays: this.getloggedDaysForUser(member.id).length
+            ...user,
+            completedDays: this.getCompletedDaysForUser(user.id)
           }
         }),
         'completedDays'
