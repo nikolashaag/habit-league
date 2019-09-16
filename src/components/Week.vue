@@ -3,7 +3,7 @@
     <div class="day" v-for="(day, index) in week" :key="index + 'last' + challenge.title">
       <q-btn
         :title="day.date"
-        :disabled="day.isInFuture || day.isBeforeHabitStart"
+        :disabled="day.afterHabitEnds || day.isInFuture || day.isBeforeHabitStart"
         size="m"
         round
         :color="getColor(day)"
