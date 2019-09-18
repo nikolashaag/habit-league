@@ -56,4 +56,21 @@ export default {
 .leaderboard-row:nth-child(5) {
   background: #ff5a04;
 }
+
+.number {
+  background: white;
+  color: black;
+  text-align: center;
+  border-radius: 50%;
+  padding: 0;
+  min-height: 0;
+  height: 2rem;
+  width: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  line-height: 2rem;
+  margin-left: 16px;
+}
 </style>
