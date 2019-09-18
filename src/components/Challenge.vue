@@ -62,11 +62,11 @@
           ></week>
         </transition>
 
-        <div class="leftover-wrapper">
+        <div :class="`leftover-wrapper rows-${leftOverWeeks.length}`">
           <div
             v-for="(week, key) in leftOverWeeks"
             :key="key + 'leftOverWeeks' + options.title"
-            class="row week-wrapper justify-between"
+            class="row justify-between"
           >
             <transition name="fade">
               <week
@@ -392,13 +392,37 @@ export default {
 }
 
 .leftover-wrapper {
-  margin-bottom: 46px;
+  // margin-bottom: 46px;
 }
 
 .leftover-wrapper,
 .week-wrapper {
   max-height: 174px;
   transition: all 0.2s ease-in-out;
+}
+
+.rows-1 {
+  max-height: 58px;
+}
+
+.rows-2 {
+  max-height: 116px;
+}
+
+.rows-3 {
+  max-height: 174px;
+}
+
+.rows-4 {
+  max-height: 232px;
+}
+
+.rows-5 {
+  max-height: 290px;
+}
+
+.rows-6 {
+  max-height: 348px;
 }
 
 .fade-enter-active,
