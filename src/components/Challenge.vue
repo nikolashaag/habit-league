@@ -285,9 +285,8 @@ export default {
     },
     calculateDays: function() {
       let startDate = new Date(this.options.startDate)
-      this.endDate = new Date()
+      this.endDate = new Date(this.options.startDate)
       this.endDate.setDate(startDate.getDate() + Number(this.options.duration))
-
       this.firstWeek = getFirstWeek({ startDate })
       this.lastWeek = getLastWeek({ endDate: this.endDate })
       this.leftOverWeeks = getAllOtherWeeks({

@@ -84,12 +84,12 @@ export const getLastWeek = ({ endDate }) => {
     })
 }
 
-export const getAllOtherWeeks = ({ duration, startDate, endDate, bla }) => {
+export const getAllOtherWeeks = ({ duration, startDate, endDate }) => {
   let split = startDate.getDay() - 1
   split = split > -1 ? split : 6
   let lastWeekSplit = endDate.getDay() - 1
   lastWeekSplit = lastWeekSplit > -1 ? lastWeekSplit : 6
-  const leftOverDays = duration - (7 - split) - (lastWeekSplit)
+  const leftOverDays = Number(duration) - (7 - split) - (lastWeekSplit)
   const prototype = [...new Array(leftOverDays / 7)]
   return prototype.map((week, weekIndex) => {
     return WEEK_MASK.map((day, index) => {
