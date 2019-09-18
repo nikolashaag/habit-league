@@ -2,9 +2,9 @@
   <div class="row week-wrapper justify-between">
     <div class="day" v-for="(day, index) in week" :key="index + 'last' + challenge.title">
       <q-btn
+        class="day-button"
         :title="day.date"
         :disabled="day.afterHabitEnds || day.isInFuture || day.isBeforeHabitStart"
-        size="m"
         round
         :color="getColor(day)"
         text-color="black"
@@ -61,11 +61,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "./src/css/breakpoints.scss";
+
 .day {
   display: flex;
   flex-grow: 1;
   align-items: center;
 }
+
+.day-button {
+  font-size: 12px;
+  @include sm {
+    font-size: 14px;
+  }
+}
+
 .hr {
   width: 100%;
   margin: 0;

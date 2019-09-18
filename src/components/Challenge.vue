@@ -8,18 +8,18 @@
       <q-card-section class="menus">
         <q-btn
           color="white"
-          size="lg"
           round
           flat
           :icon="options.expanded === true ? 'expand_less' : 'expand_more'"
+          class="caret"
         ></q-btn>
         <q-btn
           color="white"
-          size="lg"
           @click="e => e.stopPropagation()"
           round
           flat
           icon="more_vert"
+          class="falafel"
         >
           <q-menu cover auto-close>
             <q-list>
@@ -39,8 +39,8 @@
           <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
         </div>
         <div class="header">
-          <div class="text-h6">{{options.title}}</div>
-          <div class="text-subtitle2">{{readableFrequency}}</div>
+          <div class="text-title">{{options.title}}</div>
+          <div class="text-subtitle">{{readableFrequency}}</div>
         </div>
       </q-card-section>
       <q-card-section class="countdown flex flex-center" v-if="isInFuture">
@@ -360,14 +360,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "./src/css/breakpoints.scss";
+
 .menus {
   position: absolute;
   right: 0;
-  top: 0;
+  top: -8px;
   padding: 0;
   font-size: 3rem;
   color: white;
   z-index: 2;
+
+  @include sm {
+    top: 0;
+  }
 }
 .challenge {
   margin-bottom: 16px;
@@ -468,10 +474,10 @@ export default {
 }
 
 .icon-wrapper i {
-  position: absolute; /*it can be fixed too*/
+  position: absolute;
   left: 0;
   right: 0;
-  top: 0;
+  top: 12px;
   bottom: 0;
   margin: auto;
 }
@@ -479,10 +485,46 @@ export default {
 .header {
   display: inline-block;
   height: 54px;
+  margin-left: 4px;
+
+  @include sm {
+    margin-left: 8px;
+  }
+
+  .text-title {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    letter-spacing: 0.0125em;
+
+    @include sm {
+      font-size: 1.25rem;
+      line-height: 2rem;
+    }
+  }
+
+  .text-subtitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.375rem;
+    letter-spacing: 0.00714em;
+
+    @include sm {
+      font-size: 1.25rem;
+    }
+  }
 }
 
 .progress {
   position: absolute;
   bottom: 0;
+}
+
+.falafel, .caret {
+  font-size: 16px;
+
+  @include sm {
+    font-size: 20px;
+  }
 }
 </style>
