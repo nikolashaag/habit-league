@@ -1,22 +1,54 @@
 <template>
   <q-page class="flex flex-center" id="test">
-    <h5 v-if="challenges.length === 0">
-      You don't have any challenges yet. Quick start one by clicking the plus button
-    </h5>
+    <h5
+      v-if="challenges.length === 0"
+    >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
     <transition name="expand">
       <div class="title-wrapper" v-if="challenges.length > 0 && !this.oneChallengeExpanded">
-        <h5>
-          Weekly Overview
-        </h5>
+        <h5>Weekly Overview</h5>
       </div>
     </transition>
-    <div class="q-pa-md wrapper">
-      <challenge v-for="(challenge, key) in localChallenges" :options="challenge" :onExpand="onExpand" :key="key"/>
+    <div class="q-pa-md wrapper" v-if="dailyChallenges.length">
+      <h5>Today</h5>
+      <challenge
+        v-for="(challenge, key) in dailyChallenges"
+        :options="challenge"
+        :onExpand="onExpand"
+        :key="key"
+      />
     </div>
-    <transition name="fade">
-      <add-button v-if="!this.oneChallengeExpanded"/>
-    </transition>
+    <div class="q-pa-md wrapper" v-if="specificDaysChallenges.length">
+      <h5>Specific Days</h5>
+      <challenge
+        v-for="(challenge, key) in specificDaysChallenges"
+        :options="challenge"
+        :onExpand="onExpand"
+        :key="key"
+      />
+    </div>
+    <div class="q-pa-md wrapper" v-if="weeklyChallenges.length">
+      <h5>Weekly</h5>
+      <challenge
+        v-for="(challenge, key) in weeklyChallenges"
+        :options="challenge"
+        :onExpand="onExpand"
+        :key="key"
+      />
+    </div>
 
+    <div class="q-pa-md wrapper" v-if="monthlyChallenges.length">
+      <h5>Monthly</h5>
+      <challenge
+        v-for="(challenge, key) in monthlyChallenges"
+        :options="challenge"
+        :onExpand="onExpand"
+        :key="key"
+      />
+    </div>
+
+    <transition name="fade">
+      <add-button v-if="!this.oneChallengeExpanded" />
+    </transition>
   </q-page>
 </template>
 
@@ -35,24 +67,41 @@ export default {
   },
   computed: {
     challenges: {
-      get () {
+      get() {
         return this.$store.state.app.myChallenges
       }
+    },
+    weeklyChallenges() {
+      return this.getChallengesByFrequency('per-week')
+    },
+    dailyChallenges() {
+      return this.getChallengesByFrequency('daily')
+    },
+    specificDaysChallenges() {
+      return this.getChallengesByFrequency('specific')
+    },
+    monthlyChallenges() {
+      return this.getChallengesByFrequency('per-month')
     }
   },
   watch: {
-    challenges: function (val) {
+    challenges: function(val) {
       this.updateLocalChallanges(val)
     }
   },
-  data () {
+  data() {
     return {
       localChallenges: [],
       oneChallengeExpanded: false
     }
   },
   methods: {
-    updateLocalChallanges: function (val) {
+    getChallengesByFrequency(frequency) {
+      return this.challenges.filter(
+        challenge => challenge.frequency === frequency
+      )
+    },
+    updateLocalChallanges: function(val) {
       if (val.length !== this.localChallenges.length) {
         this.localChallenges = val.map(challenge => {
           return {
@@ -63,7 +112,7 @@ export default {
         })
       }
     },
-    onExpand: function (challengeId) {
+    onExpand: function(challengeId) {
       this.oneChallengeExpanded = !this.oneChallengeExpanded
       this.localChallenges = this.localChallenges.map(challenge => {
         if (challenge.id === challengeId) {
@@ -84,7 +133,7 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     if (!this.$store.state.app.syncStatus) {
       this.$store.dispatch('app/fetchChallenges')
       this.$store.dispatch('user/fetchUsers')
@@ -108,16 +157,20 @@ export default {
   width: 100%;
   padding-bottom: 0;
 }
-.expand-enter-active, .expand-leave-active {
-  transition: height .5s;
+.expand-enter-active,
+.expand-leave-active {
+  transition: height 0.5s;
 }
-.expand-enter, .expand-leave-to {
-  height: 0
+.expand-enter,
+.expand-leave-to {
+  height: 0;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
