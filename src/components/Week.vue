@@ -4,7 +4,7 @@
       <q-btn
         class="day-button"
         :title="day.date"
-        :disabled="day.afterHabitEnds || day.isInFuture || day.isBeforeHabitStart"
+        :disabled="day.isAfterHabitEnds || day.isInFuture || day.isBeforeHabitStart"
         round
         :color="getColor(day)"
         text-color="black"
