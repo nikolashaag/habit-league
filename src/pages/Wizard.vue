@@ -240,7 +240,7 @@ export default {
         { label: 'Shower', value: 'shower' },
         { label: 'Gaming', value: 'gaming' },
         { label: 'Coding', value: 'coding' },
-        { label: 'Sleep', value: 'bed' }
+        { label: 'Sleep', value: 'sleep' }
       ],
       days: [
         {

@@ -83,14 +83,35 @@ export default {
     challenges: {
       get () {
         return this.$store.state.app.myChallenges
+        // Filter for not yet logged
           .filter(chal => {
             const loggedDays = chal.loggedDays || []
             return !loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD') && day.status === 'complete')
           })
+        // Filter out challenges which haven't started yet
           .filter(chal => {
             const startDate = new Date(chal.startDate)
             const today = new Date()
             return startDate.setHours(0, 0, 0, 0) <= today.setHours(0, 0, 0, 0)
+          })
+        // Filter out weekly challenges already complete
+          .filter(chal => {
+            if (chal.frequency === 'per-week') {
+              const loggedDays = chal.loggedDays || []
+              const loggedComplete = loggedDays
+                .filter(day => day.status === 'complete')
+                .filter(log => {
+                  const getMonday = (d) => {
+                    d = new Date(d)
+                    const day = d.getDay()
+                    const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+                    return new Date(d.setDate(diff))
+                  }
+                  return new Date(log.date).setHours(0, 0, 0, 0) >= getMonday(log.date).setHours(0, 0, 0, 0)
+                })
+              return loggedComplete.length < chal.perWeek
+            }
+            return true
           })
       }
     },
