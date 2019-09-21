@@ -303,10 +303,6 @@ export default {
         console.log(e)
       })
     },
-    getloggedDaysForUser: function (uid) {
-      const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
-      return loggedDays.filter(day => day.user === uid)
-    },
     sortMembers: function(users) {
       return sort(
         users.map(user => {
