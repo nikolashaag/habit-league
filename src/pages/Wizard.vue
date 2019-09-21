@@ -238,7 +238,8 @@ export default {
         { label: 'Music', value: 'listen' },
         { label: 'Cleaning', value: 'clean' },
         { label: 'Shower', value: 'shower' },
-        { label: 'Gaming', value: 'gaming' }
+        { label: 'Gaming', value: 'gaming' },
+        { label: 'Coding', value: 'coding' }
       ],
       days: [
         {

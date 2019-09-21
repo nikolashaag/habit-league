@@ -23,5 +23,6 @@ export const ICON_MAP = {
   listen: 'fas fa-headphones-alt',
   clean: 'fas fa-broom',
   shower: 'fas fa-shower',
-  gaming: 'fas fa-gamepad'
+  gaming: 'fas fa-gamepad',
+  coding: 'fas fa-code'
 }
