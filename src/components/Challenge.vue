@@ -44,7 +44,7 @@
         </div>
       </q-card-section>
       <q-card-section class="countdown flex flex-center" v-if="isInFuture">
-        <h5>{{countdown}}</h5>
+        <h6>{{countdown}}</h6>
       </q-card-section>
       <leader-board
         :members="sortedMembers"
@@ -526,5 +526,10 @@ export default {
   @include sm {
     font-size: 20px;
   }
+}
+
+.countdown h6 {
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
 </style>
