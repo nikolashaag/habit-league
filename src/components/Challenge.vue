@@ -23,13 +23,13 @@
         >
           <q-menu cover auto-close>
             <q-list>
-              <q-item clickable @click="() => deleteChallenge = !deleteChallenge">
+              <q-item v-if="iAmAuthor" clickable @click="() => deleteChallenge = !deleteChallenge">
                 <q-item-section>Delete Habit</q-item-section>
               </q-item>
-              <q-item clickable @click="editHabit">
+              <q-item v-if="iAmAuthor" clickable @click="editHabit">
                 <q-item-section>Edit Habit</q-item-section>
               </q-item>
-              <q-item clickable @click="() => leaveChallenge = !leaveChallenge">
+              <q-item v-if="!iAmAuthor" clickable @click="() => leaveChallenge = !leaveChallenge">
                 <q-item-section>Leave Habit</q-item-section>
               </q-item>
             </q-list>
@@ -212,6 +212,11 @@ export default {
         const startDate = new Date(this.options.startDate)
         const today = new Date()
         return startDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
+      }
+    },
+    iAmAuthor: {
+      get() {
+        return this.options.author === this.$store.state.user.currentUser.displayName
       }
     },
     sortedMembers: {
