@@ -11,7 +11,12 @@
     <spinner v-if="isLoading" />
     <div v-if="!isLoading" class="challenges">
       <div class="q-pa-md wrapper" v-if="dailyChallenges.length">
-        <h5>Today</h5>
+        <transition name="expand">
+          <div class="title-wrapper" v-if="!this.oneChallengeExpanded">
+            <h5>Every day</h5>
+          </div>
+        </transition>
+
         <challenge
           v-for="(challenge, key) in dailyChallenges"
           :options="challenge"
@@ -20,7 +25,12 @@
         />
       </div>
       <div class="q-pa-md wrapper" v-if="specificDaysChallenges.length">
-        <h5>Specific Days</h5>
+        <transition name="expand">
+          <div class="title-wrapper" v-if="!this.oneChallengeExpanded">
+            <h5>Specific Days</h5>
+          </div>
+        </transition>
+
         <challenge
           v-for="(challenge, key) in specificDaysChallenges"
           :options="challenge"
@@ -29,7 +39,11 @@
         />
       </div>
       <div class="q-pa-md wrapper" v-if="weeklyChallenges.length">
-        <h5>Weekly</h5>
+        <transition name="expand">
+          <div class="title-wrapper" v-if="!this.oneChallengeExpanded">
+            <h5>Weekly</h5>
+          </div>
+        </transition>
         <challenge
           v-for="(challenge, key) in weeklyChallenges"
           :options="challenge"
@@ -38,7 +52,11 @@
         />
       </div>
       <div class="q-pa-md wrapper" v-if="monthlyChallenges.length">
-        <h5>Monthly</h5>
+        <transition name="expand">
+          <div class="title-wrapper" v-if="!this.oneChallengeExpanded">
+            <h5>Monthly</h5>
+          </div>
+        </transition>
         <challenge
           v-for="(challenge, key) in monthlyChallenges"
           :options="challenge"
@@ -165,6 +183,7 @@ export default {
 }
 .title-wrapper {
   height: 112px;
+  overflow: hidden;
 }
 
 .wrapper {
@@ -173,7 +192,7 @@ export default {
 }
 .expand-enter-active,
 .expand-leave-active {
-  transition: height 0.5s;
+  transition: height .5s;
 }
 .expand-enter,
 .expand-leave-to {

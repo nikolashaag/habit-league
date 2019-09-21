@@ -506,7 +506,7 @@ export default {
     letter-spacing: 0.00714em;
 
     @include sm {
-      font-size: 1.25rem;
+      font-size: 1rem;
     }
   }
 }
