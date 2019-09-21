@@ -22,6 +22,7 @@
     "e": "0.0.4",
     "firebase": "^6.3.5",
     "quasar": "^1.0.0",
+    "vue-clipboard2": "^0.3.1",
     "vue-i18n": "^8.0.0",
     "vue-scrollto": "^2.16.3"
   },

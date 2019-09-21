@@ -35,10 +35,10 @@ const routes = [
     }
   },
   {
-    path: '/history',
+    path: '/invite',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/Invite.vue') }
     ],
     meta: {
       requiresAuth: true

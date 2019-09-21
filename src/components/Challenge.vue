@@ -29,6 +29,9 @@
               <q-item clickable @click="editHabit">
                 <q-item-section>Edit Habit</q-item-section>
               </q-item>
+              <q-item clickable @click="copyInvite">
+                <q-item-section>Copy invite link</q-item-section>
+              </q-item>
             </q-list>
           </q-menu>
         </q-btn>
@@ -125,6 +128,7 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <textarea name="copy-pasta" id="copy-pasta"></textarea>
     </q-card>
   </transition>
 </template>
@@ -268,6 +272,40 @@ export default {
           ).length) ||
         0
       )
+    },
+    copyInviteVla: function () {
+      // Manual copy attempt
+
+      // let copy = document.querySelector('#copy-pasta')
+      // // copy.setAttribute('type', 'text')
+      // copy.select()
+      // copy.setSelectionRange(0, 99999)
+      // console.log('copy, copy', copy)
+      // try {
+      //   var successful = document.execCommand('copy')
+      //   var msg = successful ? 'successful' : 'unsuccessful'
+      //   alert('Testing code was copied ' + msg + successful)
+      // } catch (err) {
+      //   alert('Oops, unable to copy')
+      // }
+
+      /* unselect the range */
+      // copy.setAttribute('type', 'hidden')
+      // window.getSelection().removeAllRanges()
+    },
+    copyInvite: function () {
+      // Using a library
+      this.$copyText(this.options.id).then(function (e) {
+        alert('Copied')
+        console.log(e)
+      }, function (e) {
+        alert('Can not copy')
+        console.log(e)
+      })
+    },
+    getloggedDaysForUser: function (uid) {
+      const loggedDays = this.$store.state.app.myChallenges.find(challenge => challenge.id === this.options.id).loggedDays || []
+      return loggedDays.filter(day => day.user === uid)
     },
     sortMembers: function(users) {
       return sort(
