@@ -32,11 +32,28 @@ export default {
     },
     getChainColor(index) {
       let color = 'amber'
-      const nextDay = this.week[index + 1]
+      const dayBefore = this.week[index - 1]
       const currentDay = this.week[index]
+      const nextDay = this.week[index + 1]
+      const dayAfter = this.week[index + 2]
 
-      if (this.isDayChainable(currentDay) && nextDay) {
-        return this.getColor(nextDay)
+      const perWeek = this.challenge.frequency === 'per-week'
+
+      const dayBeforeIsGreen = dayBefore && this.getColor(dayBefore) === 'green'
+      const currentDayIsGreen = currentDay && this.getColor(currentDay) === 'green'
+      const currentDayIsNotRed = currentDay && this.getColor(currentDay) !== 'red'
+      const nextDayIsGreen = this.isDayChainable(currentDay) && nextDay && this.getColor(nextDay) === 'green'
+      const dayAfterIsGreen = nextDay && this.getColor(nextDay) !== 'red' && dayAfter && this.getColor(dayAfter) === 'green'
+
+      // Custom chain behaviour in per-week habits
+      if (perWeek && dayBeforeIsGreen && nextDayIsGreen && currentDayIsNotRed) {
+        return 'green'
+      }
+      if (perWeek && currentDayIsGreen && dayAfterIsGreen) {
+        return 'green'
+      }
+      if (nextDayIsGreen && currentDayIsGreen) {
+        return 'green'
       }
       return color
     },
