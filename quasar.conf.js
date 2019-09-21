@@ -68,7 +68,8 @@ module.exports = function (ctx) {
         'QSlideItem',
         'QAvatar',
         'QMenu',
-        'QKnob'
+        'QKnob',
+        'QSpinnerGrid'
       ],
 
       directives: [

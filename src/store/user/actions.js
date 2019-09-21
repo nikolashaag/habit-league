@@ -20,11 +20,14 @@ export async function saveUser ({ commit, state }, user) {
 }
 
 export function fetchUsers ({ commit, state }) {
-  var db = firebase.firestore()
-  db.collection('users').get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const user = doc.data()
-      commit('addUserToState', user)
+  return new Promise((resolve, reject) => {
+    var db = firebase.firestore()
+    db.collection('users').get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const user = doc.data()
+        commit('addUserToState', user)
+      })
+      resolve()
     })
   })
 }

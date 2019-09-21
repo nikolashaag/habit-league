@@ -3,26 +3,29 @@ import { isChallengePast } from '../../helpers/calendar'
 import { Notify } from 'quasar'
 
 export function fetchChallenges ({ commit, state, rootState }) {
-  commit('clearState')
-  const db = firebase.firestore()
-  db.collection('challenges').get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const challenge = doc.data()
-      const isPast = isChallengePast(challenge)
+  return new Promise((resolve, reject) => {
+    commit('clearState')
+    const db = firebase.firestore()
+    db.collection('challenges').get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const challenge = doc.data()
+        const isPast = isChallengePast(challenge)
 
-      if (challenge.members.find(member => member.id === rootState.user.currentUser.uid) && !isPast) {
-        commit('addMyChallengeToState', {
-          ...challenge,
-          id: doc.id
-        })
-      } else if (!isPast && challenge.privacy === 'public') {
-        commit('addChallengeToState', {
-          ...challenge,
-          id: doc.id
-        })
-      }
+        if (challenge.members.find(member => member.id === rootState.user.currentUser.uid) && !isPast) {
+          commit('addMyChallengeToState', {
+            ...challenge,
+            id: doc.id
+          })
+        } else if (!isPast && challenge.privacy === 'public') {
+          commit('addChallengeToState', {
+            ...challenge,
+            id: doc.id
+          })
+        }
+      })
+      commit('setSyncStatus', true)
+      resolve()
     })
-    commit('setSyncStatus', true)
   })
 }
 

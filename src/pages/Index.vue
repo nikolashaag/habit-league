@@ -1,49 +1,51 @@
 <template>
   <q-page class="flex flex-center" id="test">
     <h5
-      v-if="challenges.length === 0"
+      v-if="!isLoading && challenges.length === 0"
     >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
     <transition name="expand">
       <div class="title-wrapper" v-if="challenges.length > 0 && !this.oneChallengeExpanded">
         <h5>Weekly Overview</h5>
       </div>
     </transition>
-    <div class="q-pa-md wrapper" v-if="dailyChallenges.length">
-      <h5>Today</h5>
-      <challenge
-        v-for="(challenge, key) in dailyChallenges"
-        :options="challenge"
-        :onExpand="onExpand"
-        :key="key"
-      />
-    </div>
-    <div class="q-pa-md wrapper" v-if="specificDaysChallenges.length">
-      <h5>Specific Days</h5>
-      <challenge
-        v-for="(challenge, key) in specificDaysChallenges"
-        :options="challenge"
-        :onExpand="onExpand"
-        :key="key"
-      />
-    </div>
-    <div class="q-pa-md wrapper" v-if="weeklyChallenges.length">
-      <h5>Weekly</h5>
-      <challenge
-        v-for="(challenge, key) in weeklyChallenges"
-        :options="challenge"
-        :onExpand="onExpand"
-        :key="key"
-      />
-    </div>
-
-    <div class="q-pa-md wrapper" v-if="monthlyChallenges.length">
-      <h5>Monthly</h5>
-      <challenge
-        v-for="(challenge, key) in monthlyChallenges"
-        :options="challenge"
-        :onExpand="onExpand"
-        :key="key"
-      />
+    <spinner v-if="isLoading" />
+    <div v-if="!isLoading" class="challenges">
+      <div class="q-pa-md wrapper" v-if="dailyChallenges.length">
+        <h5>Today</h5>
+        <challenge
+          v-for="(challenge, key) in dailyChallenges"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key"
+        />
+      </div>
+      <div class="q-pa-md wrapper" v-if="specificDaysChallenges.length">
+        <h5>Specific Days</h5>
+        <challenge
+          v-for="(challenge, key) in specificDaysChallenges"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key"
+        />
+      </div>
+      <div class="q-pa-md wrapper" v-if="weeklyChallenges.length">
+        <h5>Weekly</h5>
+        <challenge
+          v-for="(challenge, key) in weeklyChallenges"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key"
+        />
+      </div>
+      <div class="q-pa-md wrapper" v-if="monthlyChallenges.length">
+        <h5>Monthly</h5>
+        <challenge
+          v-for="(challenge, key) in monthlyChallenges"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key"
+        />
+      </div>
     </div>
 
     <transition name="fade">
@@ -58,12 +60,14 @@
 <script>
 import Challenge from 'components/Challenge.vue'
 import AddButton from 'components/AddButton.vue'
+import Spinner from 'components/Spinner.vue'
 
 export default {
   name: 'PageIndex',
   components: {
     Challenge,
-    AddButton
+    AddButton,
+    Spinner
   },
   computed: {
     challenges: {
@@ -92,7 +96,8 @@ export default {
   data() {
     return {
       localChallenges: [],
-      oneChallengeExpanded: false
+      oneChallengeExpanded: false,
+      isLoading: true
     }
   },
   methods: {
@@ -113,7 +118,6 @@ export default {
       }
     },
     onExpand: function(challengeId) {
-      console.log('challengeId', challengeId)
       this.oneChallengeExpanded = !this.oneChallengeExpanded
       this.localChallenges = this.localChallenges.map(challenge => {
         if (challenge.id === challengeId) {
@@ -136,17 +140,24 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     if (!this.$store.state.app.syncStatus) {
-      this.$store.dispatch('app/fetchChallenges')
-      this.$store.dispatch('user/fetchUsers')
+      await Promise.all([
+        this.$store.dispatch('app/fetchChallenges'),
+        this.$store.dispatch('user/fetchUsers')
+      ])
     }
     this.updateLocalChallanges(this.challenges)
+    this.isLoading = false
   }
 }
 </script>
 
 <style>
+
+.challenges {
+  width: 100%;
+}
 .add-button {
   position: fixed;
   bottom: 50px;

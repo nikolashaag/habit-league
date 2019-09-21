@@ -21,7 +21,8 @@
     <h5 class="title" v-if="challenges.length !== 0">
       To complete a habit, swipe it to the left or to the right or tick the checkbox.
     </h5>
-    <div class="q-pa-md wrapper">
+    <spinner v-if="isLoading" />
+    <div class="q-pa-md wrapper" v-if="!isLoading">
 
       <q-list class="list" bordered separator v-if="challenges.length !== 0">
         <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge) in challenges" :key="challenge.id">
@@ -57,17 +58,20 @@ import ChallengeDaily from 'components/ChallengeDaily.vue'
 import ChallengeDailyCompleted from 'components/ChallengeDailyCompleted.vue'
 import { date } from 'quasar'
 import AddButton from 'components/AddButton.vue'
+import Spinner from 'components/Spinner.vue'
 
 export default {
   name: 'PageIndex',
   components: {
     ChallengeDaily,
     ChallengeDailyCompleted,
-    AddButton
+    AddButton,
+    Spinner
   },
   data () {
     return {
-      progress: 0
+      progress: 0,
+      isLoading: true
     }
   },
   watch: {
@@ -139,13 +143,16 @@ export default {
     clearTimeout(this.timer)
     clearTimeout(this.secondTimer)
   },
-  created () {
+  async created () {
     if (!this.$store.state.app.syncStatus) {
-      this.$store.dispatch('app/fetchChallenges')
-      this.$store.dispatch('user/fetchUsers')
+      await Promise.all([
+        this.$store.dispatch('app/fetchChallenges'),
+        this.$store.dispatch('user/fetchUsers')
+      ])
     }
     // Set progress with timeout so that it animates
     setTimeout(this.updateProgress, 500)
+    this.isLoading = false
   }
 }
 </script>
