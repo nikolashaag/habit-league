@@ -239,7 +239,8 @@ export default {
         { label: 'Cleaning', value: 'clean' },
         { label: 'Shower', value: 'shower' },
         { label: 'Gaming', value: 'gaming' },
-        { label: 'Coding', value: 'coding' }
+        { label: 'Coding', value: 'coding' },
+        { label: 'Sleep', value: 'bed' }
       ],
       days: [
         {

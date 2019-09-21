@@ -24,5 +24,6 @@ export const ICON_MAP = {
   clean: 'fas fa-broom',
   shower: 'fas fa-shower',
   gaming: 'fas fa-gamepad',
-  coding: 'fas fa-code'
+  coding: 'fas fa-code',
+  sleep: 'fas fa-bed'
 }
