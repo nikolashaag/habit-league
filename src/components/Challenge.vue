@@ -397,10 +397,6 @@ export default {
   min-height: 0;
 }
 
-.leftover-wrapper {
-  // margin-bottom: 46px;
-}
-
 .leftover-wrapper,
 .week-wrapper {
   max-height: 174px;

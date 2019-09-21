@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     getChallengesByFrequency(frequency) {
-      return this.challenges.filter(
+      return this.localChallenges.filter(
         challenge => challenge.frequency === frequency
       )
     },
@@ -113,6 +113,7 @@ export default {
       }
     },
     onExpand: function(challengeId) {
+      console.log('challengeId', challengeId)
       this.oneChallengeExpanded = !this.oneChallengeExpanded
       this.localChallenges = this.localChallenges.map(challenge => {
         if (challenge.id === challengeId) {
@@ -128,6 +129,8 @@ export default {
           oneChallengeExpanded: this.oneChallengeExpanded
         }
       })
+      console.log('challengeId', this.localChallenges)
+
       if (this.oneChallengeExpanded) {
         this.$scrollTo('body', 1000)
       }
