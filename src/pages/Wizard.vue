@@ -83,19 +83,32 @@
                   Choose icon
                 </label>
               </div>
-              <q-btn-toggle
+              <q-select
+                dark
+                standout
                 v-model="icon"
-                toggle-color="primary"
-                push
                 :options="icons"
+                label="Icon"
               >
-
-                <template v-for="(value, key) in icons" v-slot:[value.slot] >
-                  <div class="row items-center no-wrap" :key="key">
-                    <q-icon right :name="iconMap[value.slot]" />
-                  </div>
+                <template v-slot:option="scope">
+                  <q-item
+                    v-bind="scope.itemProps"
+                    v-on="scope.itemEvents"
+                  >
+                    <q-item-section avatar>
+                      <q-icon :name="iconMap[scope.opt.value]" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label v-html="scope.opt.label" />
+                    </q-item-section>
+                  </q-item>
                 </template>
-              </q-btn-toggle>
+                <template v-slot:append>
+                  <q-avatar>
+                    <q-icon :name="iconMap[icon.value]" />
+                  </q-avatar>
+                </template>
+              </q-select>
             </q-step>
 
             <q-step
@@ -185,6 +198,8 @@ export default {
       for (let key in this.activeHabit) {
         if (key === 'duration') {
           this.prefillDuration(this.activeHabit[key])
+        } else if (key === 'icon') {
+          this[key] = this.icons.find(icon => icon.value === this.activeHabit[key])
         } else {
           this[key] = (this.activeHabit.hasOwnProperty(key) && this.activeHabit[key]) || ''
         }
@@ -200,12 +215,30 @@ export default {
       frequency: 'daily',
       specificDays: [],
       icons: [
-        { label: 'Exercise', value: 'exercise', slot: 'exercise' },
-        { label: 'Meditate', value: 'meditate', slot: 'meditate' },
-        { label: 'Journal', value: 'journal', slot: 'journal' },
-        { label: 'Run', value: 'run', slot: 'run' },
-        { label: 'Bike', value: 'bike', slot: 'bike' },
-        { label: 'Swim', value: 'swim', slot: 'swim' }
+        { label: 'Exercise', value: 'exercise' },
+        { label: 'Meditate', value: 'meditate' },
+        { label: 'Journal', value: 'journal' },
+        { label: 'Running', value: 'run' },
+        { label: 'Bike', value: 'bike' },
+        { label: 'Swimming', value: 'swim' },
+        { label: 'Sweets', value: 'sweets' },
+        { label: 'Drink', value: 'drink' },
+        { label: 'Coffee', value: 'coffee' },
+        { label: 'Sports', value: 'ball' },
+        { label: 'Smoking', value: 'smoking' },
+        { label: 'Dog', value: 'dog' },
+        { label: 'Book', value: 'book' },
+        { label: 'Pray', value: 'pray' },
+        { label: 'Pills', value: 'pills' },
+        { label: 'Food', value: 'food' },
+        { label: 'Veggetables', value: 'veggetables' },
+        { label: 'Fruits', value: 'fruits' },
+        { label: 'Money', value: 'money' },
+        { label: 'Business', value: 'business' },
+        { label: 'Music', value: 'listen' },
+        { label: 'Cleaning', value: 'clean' },
+        { label: 'Shower', value: 'shower' },
+        { label: 'Gaming', value: 'gaming' }
       ],
       days: [
         {
@@ -247,7 +280,7 @@ export default {
       perWeek: null,
       perMonth: null,
       category: 'physical-health',
-      icon: 'exercise',
+      icon: { label: 'Journal', value: 'journal' },
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
       perMonthOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       challengeDurationOptions: ['1 Week', '2 Weeks', '3 Weeks', '1 Month', '3 Months', 'Custom'],
@@ -319,7 +352,7 @@ export default {
             stake: this.stake,
             privacy: this.privacy,
             category: this.category,
-            icon: this.icon,
+            icon: this.icon.value,
             author: this.$store.state.user.currentUser.displayName,
             members: [{
               name: this.$store.state.user.currentUser.displayName,
