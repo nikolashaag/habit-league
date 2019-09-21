@@ -29,6 +29,9 @@
               <q-item clickable @click="editHabit">
                 <q-item-section>Edit Habit</q-item-section>
               </q-item>
+              <q-item clickable @click="() => leaveChallenge = !leaveChallenge">
+                <q-item-section>Leave Habit</q-item-section>
+              </q-item>
             </q-list>
           </q-menu>
         </q-btn>
@@ -125,6 +128,22 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="leaveChallenge">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Are you sure you want to leave the  Challenge?</div>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn label="Leave" color="primary" @click="leaveChallengeAction" v-close-popup />
+            <q-btn
+              label="Cancel"
+              color="primary"
+              @click="e => leaveChallenge = !leaveChallenge"
+              v-close-popup
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-card>
   </transition>
 </template>
@@ -153,6 +172,7 @@ export default {
       noteProgress: false,
       expanded: false,
       deleteChallenge: false,
+      leaveChallenge: false,
       countdown: '',
       countdownInterval: null,
       firstWeek: null,
@@ -333,6 +353,9 @@ export default {
       this.$store.dispatch('app/deleteHabit', {
         challengeId: this.options.id
       })
+    },
+    leaveChallengeAction: function() {
+      this.$store.dispatch('app/leaveChallenge', this.options.id)
     },
     log: function(status) {
       this.$store.dispatch('app/noteDayProgress', {

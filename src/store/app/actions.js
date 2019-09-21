@@ -77,6 +77,21 @@ export function joinChallenge ({ dispatch, state, rootState }, challengeId) {
     })
 }
 
+export function leaveChallenge ({ dispatch, state, rootState }, challengeId) {
+  const db = firebase.firestore()
+  const localChallengeMembers = state.myChallenges.find(challenge => challenge.id === challengeId).members
+  db.collection('challenges').doc(challengeId).update({
+    members: localChallengeMembers.filter(member => member.id !== rootState.user.currentUser.uid)
+  })
+    .then(function (docRef) {
+      console.log('success', docRef)
+      dispatch('fetchChallenges')
+    })
+    .catch(function (error) {
+      console.error('Error leaving challenge: ', error)
+    })
+}
+
 export async function noteDayProgress ({ commit, state, rootState }, data) {
   commit('noteDay', data)
   const db = firebase.firestore()
