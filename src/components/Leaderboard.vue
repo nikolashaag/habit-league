@@ -1,8 +1,8 @@
 <template>
   <transition name="fade">
-    <q-card-section :class="`leaderboard rows-${members.length}`">
+    <q-card-section :class="`leaderboard rows-${activeMembers.length}`">
       Leaderboard:
-      <div class="row leaderboard-row" v-for="(member, key) in members" :key="key + 'member'">
+      <div class="row leaderboard-row" v-for="(member, key) in activeMembers" :key="key + 'member'">
         <div class="col-xs-2 col-sm-2 col-md-1">
           <div class="number">{{key + 1}}</div>
         </div>
@@ -26,6 +26,11 @@ export default {
       return this.$store.state.user.users.find(user => user.uid === id)
         .displayName
     }
+  },
+  computed: {
+    activeMembers: function() {
+      return this.members.filter(member => member.completedDays)
+    }
   }
 }
 </script>
@@ -43,20 +48,19 @@ export default {
   margin-left: -16px;
 }
 .rows-2 {
-  max-height: (48*2)+20px;
+  max-height: (48 * 2)+20px;
 }
 .rows-3 {
-  max-height: (48*3)+20px;
+  max-height: (48 * 3)+20px;
 }
 .rows-4 {
-  max-height: (48*4)+20px;
+  max-height: (48 * 4)+20px;
 }
 .rows-5 {
-  max-height: (48*5)+20px;
-
+  max-height: (48 * 5)+20px;
 }
 .rows-6 {
-  max-height: (48*6)+20px;
+  max-height: (48 * 6)+20px;
 }
 .leaderboard-row:nth-child(1) {
   background: #ffc107;
