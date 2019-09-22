@@ -11,27 +11,33 @@
         color="teal"
         track-color="grey-3"
         class="q-ma-md"
-      >
-        {{ progress }}%
-      </q-knob>
+      >{{ progress }}%</q-knob>
     </div>
-    <h5 v-if="challenges.length === 0 && completedToday.length === 0">
-      You don't have any challenges yet. Quick start one by clicking the plus button
-    </h5>
-    <h5 class="title" v-if="challenges.length !== 0">
-      To complete a habit, swipe it to the left or to the right or tick the checkbox.
-    </h5>
+    <h5
+      v-if="challenges.length === 0 && completedToday.length === 0"
+    >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
+    <h5
+      class="title"
+      v-if="challenges.length !== 0"
+    >To complete a habit, swipe it to the left or to the right or tick the checkbox.</h5>
     <spinner v-if="isLoading" />
     <div class="q-pa-md wrapper" v-if="!isLoading">
-
       <q-list class="list" bordered separator v-if="challenges.length !== 0">
-        <q-slide-item ref="item" class="item-wrapper" @left="native => onLeft(native, challenge)" @right="native => onRight(native, challenge)" v-for="(challenge) in challenges" :key="challenge.id">
+        <q-slide-item
+          ref="item"
+          class="item-wrapper"
+          @left="native => onLeft(native, challenge)"
+          @right="native => onRight(native, challenge)"
+          v-for="(challenge) in challenges"
+          :key="challenge.id"
+        >
           <template v-slot:left>
-            <q-icon name="done" /> Complete for today
+            <q-icon name="done" />Complete for today
           </template>
           <template v-slot:right>
             <div class="row items-center">
-              Skip for today <q-icon right name="alarm" />
+              Skip for today
+              <q-icon right name="alarm" />
             </div>
           </template>
 
@@ -41,10 +47,13 @@
         </q-slide-item>
       </q-list>
 
-      <h5 class="completed" v-if="completedToday.length > 0">
-        Completed:
-      </h5>
-      <challenge-daily-completed :options="challenge" :onComplete="onComplete" v-for="(challenge) in completedToday" :key="challenge.id + 'completed'"/>
+      <h5 class="completed" v-if="completedToday.length > 0">Completed:</h5>
+      <challenge-daily-completed
+        :options="challenge"
+        :onComplete="onComplete"
+        v-for="(challenge) in completedToday"
+        :key="challenge.id + 'completed'"
+      />
     </div>
     <add-button />
   </q-page>
@@ -68,87 +77,125 @@ export default {
     AddButton,
     Spinner
   },
-  data () {
+  data() {
     return {
       progress: 0,
       isLoading: true
     }
   },
   watch: {
-    challenges: function () {
+    challenges: function() {
       this.updateProgress()
     }
   },
   computed: {
     challenges: {
-      get () {
-        return this.$store.state.app.myChallenges
-        // Filter for not yet logged
-          .filter(chal => {
-            const loggedDays = chal.loggedDays || []
-            return !loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD') && day.status === 'complete')
-          })
-        // Filter out challenges which haven't started yet
-          .filter(chal => {
-            const startDate = new Date(chal.startDate)
-            const today = new Date()
-            return startDate.setHours(0, 0, 0, 0) <= today.setHours(0, 0, 0, 0)
-          })
-        // Filter out weekly challenges already complete
-          .filter(chal => {
-            if (chal.frequency === 'per-week') {
+      get() {
+        return (
+          this.$store.state.app.myChallenges
+            // Filter for not yet logged
+            .filter(chal => {
               const loggedDays = chal.loggedDays || []
-              const loggedComplete = loggedDays
-                .filter(day => day.status === 'complete')
-                .filter(log => {
-                  const getMonday = (d) => {
-                    d = new Date(d)
-                    const day = d.getDay()
-                    const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-                    return new Date(d.setDate(diff))
-                  }
-                  return new Date(log.date).setHours(0, 0, 0, 0) >= getMonday(log.date).setHours(0, 0, 0, 0)
-                })
-              return loggedComplete.length < chal.perWeek
-            }
-            return true
-          })
+              return !loggedDays
+                .filter(
+                  day => day.user === this.$store.state.user.currentUser.uid
+                )
+                .find(
+                  day =>
+                    date.formatDate(day.date, 'YYYY/MM/DD') ===
+                      date.formatDate(new Date(), 'YYYY/MM/DD') &&
+                    day.status === 'complete'
+                )
+            })
+            // Filter out challenges which haven't started yet
+            .filter(chal => {
+              const startDate = new Date(chal.startDate)
+              const today = new Date()
+              return (
+                startDate.setHours(0, 0, 0, 0) <= today.setHours(0, 0, 0, 0)
+              )
+            })
+            // Filter out weekly challenges already complete
+            .filter(chal => {
+              if (chal.frequency === 'per-week') {
+                const loggedDays = chal.loggedDays || []
+                const loggedComplete = loggedDays
+                  .filter(day => day.status === 'complete')
+                  .filter(log => {
+                    const getMonday = d => {
+                      d = new Date(d)
+                      const day = d.getDay()
+                      const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+                      return new Date(d.setDate(diff))
+                    }
+                    return (
+                      new Date(log.date).setHours(0, 0, 0, 0) >=
+                      getMonday(log.date).setHours(0, 0, 0, 0)
+                    )
+                  })
+                return loggedComplete.length < chal.perWeek
+              }
+              return true
+            })
+            // Filter out specific days
+            .filter(challenge => {
+              if (challenge.frequency === 'specific') {
+                const todayFullName = new Date()
+                  .toLocaleDateString('en-us', {
+                    weekday: 'long'
+                  })
+                  .toLowerCase()
+                return challenge.specificDays.includes(todayFullName)
+              }
+
+              return true
+            })
+        )
       }
     },
     completedToday: {
-      get () {
-        return this.$store.state.app.myChallenges
-          .filter(chal => {
-            const loggedDays = chal.loggedDays || []
-            return loggedDays.filter(day => day.user === this.$store.state.user.currentUser.uid).find(day => date.formatDate(day.date, 'YYYY/MM/DD') === date.formatDate(new Date(), 'YYYY/MM/DD') && day.status === 'complete')
-          })
+      get() {
+        return this.$store.state.app.myChallenges.filter(chal => {
+          const loggedDays = chal.loggedDays || []
+          return loggedDays
+            .filter(day => day.user === this.$store.state.user.currentUser.uid)
+            .find(
+              day =>
+                date.formatDate(day.date, 'YYYY/MM/DD') ===
+                  date.formatDate(new Date(), 'YYYY/MM/DD') &&
+                day.status === 'complete'
+            )
+        })
       }
     }
   },
   methods: {
-    updateProgress () {
-      const faktor = (parseInt(this.completedToday.length, 10) + parseInt(this.challenges.length, 10)) / 100
+    updateProgress() {
+      const faktor =
+        (parseInt(this.completedToday.length, 10) +
+          parseInt(this.challenges.length, 10)) /
+        100
       this.progress = Math.round(this.completedToday.length / faktor) || 0
     },
-    onLeft ({ reset }, challenge) {
+    onLeft({ reset }, challenge) {
       this.$q.notify('Congrats! You completed your daily habit')
       this.finalize(reset, challenge.id, 'complete')
     },
-    onRight ({ reset }, challenge) {
+    onRight({ reset }, challenge) {
       this.$q.notify("Skipped for today! Don't forget about it tomorrow")
       this.finalize(reset, challenge.id, 'skip')
     },
-    finalize (reset, challengeId, status) {
+    finalize(reset, challengeId, status) {
       this.timer = setTimeout(() => {
         this.log(status, challengeId)
       }, 1000)
     },
-    onComplete (challengeId) {
+    onComplete(challengeId) {
       this.secondTimer = setTimeout(() => {
         this.log('complete', challengeId)
       }, 500)
     },
-    log: function (status, challengeId) {
+    log: function(status, challengeId) {
       this.$store.dispatch('app/noteDayProgress', {
         day: {
           date: date.formatDate(new Date(), 'YYYY/MM/DD'),
@@ -160,11 +207,11 @@ export default {
       this.updateProgress()
     }
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearTimeout(this.timer)
     clearTimeout(this.secondTimer)
   },
-  async created () {
+  async created() {
     if (!this.$store.state.app.syncStatus) {
       await Promise.all([
         this.$store.dispatch('app/fetchChallenges'),
@@ -213,6 +260,6 @@ export default {
 }
 
 .was-completed {
-  transform: translate3d(2000px,0,0);
+  transform: translate3d(2000px, 0, 0);
 }
 </style>
