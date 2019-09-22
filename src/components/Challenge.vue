@@ -44,6 +44,7 @@
         <div class="header">
           <div class="text-title">{{options.title}}</div>
           <div class="text-subtitle">{{readableFrequency}}</div>
+          <p v-if="options.expanded">{{options.description}}</p>
         </div>
       </q-card-section>
       <q-card-section class="countdown flex flex-center" v-if="isInFuture">
@@ -131,7 +132,7 @@
       <q-dialog v-model="leaveChallenge">
         <q-card>
           <q-card-section>
-            <div class="text-h6">Are you sure you want to leave the  Challenge?</div>
+            <div class="text-h6">Are you sure you want to leave the Challenge?</div>
           </q-card-section>
           <q-card-actions align="right">
             <q-btn label="Leave" color="primary" @click="leaveChallengeAction" v-close-popup />
@@ -216,7 +217,9 @@ export default {
     },
     iAmAuthor: {
       get() {
-        return this.options.author === this.$store.state.user.currentUser.displayName
+        return (
+          this.options.author === this.$store.state.user.currentUser.displayName
+        )
       }
     },
     sortedMembers: {
@@ -388,7 +391,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "./src/css/breakpoints.scss";
+@import './src/css/breakpoints.scss';
 
 .menus {
   position: absolute;
@@ -544,7 +547,8 @@ export default {
   bottom: 0;
 }
 
-.falafel, .caret {
+.falafel,
+.caret {
   font-size: 16px;
 
   @include sm {
