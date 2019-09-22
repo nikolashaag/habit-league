@@ -150,6 +150,21 @@ export default {
 
               return true
             })
+            // Filter out per month
+            .filter(challenge => {
+              if (challenge.frequency === 'per-month') {
+                const currentMonth = new Date().getMonth() + 1
+                const completedDaysInCurrentMonth =
+                  challenge.loggedDays &&
+                  challenge.loggedDays.filter(
+                    log =>
+                      log.status === 'complete' &&
+                      parseInt(log.date.slice(5, 7), 10) === currentMonth
+                  ).length
+                return challenge.perMonth > completedDaysInCurrentMonth
+              }
+              return true
+            })
         )
       }
     },
