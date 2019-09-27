@@ -125,7 +125,7 @@ module.exports = function (ctx) {
         // name: 'Challenge me',
         // short_name: 'Challenge me',
         // description: 'A Quasar Framework app',
-        display: 'fullscreen',
+        display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#027be3',
