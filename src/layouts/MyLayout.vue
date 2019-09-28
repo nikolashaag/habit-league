@@ -1,8 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
-        <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
+      <q-toolbar class="navbar">
+        <q-btn flat dense size="lg" round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu" />
         </q-btn>
 
@@ -54,7 +54,9 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <transition :name="transitionName">
+        <router-view />
+      </transition>
     </q-page-container>
   </q-layout>
 </template>
@@ -67,7 +69,17 @@ export default {
   name: 'MyLayout',
   data() {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: this.$q.platform.is.desktop,
+      transitionName: 'slide-left'
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      if ((from.path === '/daily' && to.path === '/') || to.path === '/browse' || from.path === '/login' || from.path === '/signup') {
+        this.transitionName = 'slide-left'
+      } else {
+        this.transitionName = 'slide-right'
+      }
     }
   },
   methods: {
@@ -93,8 +105,51 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .q-header {
   background: linear-gradient(to left, #3a404d, #181c26);
+}
+
+.navbar {
+  min-height: 64px;
+}
+
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: left .5s ease-out;
+  min-height: 804px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.slide-right-enter {
+  left: -100%;
+}
+.slide-right-enter-to {
+  left: 0;
+}
+.slide-right-leave {
+  left: 0;
+}
+.slide-right-leave-to {
+  left: 100%;
+}
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: left .5s ease-out;
+  min-height: 804px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.slide-left-enter {
+  left: 100%;
+}
+.slide-left-enter-to {
+  left: 0;
+}
+.slide-left-leave {
+  left: 0;
+}
+.slide-left-leave-to {
+  left: -100%;
 }
 </style>
