@@ -7,14 +7,12 @@
           {{emailError}}
         </template>
       </q-input>
-      <br />
       <q-input color="amber" standout v-model="password" label="Password" type="password" :error="Boolean(passwordError)">
         <template v-slot:error>
           {{passwordError}}
         </template>
       </q-input>
 
-      <br />
       <div v-if="error" class="error">
         <br />
         {{error}}
