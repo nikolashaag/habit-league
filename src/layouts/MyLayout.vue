@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header elevated class="header">
       <q-toolbar class="navbar">
         <q-btn flat dense size="lg" round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu" />
@@ -15,7 +15,7 @@
         <q-item-label header>Menu</q-item-label>
         <q-item clickable @click="goToPage('daily')">
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-icon name="fas fa-calendar-day" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Daily view</q-item-label>
@@ -24,7 +24,7 @@
         </q-item>
         <q-item clickable @click="goToPage('/')">
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-icon name="fas fa-calendar-alt" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Weekly view</q-item-label>
@@ -43,11 +43,20 @@
 
         <q-item clickable @click="logout">
           <q-item-section avatar>
-            <q-icon name="public" />
+            <q-icon name="fas fa-sign-out-alt" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Logout</q-item-label>
             <q-item-label caption>Logout from the App</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable @click="reportBug">
+          <q-item-section avatar>
+            <q-icon name="fas fa-bug" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Report a bug</q-item-label>
+            <q-item-label caption>Something's not right yet?</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -64,6 +73,7 @@
 <script>
 import { openURL } from 'quasar'
 import firebase from 'firebase'
+import * as Sentry from '@sentry/browser'
 
 export default {
   name: 'MyLayout',
@@ -84,6 +94,11 @@ export default {
   },
   methods: {
     openURL,
+    reportBug: function () {
+      this.leftDrawerOpen = false
+
+      Sentry.captureException('Bug report')
+    },
     logout: function() {
       firebase
         .auth()
@@ -111,6 +126,7 @@ export default {
 <style scoped>
 .q-header {
   background: linear-gradient(to left, #3a404d, #181c26);
+  z-index: 99;
 }
 
 .navbar {
