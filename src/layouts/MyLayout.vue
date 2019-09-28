@@ -94,12 +94,15 @@ export default {
     },
     goToPage(pageName) {
       let isDesktop = this.$q.platform.is.desktop
+      const isSamePage = this.$route.path === pageName
 
-      if (!isDesktop) {
+      if (!isDesktop || isSamePage) {
         this.leftDrawerOpen = false
       }
 
-      this.$router.replace(pageName)
+      if (!isSamePage) {
+        this.$router.replace(pageName)
+      }
     }
   }
 }
@@ -115,7 +118,7 @@ export default {
 }
 
 .slide-right-enter-active, .slide-right-leave-active {
-  transition: left .5s ease-out;
+  transition: left .3s ease-out;
   min-height: 804px;
   position: absolute;
   width: 100%;
@@ -134,7 +137,7 @@ export default {
   left: 100%;
 }
 .slide-left-enter-active, .slide-left-leave-active {
-  transition: left .5s ease-out;
+  transition: left .3s ease-out;
   min-height: 804px;
   position: absolute;
   width: 100%;
