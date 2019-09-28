@@ -414,7 +414,7 @@ export default {
 }
 
 .challenge.expanded {
-  min-height: calc(100vh - 82px);
+  min-height: calc(100vh - 161px);
   transition: min-height 0.5s ease-in-out;
   width: 100%;
 }
