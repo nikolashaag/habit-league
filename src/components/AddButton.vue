@@ -22,8 +22,8 @@ export default {
 <style scoped>
 .add-button {
   position: fixed;
-  bottom: 50px;
-  right: 50px;
+  bottom: 64px;
+  right: 16px;
   z-index: 3;
 }
 

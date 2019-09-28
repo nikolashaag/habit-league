@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center challenges-page">
     <h5
       v-if="!isLoading && challenges.length === 0"
     >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
@@ -173,8 +173,13 @@ export default {
 
 <style>
 
+.challenges-page {
+  height: auto;
+}
+
 .challenges {
   width: 100%;
+
 }
 .add-button {
   position: fixed;

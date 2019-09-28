@@ -67,6 +67,7 @@
         <router-view />
       </transition>
     </q-page-container>
+    <secondary-nav />
   </q-layout>
 </template>
 
@@ -74,9 +75,13 @@
 import { openURL } from 'quasar'
 import firebase from 'firebase'
 import * as Sentry from '@sentry/browser'
+import SecondaryNav from 'components/SecondaryNav.vue'
 
 export default {
   name: 'MyLayout',
+  components: {
+    SecondaryNav
+  },
   data() {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop,
@@ -170,5 +175,12 @@ export default {
 }
 .slide-left-leave-to {
   left: -100%;
+}
+
+.secondary-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 99;
 }
 </style>

@@ -70,7 +70,10 @@ module.exports = function (ctx) {
         'QAvatar',
         'QMenu',
         'QKnob',
-        'QSpinnerGrid'
+        'QSpinnerGrid',
+        'QTabs',
+        'QTab',
+        'QRouteTab'
       ],
 
       directives: [
