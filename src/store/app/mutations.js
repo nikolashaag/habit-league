@@ -24,7 +24,7 @@ export function noteDay (state, data) {
       challenge.loggedDays = challenge.loggedDays || []
       let existingLog
       const logs = challenge.loggedDays.map(day => {
-        if (day.date === data.day.date) {
+        if (day.date === data.day.date && day.user === data.day.user) {
           existingLog = true
           return {
             ...day,
