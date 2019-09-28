@@ -1,6 +1,6 @@
 <template>
-    <q-card :class="['challenge text-white', complete ?  'was-completed' : '']">
-      <q-card-section>
+    <q-card :class="['challenge text-white row', complete ?  'was-completed' : '']">
+      <q-card-section class="col-10 main-header">
         <div class="icon-wrapper">
           <q-icon :name="getIconName(options.icon)" class="category-icon" >
           </q-icon>
@@ -10,10 +10,8 @@
           <div class="text-subtitle2">{{readableFrequency}}</div>
         </div>
       </q-card-section>
-      <q-card-section>
-        <div class="checkbox-wrapper">
-          <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck"/>
-        </div>
+      <q-card-section class="col-2 flex flex-center button-wrapper">
+        <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck"/>
       </q-card-section>
     </q-card>
 </template>
@@ -51,8 +49,13 @@ export default {
   },
   methods: {
     onCheck: function (e) {
+      console.log('boom')
       if (e) {
         this.onComplete(this.options.id)
+
+        // this.setTimeout(() => {
+        //   this.onComplete(this.options.id)
+        // }, 100)
       }
     },
     getIconName: function (value) {
@@ -72,6 +75,7 @@ export default {
   display: flex;
   justify-content: space-between;
   transition: transform 0.2s ease-in;
+  transition-delay: .5s;
 }
 
 .name {
@@ -84,6 +88,7 @@ export default {
   font-size: 32px;
   height: 54px;
   position: relative;
+  flex: 0 1 auto;
 }
 
 .icon-wrapper i {
@@ -105,12 +110,38 @@ export default {
   transform: translate(-50%, -50%);
 }
 
+.button-wrapper {
+  padding-bottom: 0;
+}
+
+.main-header {
+  flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+}
+
+.header {
+  display: inline-block;
+  height: 54px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 2 auto;
+}
+
 .was-completed {
   transform: translate3d(2000px,0,0);
 }
 
 .hidden {
   visibility: none;
+}
+
+.text-h6 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: auto;
+  white-space: nowrap;
 }
 
 </style>

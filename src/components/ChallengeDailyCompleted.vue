@@ -1,6 +1,6 @@
 <template>
-    <q-card :class="['challenge text-white', complete ?  'was-completed' : '']">
-      <q-card-section>
+    <q-card class="challenge text-white flex row">
+      <q-card-section class="col-8 main-header">
         <div class="icon-wrapper">
           <q-icon :name="getIconName(options.icon)" class="category-icon" >
           </q-icon>
@@ -10,12 +10,13 @@
           <div class="text-subtitle2">{{readableFrequency}}</div>
         </div>
       </q-card-section>
-      <q-card-section>
-        <div class="checkbox-wrapper">
-          <q-card-section class="justify-end row">
-            <q-btn color="grey" label="Undo" @click="e => undoChallenge(e)"/>
-          </q-card-section>
-      </div>
+      <q-card-section class="col-2 flex flex-center button-wrapper">
+        <div class="undo-wrapper">
+          <q-btn color="grey" label="Undo" @click="e => undoChallenge(e)"/>
+        </div>
+      </q-card-section>
+      <q-card-section class="col-2 flex flex-center button-wrapper">
+        <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck"/>
       </q-card-section>
     </q-card>
 </template>
@@ -33,7 +34,7 @@ export default {
   data () {
     return {
       noteProgress: false,
-      complete: false
+      complete: true
     }
   },
   props: ['options', 'onComplete'],
@@ -54,8 +55,8 @@ export default {
   },
   methods: {
     onCheck: function (e) {
-      if (e) {
-        this.onComplete(this.options.id)
+      if (!this.complete) {
+        this.undoChallenge()
       }
     },
     undoChallenge: function () {
@@ -103,6 +104,7 @@ export default {
   font-size: 32px;
   height: 54px;
   position: relative;
+  flex: 0 1 auto;
 }
 
 .icon-wrapper i {
@@ -112,24 +114,34 @@ export default {
   margin:auto;
 }
 
+.button-wrapper {
+  padding-bottom: 0;
+}
+
+.main-header {
+  flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+}
+
 .header {
   display: inline-block;
   height: 54px;
-}
-
-.checkbox-wrapper {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.was-completed {
-  transform: translate3d(2000px,0,0);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 2 auto;
 }
 
 .hidden {
   visibility: none;
+}
+
+.text-h6 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: auto;
+  white-space: nowrap;
 }
 
 </style>

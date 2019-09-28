@@ -103,8 +103,7 @@ export default {
                 .find(
                   day =>
                     date.formatDate(day.date, 'YYYY/MM/DD') ===
-                      date.formatDate(new Date(), 'YYYY/MM/DD') &&
-                    day.status === 'complete'
+                      date.formatDate(new Date(), 'YYYY/MM/DD')
                 )
             })
             // Filter out challenges which haven't started yet
@@ -177,8 +176,7 @@ export default {
             .find(
               day =>
                 date.formatDate(day.date, 'YYYY/MM/DD') ===
-                  date.formatDate(new Date(), 'YYYY/MM/DD') &&
-                day.status === 'complete'
+                  date.formatDate(new Date(), 'YYYY/MM/DD')
             )
         })
       }
@@ -208,7 +206,7 @@ export default {
     onComplete(challengeId) {
       this.secondTimer = setTimeout(() => {
         this.log('complete', challengeId)
-      }, 500)
+      }, 1000)
     },
     log: function(status, challengeId) {
       this.$store.dispatch('app/noteDayProgress', {
