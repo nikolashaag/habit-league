@@ -1,5 +1,4 @@
 import { register } from 'register-service-worker'
-import { Notify } from 'quasar'
 
 // The ready(), registered(), cached(), updatefound() and updated()
 // events passes a ServiceWorkerRegistration instance in their arguments.
@@ -30,15 +29,6 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated (registration) { // registration -> a ServiceWorkerRegistration instance
     console.log('New content is available; please refresh.')
-    Notify.create({
-      message: 'New content is available; please refresh.',
-      icon: 'cloud_download',
-      closeBtn: 'Update',
-      timeout: 10000,
-      onDismiss () {
-        location.reload(true)
-      }
-    })
   },
 
   offline () {
