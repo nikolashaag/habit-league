@@ -20,6 +20,11 @@
       to="/browse"
       exact
     />
+    <q-route-tab
+      icon="fas fa-plus"
+      to="/create"
+      exact
+    />
   </q-tabs>
 </template>
 

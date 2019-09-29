@@ -52,10 +52,6 @@ export default {
       console.log('boom')
       if (e) {
         this.onComplete(this.options.id)
-
-        // this.setTimeout(() => {
-        //   this.onComplete(this.options.id)
-        // }, 100)
       }
     },
     getIconName: function (value) {

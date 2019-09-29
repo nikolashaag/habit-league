@@ -5,8 +5,9 @@
         <q-btn flat dense size="lg" round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu" />
         </q-btn>
-
         <q-toolbar-title>Habit Win</q-toolbar-title>
+        <q-btn flat size="md" icon-right="fas fa-plus" label="New Habit" />
+
       </q-toolbar>
     </q-header>
 
@@ -90,7 +91,11 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      if ((from.path === '/daily' && to.path === '/') || to.path === '/browse' || from.path === '/login' || from.path === '/signup') {
+      if ((from.path === '/daily' && to.path === '/') || to.path === '/create' || from.path === '/login' || from.path === '/signup') {
+        this.transitionName = 'slide-left'
+      } else if (from.path === '/' && to.path === '/browse') {
+        this.transitionName = 'slide-left'
+      } else if (from.path === '/daily' && to.path === '/browse') {
         this.transitionName = 'slide-left'
       } else {
         this.transitionName = 'slide-right'

@@ -10,5 +10,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "./src/css/colors.scss";
 </style>

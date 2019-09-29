@@ -18,15 +18,16 @@
         >
             <q-step
               :name="1"
-              title="Select habits for challange"
+              title="Habit info"
               icon="settings"
               :done="step > 1"
+              class="dialog-inside"
             >
               <label for="title">
                 Select how the challenge should look like. You can select one or multiple habits. Select the frequency.
               </label>
               <div class="spacing"></div>
-              <q-input dark standout v-model="title" label="Habit title" />
+              <q-input :rules="[val => !!val || 'Field is required']" dark standout v-model="title" label="Habit title" />
               <div class="spacing"></div>
               <q-input dark standout v-model="description" label="Description (Optional)" />
               <div class="spacing"></div>
@@ -113,7 +114,7 @@
 
             <q-step
               :name="2"
-              title="Select a goal for the challange"
+              title="Make it a challenge"
               icon="create_new_folder"
               :done="step > 2"
             >
@@ -152,13 +153,13 @@
                 </div>
             </q-step>
 
-            <q-step
+            <!-- <q-step
               :name="4"
               title="Finish"
               icon="add_comment"
             >
               Your challenge is ready to go. Good luck
-            </q-step>
+            </q-step> -->
             <template v-slot:navigation>
               <q-stepper-navigation>
                 <q-btn v-if="step !== 4" @click="$refs.stepper.next()" color="amber" label="Continue" />
@@ -400,5 +401,9 @@ export default {
 }
 label {
   margin-bottom: 16px;
+}
+
+.q-stepper__step-inner {
+  padding: 16px !important;
 }
 </style>

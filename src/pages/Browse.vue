@@ -6,7 +6,6 @@
     <div class="q-pa-md wrapper">
       <public-challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
     </div>
-    <add-button />
   </q-page>
 </template>
 
@@ -15,12 +14,10 @@
 
 <script>
 import PublicChallenge from 'components/PublicChallenge.vue'
-import AddButton from 'components/AddButton.vue'
 export default {
   name: 'PageIndex',
   components: {
-    PublicChallenge,
-    AddButton
+    PublicChallenge
   },
   computed: {
     challenges: {

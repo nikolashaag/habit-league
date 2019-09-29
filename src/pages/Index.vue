@@ -67,7 +67,6 @@
     </div>
 
     <transition name="fade">
-      <add-button v-if="!this.oneChallengeExpanded" />
     </transition>
   </q-page>
 </template>
@@ -77,14 +76,12 @@
 
 <script>
 import Challenge from 'components/Challenge.vue'
-import AddButton from 'components/AddButton.vue'
 import Spinner from 'components/Spinner.vue'
 
 export default {
   name: 'PageIndex',
   components: {
     Challenge,
-    AddButton,
     Spinner
   },
   computed: {

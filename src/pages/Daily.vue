@@ -55,7 +55,6 @@
         :key="challenge.id + 'completed'"
       />
     </div>
-    <add-button />
   </q-page>
 </template>
 
@@ -66,7 +65,6 @@
 import ChallengeDaily from 'components/ChallengeDaily.vue'
 import ChallengeDailyCompleted from 'components/ChallengeDailyCompleted.vue'
 import { date } from 'quasar'
-import AddButton from 'components/AddButton.vue'
 import Spinner from 'components/Spinner.vue'
 
 export default {
@@ -74,7 +72,6 @@ export default {
   components: {
     ChallengeDaily,
     ChallengeDailyCompleted,
-    AddButton,
     Spinner
   },
   data() {
