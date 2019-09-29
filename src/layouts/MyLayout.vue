@@ -6,8 +6,6 @@
           <q-icon name="menu" />
         </q-btn>
         <q-toolbar-title>Habit Win</q-toolbar-title>
-        <q-btn flat size="md" icon-right="fas fa-plus" label="New Habit" />
-
       </q-toolbar>
     </q-header>
 
