@@ -4,8 +4,15 @@
       v-if="!isLoading && challenges.length === 0"
     >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
     <transition name="expand">
-      <div class="title-wrapper" v-if="challenges.length > 0 && !this.oneChallengeExpanded">
-        <h5>Weekly Overview</h5>
+      <div :class="['top', showTooltip && 'top--big']" v-if="challenges.length > 0 && !this.oneChallengeExpanded">
+        <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
+          <p>
+            In this view you see a weekly overview for each habit. When you tab on a habit, it will expand and show more details, like the calendar.
+          </p>
+        </note>
+        <div class="title-wrapper text-center">
+          <h5>Weekly Overview</h5>
+        </div>
       </div>
     </transition>
     <spinner v-if="isLoading" />
@@ -77,14 +84,27 @@
 <script>
 import Challenge from 'components/Challenge.vue'
 import Spinner from 'components/Spinner.vue'
+import Note from 'components/Note.vue'
 
 export default {
   name: 'PageIndex',
   components: {
     Challenge,
-    Spinner
+    Spinner,
+    Note
   },
   computed: {
+    showTooltip: {
+      get() {
+        const userId = this.$store.state.user.currentUser.uid
+        const user = (this.$store.state.user.users || []).find(user => user.uid === userId)
+        if (!user) {
+          return false
+        }
+        const tipsClosed = (user && user.tipsClosed) || []
+        return !(tipsClosed.indexOf('weekly') > -1)
+      }
+    },
     challenges: {
       get() {
         return this.$store.state.app.myChallenges
@@ -116,6 +136,12 @@ export default {
     }
   },
   methods: {
+    onTipClose() {
+      this.$store.dispatch('user/closeTip', {
+        userId: this.$store.state.user.currentUser.uid,
+        tip: 'weekly'
+      })
+    },
     getChallengesByFrequency(frequency) {
       return this.localChallenges.filter(
         challenge => challenge.frequency === frequency
@@ -168,7 +194,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 .challenges-page {
   height: auto;
@@ -176,12 +202,20 @@ export default {
 
 .challenges {
   width: 100%;
-
+  margin-bottom: 52px;
 }
 .add-button {
   position: fixed;
   bottom: 50px;
   right: 50px;
+}
+
+.top {
+  height: 112px;
+
+  &--big {
+    height: 186px;
+  }
 }
 .title-wrapper {
   height: 112px;

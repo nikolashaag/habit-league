@@ -1,6 +1,6 @@
 <template>
   <q-page class="">
-    <div class="q-pa-md">
+    <div class="q-pa-md wizard">
       <q-form
         @submit="onSubmit"
         @reset="onReset"
@@ -385,6 +385,10 @@ export default {
 </script>
 
 <style>
+.wizard {
+  margin-bottom: 52px;
+}
+
 .add-button {
   position: absolute;
   bottom: 50px;

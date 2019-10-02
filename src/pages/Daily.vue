@@ -1,5 +1,15 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center daily q-pa-md wrapper">
+    <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
+      <p>
+        To complete a habit, swipe it to the right (for
+        <i>complete</i>),to the left (for
+        <i>skip</i>) or tick the checkbox.
+      </p>
+    </note>
+    <div class="title-wrapper" v-if="challenges.length > 0">
+      <h5>Daily view</h5>
+    </div>
     <div class="progress-wrapper row flex flex-center">
       <q-knob
         show-value
@@ -16,12 +26,8 @@
     <h5
       v-if="challenges.length === 0 && completedToday.length === 0"
     >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
-    <h5
-      class="title"
-      v-if="challenges.length !== 0"
-    >To complete a habit, swipe it to the left or to the right or tick the checkbox.</h5>
     <spinner v-if="isLoading" />
-    <div class="q-pa-md wrapper" v-if="!isLoading">
+    <div class="wrapper" v-if="!isLoading">
       <q-list class="list" bordered separator v-if="challenges.length !== 0">
         <q-slide-item
           ref="item"
@@ -63,6 +69,7 @@
 
 <script>
 import ChallengeDaily from 'components/ChallengeDaily.vue'
+import Note from 'components/Note.vue'
 import ChallengeDailyCompleted from 'components/ChallengeDailyCompleted.vue'
 import { date } from 'quasar'
 import Spinner from 'components/Spinner.vue'
@@ -72,7 +79,8 @@ export default {
   components: {
     ChallengeDaily,
     ChallengeDailyCompleted,
-    Spinner
+    Spinner,
+    Note
   },
   data() {
     return {
@@ -86,6 +94,17 @@ export default {
     }
   },
   computed: {
+    showTooltip: {
+      get() {
+        const userId = this.$store.state.user.currentUser.uid
+        const user = (this.$store.state.user.users || []).find(user => user.uid === userId)
+        if (!user) {
+          return false
+        }
+        const tipsClosed = (user && user.tipsClosed) || []
+        return !(tipsClosed.indexOf('daily') > -1)
+      }
+    },
     challenges: {
       get() {
         return (
@@ -180,6 +199,12 @@ export default {
     }
   },
   methods: {
+    onTipClose() {
+      this.$store.dispatch('user/closeTip', {
+        userId: this.$store.state.user.currentUser.uid,
+        tip: 'daily'
+      })
+    },
     updateProgress() {
       const faktor =
         (parseInt(this.completedToday.length, 10) +
@@ -235,18 +260,22 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.daily {
+margin-bottom: 52px;
+}
+
+.hidden {
+  display: none;
+}
+
 .progress-wrapper {
-  margin-top: 16px;
+  margin-bottom: 16px;
   width: 100%;
 }
 
 .wrapper {
   width: 100%;
-}
-
-.title {
-  text-align: center;
 }
 
 .completed {
@@ -272,4 +301,13 @@ export default {
 .was-completed {
   transform: translate3d(2000px, 0, 0);
 }
+
+.title-wrapper {
+  width: 100%;
+  text-align: center;
+  h5 {
+    margin-bottom: 16px;
+  }
+}
+
 </style>
