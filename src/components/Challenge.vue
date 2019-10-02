@@ -435,27 +435,27 @@ export default {
 }
 
 .rows-1 {
-  max-height: 58px;
+  max-height: 74px;
 }
 
 .rows-2 {
-  max-height: 116px;
+  max-height: 148px;
 }
 
 .rows-3 {
-  max-height: 174px;
+  max-height: 222px;
 }
 
 .rows-4 {
-  max-height: 232px;
+  max-height: 296px;
 }
 
 .rows-5 {
-  max-height: 290px;
+  max-height: 370px;
 }
 
 .rows-6 {
-  max-height: 348px;
+  max-height: 444px;
 }
 
 .fade-enter-active,

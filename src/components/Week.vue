@@ -9,7 +9,10 @@
         :color="getColor(day)"
         text-color="black"
         @click="$emit('noteProgressForDay', day,$event)"
-      >{{day.label}}</q-btn>
+      >
+        <span class="date">{{day.date.getDate()}} <span class="month" v-if="day.date.getDate() === 1">{{getMonthWritten(day.date.getMonth())}}</span>  </span>
+        {{day.label}}
+      </q-btn>
       <hr :class="`hr hr--${getChainColor(index)}`" />
     </div>
   </div>
@@ -29,6 +32,34 @@ export default {
       }
 
       return true
+    },
+    getMonthWritten(month) {
+      switch (month) {
+        case 1:
+          return 'Jan'
+        case 2:
+          return 'Feb'
+        case 3:
+          return 'Mar'
+        case 4:
+          return 'Apr'
+        case 5:
+          return 'May'
+        case 6:
+          return 'Jun'
+        case 7:
+          return 'Jul'
+        case 8:
+          return 'Aug'
+        case 9:
+          return 'Sep'
+        case 10:
+          return 'Okt'
+        case 11:
+          return 'Nov'
+        case 12:
+          return 'Dec'
+      }
     },
     getChainColor(index) {
       let color = 'amber'
@@ -79,11 +110,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "./src/css/breakpoints.scss";
+.week-wrapper {
+  margin-top: 16px;
+}
 
 .day {
   display: flex;
   flex-grow: 1;
   align-items: center;
+  position: relative;
 }
 
 .day-button {
@@ -103,5 +138,16 @@ export default {
   &--red {
     border: 2px solid red;
   }
+}
+
+.date {
+  position: absolute;
+  top: -10px;
+  color: #b1b1b1;
+  transform: translateY(-50%);
+}
+
+.month {
+  text-transform: none;
 }
 </style>
