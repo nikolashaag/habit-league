@@ -163,7 +163,7 @@
             <template v-slot:navigation>
               <q-stepper-navigation>
                 <q-btn v-if="step !== 3" @click="$refs.stepper.next()" color="amber" label="Continue" />
-                <q-btn type="submit" v-if="step === 3" color="amber" label="Finish" />
+                <q-btn @click="onSubmit" v-if="step === 3" color="amber" label="Finish" />
                 <q-btn v-if="step > 1" flat color="amber" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
               </q-stepper-navigation>
             </template>
