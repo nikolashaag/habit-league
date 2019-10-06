@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-
 export default async ({ app, router, store, Vue }) => {
   const config = {
     apiKey: 'AIzaSyBE9hrVOCokIuIKJoysBtDgKm_twzmGR-U',
@@ -12,7 +11,8 @@ export default async ({ app, router, store, Vue }) => {
   }
 
   firebase.initializeApp(config)
-  await new Promise((resolve) => {
+
+  await new Promise(resolve => {
     firebase.auth().onAuthStateChanged(() => {
       resolve()
     })

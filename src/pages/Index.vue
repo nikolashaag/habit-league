@@ -4,11 +4,12 @@
       v-if="!isLoading && challenges.length === 0"
     >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
     <transition name="expand">
-      <div :class="['top', showTooltip && 'top--big']" v-if="challenges.length > 0 && !this.oneChallengeExpanded">
+      <div
+        :class="['top', showTooltip && 'top--big']"
+        v-if="challenges.length > 0 && !this.oneChallengeExpanded"
+      >
         <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
-          <p>
-            In this view you see a weekly overview for each habit. When you tab on a habit, it will expand and show more details, like the calendar.
-          </p>
+          <p>In this view you see a weekly overview for each habit. When you tab on a habit, it will expand and show more details, like the calendar.</p>
         </note>
         <div class="title-wrapper text-center">
           <h5>Weekly Overview</h5>
@@ -73,8 +74,7 @@
       </div>
     </div>
 
-    <transition name="fade">
-    </transition>
+    <transition name="fade"></transition>
   </q-page>
 </template>
 
@@ -85,6 +85,7 @@
 import Challenge from 'components/Challenge.vue'
 import Spinner from 'components/Spinner.vue'
 import Note from 'components/Note.vue'
+import { initMessaging } from '../helpers/messaging'
 
 export default {
   name: 'PageIndex',
@@ -97,7 +98,9 @@ export default {
     showTooltip: {
       get() {
         const userId = this.$store.state.user.currentUser.uid
-        const user = (this.$store.state.user.users || []).find(user => user.uid === userId)
+        const user = (this.$store.state.user.users || []).find(
+          user => user.uid === userId
+        )
         if (!user) {
           return false
         }
@@ -190,12 +193,16 @@ export default {
     }
     this.updateLocalChallanges(this.challenges)
     this.isLoading = false
+
+    const currentToken = await initMessaging()
+    if (currentToken) {
+      this.$store.dispatch('user/saveToken', currentToken)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
 .challenges-page {
   height: auto;
 }
@@ -228,7 +235,7 @@ export default {
 }
 .expand-enter-active,
 .expand-leave-active {
-  transition: height .5s;
+  transition: height 0.5s;
 }
 .expand-enter,
 .expand-leave-to {

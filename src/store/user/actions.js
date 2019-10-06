@@ -68,3 +68,32 @@ export async function closeTip({ commit, state, rootState }, data) {
       console.log('coudnt find user: ', error)
     })
 }
+
+export async function saveToken({ commit, state, rootState }, token) {
+  const db = firebase.firestore()
+  db.collection('users')
+    .where('uid', '==', rootState.user.currentUser.uid)
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        if (!doc.exists) {
+          console.log('user not available')
+          return
+        }
+        db.collection('users')
+          .doc(doc.id)
+          .update({
+            notificationsToken: token
+          })
+          .then(function(docRef) {
+            console.log('successfully updated message token', docRef)
+          })
+          .catch(function(error) {
+            console.error('Error updating message token: ', error)
+          })
+      })
+    })
+    .catch(function(error) {
+      console.log('coudnt find user: ', error)
+    })
+}
