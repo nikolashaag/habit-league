@@ -40,6 +40,7 @@ export default {
   max-height: 174px;
   transition: all 0.2s ease-in-out;
   padding-bottom: 0;
+  margin-bottom: 10px;
 }
 .leaderboard-row {
   width: calc(100% + 32px);
