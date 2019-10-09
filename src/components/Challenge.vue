@@ -46,6 +46,7 @@
           <div class="text-subtitle">{{readableFrequency}}</div>
           <p v-if="options.expanded">{{options.description}}</p>
         </div>
+        <div v-if="sortedMembers.length">Leader: {{sortedMembers[0].name}}</div>
       </q-card-section>
       <q-card-section class="countdown flex flex-center" v-if="isInFuture">
         <h6>{{countdown}}</h6>
