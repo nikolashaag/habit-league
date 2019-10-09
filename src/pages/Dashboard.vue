@@ -45,7 +45,7 @@ export default {
 
       return groupedChallenges
     },
-    getHabitSuccessRate(habit) {
+    getHabitSuccessRate(habit, currentUserId) {
       let frequency = 1
 
       if (habit.frequency === 'daily') {
@@ -63,6 +63,7 @@ export default {
       let loggedDays = habit.loggedDays.filter(
         d =>
           d.status === 'complete' &&
+          d.user === currentUserId &&
           moment(d.date).isBetween(moment().day(0), moment().day(7))
       ).length
 
@@ -79,7 +80,10 @@ export default {
 
     for (let category in groupedChallenges) {
       let habits = groupedChallenges[category].map(habit => {
-        habit.successRate = this.getHabitSuccessRate(habit)
+        habit.successRate = this.getHabitSuccessRate(
+          habit,
+          this.$store.state.user.currentUser.uid
+        )
         return habit
       })
 
