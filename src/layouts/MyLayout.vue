@@ -39,6 +39,15 @@
             <q-item-label caption>Join other people</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item clickable @click="goToPage('dashboard')">
+          <q-item-section avatar>
+            <q-icon name="record_voice_over" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Dashboard</q-item-label>
+            <q-item-label caption>See your progress</q-item-label>
+          </q-item-section>
+        </q-item>
 
         <q-item clickable @click="logout">
           <q-item-section avatar>

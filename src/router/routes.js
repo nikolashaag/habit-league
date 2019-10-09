@@ -1,4 +1,3 @@
-
 const routes = [
   {
     path: '*',
@@ -7,9 +6,7 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') }
-    ],
+    children: [{ path: '', component: () => import('pages/Index.vue') }],
     meta: {
       requiresAuth: true
     }
@@ -17,9 +14,7 @@ const routes = [
   {
     path: '/browse',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Browse.vue') }
-    ],
+    children: [{ path: '', component: () => import('pages/Browse.vue') }],
     meta: {
       requiresAuth: true
     }
@@ -27,9 +22,7 @@ const routes = [
   {
     path: '/daily',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Daily.vue') }
-    ],
+    children: [{ path: '', component: () => import('pages/Daily.vue') }],
     meta: {
       requiresAuth: true
     }
@@ -37,9 +30,7 @@ const routes = [
   {
     path: '/history',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') }
-    ],
+    children: [{ path: '', component: () => import('pages/Index.vue') }],
     meta: {
       requiresAuth: true
     }
@@ -47,9 +38,7 @@ const routes = [
   {
     path: '/create',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Wizard.vue') }
-    ],
+    children: [{ path: '', component: () => import('pages/Wizard.vue') }],
     meta: {
       requiresAuth: true
     }
@@ -57,16 +46,20 @@ const routes = [
   {
     path: '/login',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Login.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/Login.vue') }]
   },
   {
     path: '/sign-up',
     component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Signup.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/Signup.vue') }]
+  },
+  {
+    path: '/dashboard',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Dashboard.vue') }],
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
 

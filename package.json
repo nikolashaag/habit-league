@@ -22,9 +22,12 @@
     "@sentry/browser": "^5.6.3",
     "@sentry/integrations": "^5.6.1",
     "axios": "^0.18.1",
+    "chart.js": "^2.8.0",
     "e": "0.0.4",
     "firebase": "^6.3.5",
+    "moment": "^2.24.0",
     "quasar": "^1.1.1",
+    "vue-chartjs": "^3.4.2",
     "vue-i18n": "^8.0.0",
     "vue-scrollto": "^2.16.3"
   },
