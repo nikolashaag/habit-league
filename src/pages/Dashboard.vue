@@ -92,8 +92,8 @@ export default {
         datasets: [
           {
             label: category,
-            backgroundColor: 'rgba(255,0,0, 0.9)',
-            borderColor: 'rgba(255,0,0, 0.1)',
+            backgroundColor: 'rgba(226, 212, 2,0.7)',
+            borderColor: 'transparent',
             data: habits.map(h => h.successRate)
           }
         ]
