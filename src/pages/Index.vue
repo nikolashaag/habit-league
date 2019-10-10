@@ -5,7 +5,7 @@
     >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
     <transition name="expand">
       <div
-        :class="['top', showTooltip && 'top--big']"
+        :class="['wrapper q-pa-md top', showTooltip && 'top--big']"
         v-if="challenges.length > 0 && !this.oneChallengeExpanded"
       >
         <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
@@ -13,6 +13,9 @@
         </note>
         <div class="title-wrapper text-center">
           <h5>Weekly Overview</h5>
+        </div>
+        <div class="search wrapper">
+          <q-input v-model="search" label="Search for habit" />
         </div>
       </div>
     </transition>
@@ -124,6 +127,15 @@ export default {
     },
     monthlyChallenges() {
       return this.getChallengesByFrequency('per-month')
+    },
+    filterdChallenges() {
+      if (this.search) {
+        return this.localChallenges.filter(challenge => {
+          const title = challenge.title.toLowerCase()
+          return title.includes(this.search.toLowerCase())
+        })
+      }
+      return this.localChallenges
     }
   },
   watch: {
@@ -135,7 +147,8 @@ export default {
     return {
       localChallenges: [],
       oneChallengeExpanded: false,
-      isLoading: true
+      isLoading: true,
+      search: ''
     }
   },
   methods: {
@@ -146,7 +159,7 @@ export default {
       })
     },
     getChallengesByFrequency(frequency) {
-      return this.localChallenges.filter(
+      return this.filterdChallenges.filter(
         challenge => challenge.frequency === frequency
       )
     },
@@ -216,16 +229,20 @@ export default {
   bottom: 50px;
   right: 50px;
 }
+.search {
+  width: 100%;
+  margin-bottom: 20px;
+}
 
 .top {
-  height: 112px;
+  min-height: 112px;
 
   &--big {
-    height: 186px;
+    min-height: 186px;
   }
 }
 .title-wrapper {
-  height: 112px;
+  min-height: 112px;
   overflow: hidden;
 }
 
