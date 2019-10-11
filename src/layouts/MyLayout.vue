@@ -41,7 +41,7 @@
         </q-item>
         <q-item clickable @click="goToPage('dashboard')">
           <q-item-section avatar>
-            <q-icon name="record_voice_over" />
+            <q-icon name="fas fa-chart-line" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Dashboard</q-item-label>
@@ -98,11 +98,17 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      if ((from.path === '/daily' && to.path === '/') || to.path === '/create' || from.path === '/login' || from.path === '/signup') {
+      if ((from.path === '/daily' && to.path === '/') || to.path === '/dashboard' || from.path === '/login' || from.path === '/signup') {
         this.transitionName = 'slide-left'
       } else if (from.path === '/' && to.path === '/browse') {
         this.transitionName = 'slide-left'
+      } else if (from.path === '/create' && to.path === '/browse') {
+        this.transitionName = 'slide-left'
       } else if (from.path === '/daily' && to.path === '/browse') {
+        this.transitionName = 'slide-right'
+      } else if (from.path === '/browse' && to.path === '/create') {
+        this.transitionName = 'slide-right'
+      } else if (from.path === '/' && to.path === '/create') {
         this.transitionName = 'slide-left'
       } else {
         this.transitionName = 'slide-right'

@@ -16,13 +16,18 @@
       exact
     />
     <q-route-tab
+      icon="fas fa-plus"
+      to="/create"
+      exact
+    />
+    <q-route-tab
       icon="record_voice_over"
       to="/browse"
       exact
     />
     <q-route-tab
-      icon="fas fa-plus"
-      to="/create"
+      icon="fas fa-chart-line"
+      to="/dashboard"
       exact
     />
   </q-tabs>

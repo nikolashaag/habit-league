@@ -60,10 +60,9 @@ export default {
       }
     },
     undoChallenge: function () {
-      this.$store.dispatch('app/noteDayProgress', {
+      this.$store.dispatch('app/removeDayProgress', {
         day: {
           date: date.formatDate(new Date(), 'YYYY/MM/DD'),
-          status: 'skip',
           user: this.$store.state.user.currentUser.uid
         },
         challengeId: this.options.id
