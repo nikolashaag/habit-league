@@ -67,9 +67,14 @@ export default {
       const currentDay = this.week[index]
       const nextDay = this.week[index + 1]
       const dayAfter = this.week[index + 2]
-
+      const dayIsInFuture = this.week[index].date.isInFuture
+      const isSunday = index === 6
       const perWeek = this.challenge.frequency === 'per-week'
+      const factorPerWeek = this.challenge.perWeek || 0
 
+      const weekHasFactorCompletions = this.week.filter(day => {
+        return this.getColor(day) === 'green'
+      }).length >= factorPerWeek
       const dayBeforeIsGreen = dayBefore && this.getColor(dayBefore) === 'green'
       const currentDayIsGreen = currentDay && this.getColor(currentDay) === 'green'
       const currentDayIsNotRed = currentDay && this.getColor(currentDay) !== 'red'
@@ -77,10 +82,13 @@ export default {
       const dayAfterIsGreen = nextDay && this.getColor(nextDay) !== 'red' && dayAfter && this.getColor(dayAfter) === 'green'
 
       // Custom chain behaviour in per-week habits
-      if (perWeek && dayBeforeIsGreen && nextDayIsGreen && currentDayIsNotRed) {
+      if (perWeek && weekHasFactorCompletions && !dayIsInFuture && !isSunday) {
         return 'green'
       }
-      if (perWeek && currentDayIsGreen && dayAfterIsGreen) {
+      if (perWeek && factorPerWeek < 4 && dayBeforeIsGreen && nextDayIsGreen && currentDayIsNotRed) {
+        return 'green'
+      }
+      if (perWeek && factorPerWeek < 4 && currentDayIsGreen && dayAfterIsGreen) {
         return 'green'
       }
       if (nextDayIsGreen && currentDayIsGreen) {
