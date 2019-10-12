@@ -1,11 +1,7 @@
 <template>
-  <q-page class="">
+  <q-page class>
     <div class="q-pa-md wizard">
-      <q-form
-        @submit="onSubmit"
-        @reset="onReset"
-        class="q-gutter-md"
-      >
+      <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
         <q-stepper
           v-model="step"
           ref="stepper"
@@ -16,157 +12,182 @@
           active-color="secondary"
           done-color="secondary"
         >
-            <q-step
-              :name="1"
-              title="Habit info"
-              icon="settings"
-              :done="step > 1"
-              class="dialog-inside"
-            >
-              <label for="title">
-                Select how the challenge should look like. You can select one or multiple habits. Select the frequency.
-              </label>
-              <div class="spacing"></div>
-              <q-input :rules="[val => !!val || 'Field is required']" dark standout v-model="title" label="Habit title" />
-              <div class="spacing"></div>
-              <q-input dark standout v-model="description" label="Description (Optional)" />
-              <div class="spacing"></div>
-              <div class="row">
-                <label for="">
-                  Choose frequency
-                </label>
-              </div>
-              <q-btn-toggle
-                v-model="frequency"
-                toggle-color="primary"
-                push
-                :options="[
+          <q-step
+            :name="1"
+            title="Habit info"
+            icon="settings"
+            :done="step > 1"
+            class="dialog-inside"
+          >
+            <label
+              for="title"
+            >Select how the challenge should look like. You can select one or multiple habits. Select the frequency.</label>
+            <div class="spacing"></div>
+            <q-input
+              :rules="[val => !!val || 'Field is required']"
+              dark
+              standout
+              v-model="title"
+              label="Habit title"
+            />
+            <div class="spacing"></div>
+            <q-input dark standout v-model="description" label="Description (Optional)" />
+            <div class="spacing"></div>
+            <div class="row">
+              <label for>Choose frequency</label>
+            </div>
+            <q-select
+              dark
+              standout
+              v-model="frequency"
+              :options="[
                   {label: 'Daily', value: 'daily'},
                   {label: 'Per Week', value: 'per-week'},
                   {label: 'Per Month', value: 'per-month'},
                   {label: 'Specific Days', value: 'specific'},
                 ]"
-              />
-              <div class="spacing"></div>
+              label="Frequency"
+            />
 
-              <q-option-group
-                v-if="frequency === 'specific'"
-                :options="days"
-                dark
-                label="Choose days"
-                type="checkbox"
-                v-model="specificDays"
-              />
-              <q-select dark standout v-if="frequency === 'per-week'" v-model="perWeek" :options="perWeekOptions" label="Days per Week" />
-              <q-select dark standout v-if="frequency === 'per-month'" v-model="perMonth" :options="perMonthOptions" label="Days per Month" />
-              <div class="row">
-                <label for="">
-                  Choose category
-                </label>
-              </div>
+            <div class="spacing"></div>
 
-              <q-btn-toggle
-                v-model="category"
-                toggle-color="primary"
-                push
-                :options="[
+            <q-option-group
+              v-if="frequency.value === 'specific'"
+              :options="days"
+              dark
+              label="Choose days"
+              type="checkbox"
+              v-model="specificDays"
+            />
+            <q-select
+              dark
+              standout
+              v-if="frequency.value === 'per-week'"
+              v-model="perWeek"
+              :options="perWeekOptions"
+              label="Days per Week"
+            />
+            <q-select
+              dark
+              standout
+              v-if="frequency.value === 'per-month'"
+              v-model="perMonth"
+              :options="perMonthOptions"
+              label="Days per Month"
+            />
+            <div class="row">
+              <label for>Choose category</label>
+            </div>
+
+            <q-btn-toggle
+              v-model="category"
+              toggle-color="primary"
+              push
+              :options="[
                   {label: 'Physical Health', value: 'physical-health'},
                   {label: 'Mental Health', value: 'mental-health'},
                   {label: 'Relationships', value: 'relationships'},
                   {label: 'Career', value: 'career'},
                   {label: 'Hobbies', value: 'hobbies'}
                 ]"
-              />
-              <div class="spacing"></div>
+            />
+            <div class="spacing"></div>
 
-              <div class="row">
-                <label for="">
-                  Choose icon
-                </label>
-              </div>
-              <q-select
-                dark
-                standout
-                v-model="icon"
-                :options="icons"
-                label="Icon"
-              >
-                <template v-slot:option="scope">
-                  <q-item
-                    v-bind="scope.itemProps"
-                    v-on="scope.itemEvents"
-                  >
-                    <q-item-section avatar>
-                      <q-icon :name="iconMap[scope.opt.value]" />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label v-html="scope.opt.label" />
-                    </q-item-section>
-                  </q-item>
-                </template>
-                <template v-slot:append>
-                  <q-avatar>
-                    <q-icon :name="iconMap[icon.value]" />
-                  </q-avatar>
-                </template>
-              </q-select>
-            </q-step>
+            <div class="row">
+              <label for>Choose icon</label>
+            </div>
+            <q-select dark standout v-model="icon" :options="icons" label="Icon">
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
+                  <q-item-section avatar>
+                    <q-icon :name="iconMap[scope.opt.value]" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label v-html="scope.opt.label" />
+                  </q-item-section>
+                </q-item>
+              </template>
+              <template v-slot:append>
+                <q-avatar>
+                  <q-icon :name="iconMap[icon.value]" />
+                </q-avatar>
+              </template>
+            </q-select>
+          </q-step>
 
-            <q-step
-              :name="2"
-              title="Make it a challenge"
-              icon="create_new_folder"
-              :done="step > 2"
+          <q-step :name="2" title="Make it a challenge" icon="create_new_folder" :done="step > 2">
+            <div class="row">
+              <label>Select a goal for the challenge to stay motivated. How long should it last? What will the winner get?</label>
+            </div>
+            <q-input
+              dark
+              standout
+              v-model="startDate"
+              mask="date"
+              :rules="['date']"
+              label="Start date"
             >
-              <div class="row">
-                <label>
-                  Select a goal for the challenge to stay motivated. How long should it last? What will the winner get?
-                </label>
-              </div>
-              <q-input dark standout v-model="startDate" mask="date" :rules="['date']" label="Start date" >
-                <template v-slot:append>
-                  <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date v-model="startDate" @input="() => $refs.qDateProxy.hide()" />
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
-              <q-select dark standout v-model="challengeDuration" :options="challengeDurationOptions" label="Challenge duration" />
-              <div class="spacing"></div>
-              <q-input v-if="challengeDuration === 'Custom'" dark standout v-model="duration" label="Custom duration (number of days)" />
-              <q-input dark standout v-model="stake" label="Stake or reward (Optional)" />
-              <div class="spacing"></div>
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                    <q-date v-model="startDate" @input="() => $refs.qDateProxy.hide()" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+            <q-select
+              dark
+              standout
+              v-model="challengeDuration"
+              :options="challengeDurationOptions"
+              label="Challenge duration"
+            />
+            <div class="spacing"></div>
+            <q-input
+              v-if="challengeDuration === 'Custom'"
+              dark
+              standout
+              v-model="duration"
+              label="Custom duration (number of days)"
+            />
+            <q-input dark standout v-model="stake" label="Stake or reward (Optional)" />
+            <div class="spacing"></div>
+          </q-step>
 
-            </q-step>
+          <q-step :name="3" title="Set privacy" icon="assignment" :done="step > 3">
+            Set the privacy of the challenge. Will it be only for you and your friends? Or make it public and let anybody in the world join in.
+            <div class="q-gutter-sm">
+              <q-radio v-model="privacy" val="private" label="Private" />
+              <q-radio v-model="privacy" val="public" label="Public" />
+            </div>
+          </q-step>
 
-            <q-step
-              :name="3"
-              title="Set privacy"
-              icon="assignment"
-              :done="step > 3"
-            >
-              Set the privacy of the challenge. Will it be only for you and your friends? Or make it public and let anybody in the world join in.
-                <div class="q-gutter-sm">
-                  <q-radio v-model="privacy" val="private" label="Private" />
-                  <q-radio v-model="privacy" val="public" label="Public" />
-                </div>
-            </q-step>
-
-            <!-- <q-step
+          <!-- <q-step
               :name="4"
               title="Finish"
               icon="add_comment"
             >
               Your challenge is ready to go. Good luck
-            </q-step> -->
-            <template v-slot:navigation>
-              <q-stepper-navigation>
-                <q-btn v-if="step !== 3" @click="$refs.stepper.next()" color="amber" label="Continue" />
-                <q-btn @click="onSubmit" v-if="step === 3" color="amber" label="Finish" />
-                <q-btn v-if="step > 1" flat color="amber" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
-              </q-stepper-navigation>
-            </template>
+          </q-step>-->
+          <template v-slot:navigation>
+            <q-stepper-navigation>
+              <q-btn
+                v-if="step !== 3"
+                @click="$refs.stepper.next()"
+                color="amber"
+                label="Continue"
+              />
+              <q-btn @click="onSubmit" v-if="step === 3" color="amber" label="Finish" />
+              <q-btn
+                v-if="step > 1"
+                flat
+                color="amber"
+                @click="$refs.stepper.previous()"
+                label="Back"
+                class="q-ml-sm"
+              />
+            </q-stepper-navigation>
+          </template>
         </q-stepper>
       </q-form>
     </div>
@@ -182,38 +203,47 @@ import { date } from 'quasar'
 
 export default {
   name: 'Wizard',
+  watch: {
+    frequency: function() {
+      console.log('frequency', this.frequency)
+    }
+  },
   computed: {
     isEditMode: {
-      get () {
+      get() {
         return this.$route.query.edit
       }
     },
     activeHabit: {
-      get () {
+      get() {
         return this.$store.state.app.activeChallenge
       }
     }
   },
-  created () {
+  created() {
     if (this.isEditMode) {
       for (let key in this.activeHabit) {
         if (key === 'duration') {
           this.prefillDuration(this.activeHabit[key])
         } else if (key === 'icon') {
-          this[key] = this.icons.find(icon => icon.value === this.activeHabit[key])
+          this[key] = this.icons.find(
+            icon => icon.value === this.activeHabit[key]
+          )
         } else {
-          this[key] = (this.activeHabit.hasOwnProperty(key) && this.activeHabit[key]) || ''
+          this[key] =
+            (this.activeHabit.hasOwnProperty(key) && this.activeHabit[key]) ||
+            ''
         }
       }
     }
   },
-  data () {
+  data() {
     return {
       step: 1,
       title: '',
       iconMap: ICON_MAP,
       description: '',
-      frequency: 'daily',
+      frequency: { label: 'Daily', value: 'daily' },
       specificDays: [],
       icons: [
         { label: 'Exercise', value: 'exercise' },
@@ -285,8 +315,36 @@ export default {
       category: 'physical-health',
       icon: { label: 'Journal', value: 'journal' },
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
-      perMonthOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-      challengeDurationOptions: ['1 Week', '2 Weeks', '3 Weeks', '1 Month', '3 Months', 'Custom'],
+      perMonthOptions: [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      challengeDurationOptions: [
+        '1 Week',
+        '2 Weeks',
+        '3 Weeks',
+        '1 Month',
+        '3 Months',
+        'Custom'
+      ],
       challengeDuration: '1 Month',
       duration: '',
       startDate: date.formatDate(new Date(), 'YYYY/MM/DD'),
@@ -296,7 +354,7 @@ export default {
     }
   },
   methods: {
-    getDuration () {
+    getDuration() {
       switch (this.challengeDuration) {
         case '1 Week':
           return 7
@@ -312,7 +370,7 @@ export default {
           return this.duration
       }
     },
-    prefillDuration (duration) {
+    prefillDuration(duration) {
       switch (duration) {
         case 7:
           this.challengeDuration = '1 Week'
@@ -334,19 +392,22 @@ export default {
           this.duration = duration
       }
     },
-    onSubmit (e) {
+    onSubmit(e) {
+      console.log('onSubmit')
       if (this.title && this.frequency && this.privacy) {
-        if (this.frequency === 'specific' && this.specificDays.length === 0) {
+        if (this.frequency.value === 'specific' && this.specificDays.length === 0) {
           this.errors.push('Select at least 1 day.')
-        } else if (this.frequency === 'per-week' && !this.perWeek) {
+        } else if (this.frequency.value === 'per-week' && !this.perWeek) {
           this.errors.push('Select at least 1 day per week.')
-        } else if (this.frequency === 'per-month' && !this.perMonth) {
+        } else if (this.frequency.value === 'per-month' && !this.perMonth) {
           this.errors.push('Select at least 1 day per month.')
         } else {
+          console.log('no validation problem')
+
           const challenge = {
             title: this.title,
             description: this.description,
-            frequency: this.frequency,
+            frequency: this.frequency.value,
             specificDays: this.specificDays,
             perWeek: this.perWeek,
             perMonth: this.perMonth,
@@ -357,18 +418,24 @@ export default {
             category: this.category,
             icon: this.icon.value,
             author: this.$store.state.user.currentUser.displayName,
-            members: [{
-              name: this.$store.state.user.currentUser.displayName,
-              id: this.$store.state.user.currentUser.uid,
-              completedDays: 0
-            }]
+            members: [
+              {
+                name: this.$store.state.user.currentUser.displayName,
+                id: this.$store.state.user.currentUser.uid,
+                completedDays: 0
+              }
+            ]
           }
           if (this.isEditMode) {
+            console.log('edit')
+
             this.$store.dispatch('app/updateChallenge', {
               challenge,
               challengeId: this.activeHabit.id
             })
           } else {
+            console.log('no edit')
+
             this.$store.dispatch('app/addChallenge', challenge)
           }
           this.$router.push({ path: '/' })
@@ -378,8 +445,7 @@ export default {
 
       e.preventDefault()
     },
-    onReset () {
-    }
+    onReset() {}
   }
 }
 </script>
@@ -396,7 +462,7 @@ export default {
 }
 
 .stepper {
-  background: linear-gradient(to left, #3a404d, #181c26)
+  background: linear-gradient(to left, #3a404d, #181c26);
 }
 
 .spacing {

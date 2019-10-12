@@ -45,7 +45,7 @@
         <div class="text-subtitle">{{readableFrequency}}</div>
         <p v-if="options.expanded">{{options.description}}</p>
       </div>
-      <div v-if="sortedMembers.length > 1">Leader: {{sortedMembers[0].name}}</div>
+      <div v-if="sortedMembers.length > 1">Leader: {{sortedMembers ? sortedMembers[0].name : ''}}</div>
     </q-card-section>
     <q-card-section class="countdown flex flex-center" v-if="isInFuture">
       <h6>{{countdown}}</h6>
@@ -223,7 +223,11 @@ export default {
     },
     sortedMembers: {
       get() {
-        return this.sortMembers(this.options.members)
+        try {
+          return this.sortMembers(this.options.members || [])
+        } catch {
+          return []
+        }
       }
     },
     progress: {
@@ -287,13 +291,11 @@ export default {
       const currentChallenge = this.$store.state.app.myChallenges.find(
         challenge => challenge.id === challengeId
       )
+      const loggedDays = (currentChallenge && currentChallenge.loggedDays) || []
 
       return (
-        (currentChallenge &&
-          currentChallenge.loggedDays.filter(
-            day => day.user === uid && day.status === 'complete'
-          ).length) ||
-        0
+        loggedDays.filter(day => day.user === uid && day.status === 'complete')
+          .length || 0
       )
     },
     sortMembers: function(users) {
