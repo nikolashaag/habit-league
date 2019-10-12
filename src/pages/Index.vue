@@ -15,7 +15,7 @@
           <h5>Weekly Overview</h5>
         </div>
         <div class="search wrapper">
-          <q-input v-model="search" label="Search for habit" />
+          <q-input v-model="search" label="Search for a habit" />
         </div>
       </div>
     </transition>
@@ -235,14 +235,14 @@ export default {
 }
 
 .top {
-  min-height: 112px;
+  height: 188px;
 
   &--big {
-    min-height: 186px;
+    height: 262px;
   }
 }
 .title-wrapper {
-  min-height: 112px;
+  height: 112px;
   overflow: hidden;
 }
 

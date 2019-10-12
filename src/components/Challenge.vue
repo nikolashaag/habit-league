@@ -1,153 +1,151 @@
 <template>
-  <transition name="expand">
-    <q-card
-      :class="['challenge', 'text-white', options.expanded && 'expanded']"
-      @click="() => onExpand(options.id)"
-      v-if="!(!options.expanded && options.oneChallengeExpanded)"
-    >
-      <q-card-section class="menus">
-        <q-btn
-          color="white"
-          round
-          flat
-          :icon="options.expanded === true ? 'expand_less' : 'expand_more'"
-          class="caret"
-        ></q-btn>
-        <q-btn
-          color="white"
-          @click="e => e.stopPropagation()"
-          round
-          flat
-          icon="more_vert"
-          class="falafel"
+  <q-card
+    :class="['challenge', 'text-white', options.expanded && 'expanded']"
+    @click="() => onExpand(options.id)"
+    v-if="!(!options.expanded && options.oneChallengeExpanded)"
+  >
+    <q-card-section class="menus">
+      <q-btn
+        color="white"
+        round
+        flat
+        :icon="options.expanded === true ? 'expand_less' : 'expand_more'"
+        class="caret"
+      ></q-btn>
+      <q-btn
+        color="white"
+        @click="e => e.stopPropagation()"
+        round
+        flat
+        icon="more_vert"
+        class="falafel"
+      >
+        <q-menu cover auto-close>
+          <q-list>
+            <q-item v-if="iAmAuthor" clickable @click="() => deleteChallenge = !deleteChallenge">
+              <q-item-section>Delete Habit</q-item-section>
+            </q-item>
+            <q-item v-if="iAmAuthor" clickable @click="editHabit">
+              <q-item-section>Edit Habit</q-item-section>
+            </q-item>
+            <q-item v-if="!iAmAuthor" clickable @click="() => leaveChallenge = !leaveChallenge">
+              <q-item-section>Leave Habit</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-btn>
+    </q-card-section>
+
+    <q-card-section class="content">
+      <div class="icon-wrapper">
+        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
+      </div>
+      <div class="header">
+        <div class="text-title">{{options.title}}</div>
+        <div class="text-subtitle">{{readableFrequency}}</div>
+        <p v-if="options.expanded">{{options.description}}</p>
+      </div>
+      <div v-if="sortedMembers.length > 1">Leader: {{sortedMembers[0].name}}</div>
+    </q-card-section>
+    <q-card-section class="countdown flex flex-center" v-if="isInFuture">
+      <h6>{{countdown}}</h6>
+    </q-card-section>
+    <leader-board
+      :members="sortedMembers"
+      v-if="options.expanded === true && options.members.length > 1"
+    ></leader-board>
+
+    <q-card-actions class="weeks">
+      <transition name="fade">
+        <week
+          v-if="isCurrentWeek(firstWeek) || options.expanded === true"
+          :challenge="options"
+          :loggedDays="loggedDays"
+          :week="firstWeek"
+          @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
+        ></week>
+      </transition>
+
+      <div :class="`leftover-wrapper rows-${leftOverWeeks.length}`">
+        <div
+          v-for="(week, key) in leftOverWeeks"
+          :key="key + 'leftOverWeeks' + options.title"
+          class="row justify-between"
         >
-          <q-menu cover auto-close>
-            <q-list>
-              <q-item v-if="iAmAuthor" clickable @click="() => deleteChallenge = !deleteChallenge">
-                <q-item-section>Delete Habit</q-item-section>
-              </q-item>
-              <q-item v-if="iAmAuthor" clickable @click="editHabit">
-                <q-item-section>Edit Habit</q-item-section>
-              </q-item>
-              <q-item v-if="!iAmAuthor" clickable @click="() => leaveChallenge = !leaveChallenge">
-                <q-item-section>Leave Habit</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-      </q-card-section>
-
-      <q-card-section class="content">
-        <div class="icon-wrapper">
-          <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
+          <transition name="fade">
+            <week
+              v-if="isCurrentWeek(week) || options.expanded === true"
+              :challenge="options"
+              :loggedDays="loggedDays"
+              :week="week"
+              @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
+            ></week>
+          </transition>
         </div>
-        <div class="header">
-          <div class="text-title">{{options.title}}</div>
-          <div class="text-subtitle">{{readableFrequency}}</div>
-          <p v-if="options.expanded">{{options.description}}</p>
-        </div>
-        <div v-if="sortedMembers.length">Leader: {{sortedMembers[0].name}}</div>
-      </q-card-section>
-      <q-card-section class="countdown flex flex-center" v-if="isInFuture">
-        <h6>{{countdown}}</h6>
-      </q-card-section>
-      <leader-board
-        :members="sortedMembers"
-        v-if="options.expanded === true && options.members.length > 1"
-      ></leader-board>
-
-      <q-card-actions class="weeks">
-        <transition name="fade">
-          <week
-            v-if="isCurrentWeek(firstWeek) || options.expanded === true"
-            :challenge="options"
-            :loggedDays="loggedDays"
-            :week="firstWeek"
-            @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
-          ></week>
-        </transition>
-
-        <div :class="`leftover-wrapper rows-${leftOverWeeks.length}`">
-          <div
-            v-for="(week, key) in leftOverWeeks"
-            :key="key + 'leftOverWeeks' + options.title"
-            class="row justify-between"
-          >
-            <transition name="fade">
-              <week
-                v-if="isCurrentWeek(week) || options.expanded === true"
-                :challenge="options"
-                :loggedDays="loggedDays"
-                :week="week"
-                @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
-              ></week>
-            </transition>
-          </div>
-        </div>
-        <transition name="fade">
-          <week
-            v-if="isCurrentWeek(lastWeek) || options.expanded === true"
-            :challenge="options"
-            :loggedDays="loggedDays"
-            :week="lastWeek"
-            @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
-          ></week>
-        </transition>
-      </q-card-actions>
-      <q-linear-progress
-        rounded
-        stripe
-        class="progress"
-        style="height: 10px"
-        color="warning"
-        :value="progress"
-      />
-      <q-dialog v-model="noteProgress">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">Note day</div>
-          </q-card-section>
-          <q-card-actions align="center">
-            <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
-            <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
-            <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-      <q-dialog v-model="deleteChallenge">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">Are you sure you want to delete this Habit?</div>
-          </q-card-section>
-          <q-card-actions align="right">
-            <q-btn label="Delete" color="primary" @click="removeChallenge" v-close-popup />
-            <q-btn
-              label="Cancel"
-              color="primary"
-              @click="e => deleteChallenge = !deleteChallenge"
-              v-close-popup
-            />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-      <q-dialog v-model="leaveChallenge">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">Are you sure you want to leave the Challenge?</div>
-          </q-card-section>
-          <q-card-actions align="right">
-            <q-btn label="Leave" color="primary" @click="leaveChallengeAction" v-close-popup />
-            <q-btn
-              label="Cancel"
-              color="primary"
-              @click="e => leaveChallenge = !leaveChallenge"
-              v-close-popup
-            />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-    </q-card>
-  </transition>
+      </div>
+      <transition name="fade">
+        <week
+          v-if="isCurrentWeek(lastWeek) || options.expanded === true"
+          :challenge="options"
+          :loggedDays="loggedDays"
+          :week="lastWeek"
+          @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
+        ></week>
+      </transition>
+    </q-card-actions>
+    <q-linear-progress
+      rounded
+      stripe
+      class="progress"
+      style="height: 10px"
+      color="warning"
+      :value="progress"
+    />
+    <q-dialog v-model="noteProgress">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Note day</div>
+        </q-card-section>
+        <q-card-actions align="center">
+          <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
+          <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
+          <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="deleteChallenge">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Are you sure you want to delete this Habit?</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Delete" color="primary" @click="removeChallenge" v-close-popup />
+          <q-btn
+            label="Cancel"
+            color="primary"
+            @click="e => deleteChallenge = !deleteChallenge"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="leaveChallenge">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Are you sure you want to leave the Challenge?</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Leave" color="primary" @click="leaveChallengeAction" v-close-popup />
+          <q-btn
+            label="Cancel"
+            color="primary"
+            @click="e => leaveChallenge = !leaveChallenge"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </q-card>
 </template>
 
 <style>
