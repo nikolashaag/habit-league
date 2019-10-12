@@ -60,11 +60,11 @@ export default {
         frequency = habit.perMonth
       }
 
-      let loggedDays = habit.loggedDays.filter(
+      let loggedDays = (habit.loggedDays || []).filter(
         d =>
           d.status === 'complete' &&
           d.user === currentUserId &&
-          moment(d.date).isBetween(moment().day(0), moment().day(7))
+          moment(d.date, 'YYYY/MM/DD').isBetween(moment().day(0), moment().day(7))
       ).length
 
       return Math.ceil((loggedDays / frequency) * 100)
