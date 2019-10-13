@@ -21,7 +21,7 @@
           >
             <label
               for="title"
-            >Select how the challenge should look like. You can select one or multiple habits. Select the frequency.</label>
+            >Select how the challenge should look like.How ofte do you want to do this habit? Select the frequency.</label>
             <div class="spacing"></div>
             <q-input
               :rules="[val => !!val || 'Field is required']"
@@ -40,12 +40,7 @@
               dark
               standout
               v-model="frequency"
-              :options="[
-                  {label: 'Daily', value: 'daily'},
-                  {label: 'Per Week', value: 'per-week'},
-                  {label: 'Per Month', value: 'per-month'},
-                  {label: 'Specific Days', value: 'specific'},
-                ]"
+              :options="frequencyValues"
               label="Frequency"
             />
 
@@ -78,19 +73,7 @@
             <div class="row">
               <label for>Choose category</label>
             </div>
-
-            <q-btn-toggle
-              v-model="category"
-              toggle-color="primary"
-              push
-              :options="[
-                  {label: 'Physical Health', value: 'physical-health'},
-                  {label: 'Mental Health', value: 'mental-health'},
-                  {label: 'Relationships', value: 'relationships'},
-                  {label: 'Career', value: 'career'},
-                  {label: 'Hobbies', value: 'hobbies'}
-                ]"
-            />
+            <q-select dark standout v-model="category" :options="categoryValues" label="Category" />
             <div class="spacing"></div>
 
             <div class="row">
@@ -162,13 +145,6 @@
             </div>
           </q-step>
 
-          <!-- <q-step
-              :name="4"
-              title="Finish"
-              icon="add_comment"
-            >
-              Your challenge is ready to go. Good luck
-          </q-step>-->
           <template v-slot:navigation>
             <q-stepper-navigation>
               <q-btn
@@ -203,11 +179,6 @@ import { date } from 'quasar'
 
 export default {
   name: 'Wizard',
-  watch: {
-    frequency: function() {
-      console.log('frequency', this.frequency)
-    }
-  },
   computed: {
     isEditMode: {
       get() {
@@ -229,6 +200,14 @@ export default {
           this[key] = this.icons.find(
             icon => icon.value === this.activeHabit[key]
           )
+        } else if (key === 'frequency') {
+          this[key] = this.frequencyValues.find(
+            icon => icon.value === this.activeHabit[key]
+          )
+        } else if (key === 'category') {
+          this[key] = this.categoryValues.find(
+            icon => icon.value === this.activeHabit[key]
+          )
         } else {
           this[key] =
             (this.activeHabit.hasOwnProperty(key) && this.activeHabit[key]) ||
@@ -244,6 +223,12 @@ export default {
       iconMap: ICON_MAP,
       description: '',
       frequency: { label: 'Daily', value: 'daily' },
+      frequencyValues: [
+        { label: 'Daily', value: 'daily' },
+        { label: 'Per Week', value: 'per-week' },
+        { label: 'Per Month', value: 'per-month' },
+        { label: 'Specific Days', value: 'specific' }
+      ],
       specificDays: [],
       icons: [
         { label: 'Exercise', value: 'exercise' },
@@ -312,7 +297,14 @@ export default {
       ],
       perWeek: null,
       perMonth: null,
-      category: 'physical-health',
+      category: { label: 'Physical Health', value: 'physical-health' },
+      categoryValues: [
+        { label: 'Physical Health', value: 'physical-health' },
+        { label: 'Mental Health', value: 'mental-health' },
+        { label: 'Relationships', value: 'relationships' },
+        { label: 'Career', value: 'career' },
+        { label: 'Hobbies', value: 'hobbies' }
+      ],
       icon: { label: 'Journal', value: 'journal' },
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
       perMonthOptions: [
@@ -395,7 +387,10 @@ export default {
     onSubmit(e) {
       console.log('onSubmit')
       if (this.title && this.frequency && this.privacy) {
-        if (this.frequency.value === 'specific' && this.specificDays.length === 0) {
+        if (
+          this.frequency.value === 'specific' &&
+          this.specificDays.length === 0
+        ) {
           this.errors.push('Select at least 1 day.')
         } else if (this.frequency.value === 'per-week' && !this.perWeek) {
           this.errors.push('Select at least 1 day per week.')
@@ -415,7 +410,7 @@ export default {
             startDate: this.startDate,
             stake: this.stake,
             privacy: this.privacy,
-            category: this.category,
+            category: this.category.value,
             icon: this.icon.value,
             author: this.$store.state.user.currentUser.displayName,
             members: [
@@ -475,5 +470,9 @@ label {
 
 .q-stepper__step-inner {
   padding: 16px !important;
+}
+
+.q-stepper__tab {
+  justify-content: flex-start !important;
 }
 </style>
