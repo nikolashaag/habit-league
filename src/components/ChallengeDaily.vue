@@ -24,7 +24,7 @@ import { ICON_MAP } from '../helpers/constants'
 import { getReadableFrequency } from '../helpers/calendar'
 
 export default {
-  name: 'Challenge',
+  name: 'ChallengeDaily',
   data () {
     return {
       noteProgress: false,
