@@ -22,7 +22,7 @@ import PublicChallenge from 'components/PublicChallenge.vue'
 import Note from 'components/Note.vue'
 
 export default {
-  name: 'PageIndex',
+  name: 'Browse',
   components: {
     PublicChallenge,
     Note

@@ -62,7 +62,7 @@ export default {
               ...user.additionalUserInfo.profile,
               uid: user.user.uid
             })
-            this.$router.replace('/')
+            this.$router.replace('/weekly')
           },
           err => {
             if (err.message.indexOf('email') > -1) {

@@ -91,7 +91,7 @@ import Note from 'components/Note.vue'
 import { initMessaging } from '../helpers/messaging'
 
 export default {
-  name: 'PageIndex',
+  name: 'Weekly',
   components: {
     Challenge,
     Spinner,

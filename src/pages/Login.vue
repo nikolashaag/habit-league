@@ -66,7 +66,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          this.$router.replace('/')
+          this.$router.replace('/weekly')
         })
         .catch(err => {
           if (err.message.indexOf('email') > -1) {
@@ -87,7 +87,7 @@ export default {
           console.log('google success saveUser', result)
           this.$store.dispatch('user/saveUser', result.user)
 
-          this.$router.replace('/')
+          this.$router.replace('/weekly')
         })
         .catch(err => {
           alert('Oops. ' + err.message)

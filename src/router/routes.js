@@ -4,9 +4,9 @@ const routes = [
     redirect: '/login'
   },
   {
-    path: '/',
+    path: '/weekly',
     component: () => import('layouts/MyLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Index.vue') }],
+    children: [{ path: '', component: () => import('pages/Weekly.vue') }],
     meta: {
       requiresAuth: true
     }
@@ -23,14 +23,6 @@ const routes = [
     path: '/daily',
     component: () => import('layouts/MyLayout.vue'),
     children: [{ path: '', component: () => import('pages/Daily.vue') }],
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/history',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Index.vue') }],
     meta: {
       requiresAuth: true
     }

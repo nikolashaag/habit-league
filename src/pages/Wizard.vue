@@ -433,7 +433,7 @@ export default {
 
             this.$store.dispatch('app/addChallenge', challenge)
           }
-          this.$router.push({ path: '/' })
+          this.$router.push({ path: '/weekly' })
           return true
         }
       }

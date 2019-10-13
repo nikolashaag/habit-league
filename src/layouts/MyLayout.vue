@@ -21,7 +21,7 @@
             <q-item-label caption>Complete your daily tasks</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="goToPage('/')">
+        <q-item clickable @click="goToPage('/weekly')">
           <q-item-section avatar>
             <q-icon name="fas fa-calendar-alt" />
           </q-item-section>
@@ -98,9 +98,9 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-      if ((from.path === '/daily' && to.path === '/') || to.path === '/dashboard' || from.path === '/login' || from.path === '/signup') {
+      if ((from.path === '/daily' && to.path === '/weekly') || to.path === '/dashboard' || from.path === '/login' || from.path === '/signup') {
         this.transitionName = 'slide-left'
-      } else if (from.path === '/' && to.path === '/browse') {
+      } else if (from.path === '/weekly' && to.path === '/browse') {
         this.transitionName = 'slide-left'
       } else if (from.path === '/create' && to.path === '/browse') {
         this.transitionName = 'slide-left'
@@ -108,7 +108,7 @@ export default {
         this.transitionName = 'slide-right'
       } else if (from.path === '/browse' && to.path === '/create') {
         this.transitionName = 'slide-right'
-      } else if (from.path === '/' && to.path === '/create') {
+      } else if (from.path === '/weekly' && to.path === '/create') {
         this.transitionName = 'slide-left'
       } else {
         this.transitionName = 'slide-right'

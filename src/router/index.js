@@ -10,7 +10,7 @@ Vue.use(VueRouter)
  * directly export the Router instantiation
  */
 
-export default function (/* { store, ssrContext } */) {
+export default function(/* { store, ssrContext } */) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
     routes,
@@ -36,7 +36,7 @@ export default function (/* { store, ssrContext } */) {
     }
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     if (requiresAuth && !currentUser) next('login')
-    else if (!requiresAuth && currentUser) next('/')
+    else if (!requiresAuth && currentUser) next('/weekly')
     else next()
   })
 
