@@ -18,17 +18,12 @@
 
     <q-card-actions></q-card-actions>
     <q-linear-progress rounded stripe style="height: 10px" color="warning" :value="progress" />
-    <q-dialog v-model="noteProgress">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Are you sure you want to join this challenge?</div>
-        </q-card-section>
-        <q-card-actions align="center">
-          <q-btn label="Confirm" color="primary" @click="confirm()" v-close-popup />
-          <q-btn label="Cancel" color="primary" @click="cancel()" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    <dialog-popup
+      title="Are you sure you want to join this challenge?"
+      :model="noteProgress"
+      :confirm="{label: 'Confirm', onClick: confirm}"
+      :cancel="{label: 'Cancel', onClick: cancel}"
+    />
   </q-card>
 </template>
 
@@ -37,9 +32,13 @@
 
 <script>
 import { ICON_MAP } from '../helpers/constants'
+import DialogPopup from './DialogPopup.vue'
 
 export default {
   name: 'Challenge',
+  components: {
+    DialogPopup
+  },
   data() {
     return {
       noteProgress: false,
@@ -75,7 +74,9 @@ export default {
     confirm: function() {
       this.$store.dispatch('app/joinChallenge', this.options.id)
     },
-    cancel: function() {}
+    cancel: function() {
+      this.noteProgress = false
+    }
   },
   created: function() {}
 }

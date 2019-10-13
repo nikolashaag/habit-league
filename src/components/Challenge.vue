@@ -101,55 +101,29 @@
       color="warning"
       :value="progress"
     />
-    <q-dialog v-model="noteProgress">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Note day</div>
-        </q-card-section>
-        <q-card-actions align="center">
-          <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
-          <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
-          <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <q-dialog v-model="deleteChallenge">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Are you sure you want to delete this Habit?</div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn label="Delete" color="primary" @click="removeChallenge" v-close-popup />
-          <q-btn
-            label="Cancel"
-            color="primary"
-            @click="e => deleteChallenge = !deleteChallenge"
-            v-close-popup
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <q-dialog v-model="leaveChallenge">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Are you sure you want to leave the Challenge?</div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn label="Leave" color="primary" @click="leaveChallengeAction" v-close-popup />
-          <q-btn
-            label="Cancel"
-            color="primary"
-            @click="e => leaveChallenge = !leaveChallenge"
-            v-close-popup
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    <dialog-popup
+      title="Note day"
+      :model="noteProgress"
+      align='center'
+    >
+      <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
+      <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
+      <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
+    </dialog-popup>
+    <dialog-popup
+      title="Are you sure you want to delete this Habit?"
+      :model="deleteChallenge"
+      :confirm="{label: 'Delete', onClick: removeChallenge}"
+      :cancel="{label: 'Cancel', onClick: onDelete.bind(this)}"
+    />
+    <dialog-popup
+      title="Are you sure you want to leave the Challenge?"
+      :model="leaveChallenge"
+      :confirm="{label: 'Leave', onClick: leaveChallengeAction}"
+      :cancel="{label: 'Cancel', onClick: e => leaveChallenge = !leaveChallenge}"
+    />
   </q-card>
 </template>
-
-<style>
-</style>
 
 <script>
 import { date } from 'quasar'
@@ -157,6 +131,7 @@ import { ICON_MAP } from '../helpers/constants'
 import { sort } from '../helpers/utils'
 import week from './Week'
 import LeaderBoard from './Leaderboard'
+import DialogPopup from './DialogPopup.vue'
 
 import {
   getFirstWeek,
@@ -182,7 +157,8 @@ export default {
   },
   components: {
     week,
-    LeaderBoard
+    LeaderBoard,
+    DialogPopup
   },
   props: ['options', 'onExpand'],
   computed: {
@@ -297,6 +273,10 @@ export default {
         loggedDays.filter(day => day.user === uid && day.status === 'complete')
           .length || 0
       )
+    },
+    onDelete () {
+      console.log('onDelete')
+      this.deleteChallenge = !this.deleteChallenge
     },
     sortMembers: function(users) {
       return sort(

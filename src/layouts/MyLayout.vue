@@ -92,7 +92,7 @@ export default {
   },
   data() {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop,
+      leftDrawerOpen: false,
       transitionName: 'slide-left'
     }
   },
@@ -146,7 +146,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
 .q-header {
   background: linear-gradient(to left, #3a404d, #181c26);
   z-index: 99;

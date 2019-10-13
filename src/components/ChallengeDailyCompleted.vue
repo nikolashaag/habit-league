@@ -30,7 +30,7 @@ import { date } from 'quasar'
 import { getReadableFrequency } from '../helpers/calendar'
 
 export default {
-  name: 'Challenge',
+  name: 'ChallengeDailyCompleted',
   data () {
     return {
       noteProgress: false,
