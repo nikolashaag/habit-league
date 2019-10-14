@@ -355,6 +355,7 @@ export default {
         },
         challengeId: this.options.id
       })
+      this.noteProgress = false
     }
   },
   created: function() {
