@@ -7,9 +7,6 @@
         <i>skip</i>) or tick the checkbox.
       </p>
     </note>
-    <div class="title-wrapper" v-if="challenges.length > 0">
-      <h5>Daily view</h5>
-    </div>
     <div class="progress-wrapper row flex flex-center">
       <q-knob
         show-value
@@ -20,7 +17,7 @@
         :thickness="0.22"
         color="teal"
         track-color="grey-3"
-        class="q-ma-md"
+        class="q-ma-md text-white"
       >{{ progress }}%</q-knob>
     </div>
     <h5
@@ -302,12 +299,7 @@ margin-bottom: 52px;
   transform: translate3d(2000px, 0, 0);
 }
 
-.title-wrapper {
-  width: 100%;
-  text-align: center;
-  h5 {
-    margin-bottom: 16px;
-  }
+/deep/ .q-slide-item__content {
+  background: unset;
 }
-
 </style>

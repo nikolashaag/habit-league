@@ -1,5 +1,5 @@
 <template>
-  <q-card class="challenge text-white" @click="() => expanded = !expanded">
+  <q-card class="challenge text-white bg-dark" @click="() => expanded = !expanded">
     <q-card-section>
       <div class="icon-wrapper">
         <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
@@ -10,8 +10,11 @@
       </div>
     </q-card-section>
 
+    <q-card-section class="row">
+      <p>{{options.description}}</p>
+    </q-card-section>
     <q-card-section class="justify-end row">
-      <q-btn color="amber" label="Join Challenge" @click="e => joinChallenge(e)" />
+      <q-btn class="join-button" color="amber" label="Join Challenge" @click="e => joinChallenge(e)" />
     </q-card-section>
 
     <!-- <q-separator dark /> -->
@@ -168,5 +171,9 @@ export default {
 .header {
   display: inline-block;
   height: 54px;
+}
+
+.join-button {
+  color: #1f1f1f !important;
 }
 </style>

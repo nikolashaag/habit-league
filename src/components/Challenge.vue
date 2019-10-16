@@ -1,6 +1,6 @@
 <template>
   <q-card
-    :class="['challenge', 'text-white', options.expanded && 'expanded']"
+    :class="['challenge', 'bg-dark', 'text-white', options.expanded && 'expanded']"
     @click="() => onExpand(options.id)"
     v-if="!(!options.expanded && options.oneChallengeExpanded)"
   >
@@ -390,7 +390,6 @@ export default {
 }
 .challenge {
   margin-bottom: 16px;
-  background: linear-gradient(to left, #3a404d, #181c26);
   transition: min-height 0.5s ease;
   min-height: 192px;
 }
@@ -399,6 +398,11 @@ export default {
   min-height: calc(100vh - 161px);
   transition: min-height 0.5s ease-in-out;
   width: 100%;
+
+  .content {
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
 }
 
 .expand-enter-active,
@@ -453,6 +457,7 @@ export default {
 }
 
 .content {
+  padding-bottom: 0;
   margin-bottom: 16px;
 }
 

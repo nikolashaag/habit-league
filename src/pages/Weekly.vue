@@ -11,12 +11,11 @@
         <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
           <p>In this view you see a weekly overview for each habit. When you tab on a habit, it will expand and show more details, like the calendar.</p>
         </note>
-        <div class="title-wrapper text-center">
-          <h5>Weekly Overview</h5>
-        </div>
-        <div class="search wrapper">
-          <q-input v-model="search" label="Search for a habit" />
-        </div>
+        <transition name="expand">
+          <div class="search wrapper">
+            <q-input dark color="amber" v-model="search" label="Search for a habit" />
+          </div>
+        </transition>
       </div>
     </transition>
     <spinner v-if="isLoading" />
@@ -229,21 +228,27 @@ export default {
   bottom: 50px;
   right: 50px;
 }
+
 .search {
   width: 100%;
-  margin-bottom: 20px;
+  height: 56px;
 }
 
 .top {
-  height: 188px;
+  height: 76px;
 
   &--big {
-    height: 262px;
+    height: 150px;
   }
 }
+
 .title-wrapper {
   height: 112px;
   overflow: hidden;
+
+  h5 {
+    color: #e1e1e1;
+  }
 }
 
 .wrapper {

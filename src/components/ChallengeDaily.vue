@@ -1,5 +1,5 @@
 <template>
-    <q-card :class="['challenge text-white row', complete ?  'was-completed' : '']">
+    <q-card :class="['challenge text-white row bg-dark', complete ?  'was-completed' : '']">
       <q-card-section class="col-10 main-header">
         <div class="icon-wrapper">
           <q-icon :name="getIconName(options.icon)" class="category-icon" >
@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     onCheck: function (e) {
-      console.log('boom')
       if (e) {
         this.onComplete(this.options.id)
       }

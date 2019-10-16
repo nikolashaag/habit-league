@@ -1,16 +1,16 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="header">
+  <q-layout class="background" view="lHh Lpr lFf">
+    <q-header elevated class="header bg-dark">
       <q-toolbar class="navbar">
-        <q-btn flat dense size="lg" round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
+        <q-btn class="burger" flat dense size="lg" round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu" />
         </q-btn>
-        <q-toolbar-title>Habit Win</q-toolbar-title>
+        <q-toolbar-title>{{title}}</q-toolbar-title>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-2">
-      <q-list>
+    <q-drawer v-model="leftDrawerOpen" content-class="bg-grey-9">
+      <q-list dark>
         <q-item-label header>Menu</q-item-label>
         <q-item clickable @click="goToPage('daily')">
           <q-item-section avatar>
@@ -91,9 +91,11 @@ export default {
     SecondaryNav
   },
   data() {
+    console.log('this', this.$route)
     return {
       leftDrawerOpen: false,
-      transitionName: 'slide-left'
+      transitionName: 'slide-left',
+      title: this.$route.matched.find(record => record.meta.title).meta.title
     }
   },
   watch: {
@@ -113,6 +115,8 @@ export default {
       } else {
         this.transitionName = 'slide-right'
       }
+      console.log('to', to.matched.find(record => record.meta.title).meta.title)
+      this.title = to.matched.find(record => record.meta.title).meta.title
     }
   },
   methods: {
@@ -148,9 +152,18 @@ export default {
 
 <style lang="scss" scoped>
 
+.background {
+  background: #121212;
+}
+
 .q-header {
   background: linear-gradient(to left, #3a404d, #181c26);
   z-index: 99;
+  text-align: center;
+
+  .burger {
+    position: absolute;
+  }
 }
 
 .navbar {

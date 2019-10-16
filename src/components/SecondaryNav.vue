@@ -12,7 +12,7 @@
     />
     <q-route-tab
       icon="fas fa-calendar-alt"
-      to="/"
+      to="/weekly"
       exact
     />
     <q-route-tab

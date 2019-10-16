@@ -1,12 +1,12 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center text-white">
     <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
       <p>
         Browse what habits are other people developing. by joining a habit, you make it a challenge and can compete with them.
       </p>
     </note>
     <h5>
-      Browse public challenges
+      Public challenges
     </h5>
     <div class="q-pa-md wrapper">
       <public-challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
@@ -77,7 +77,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .wrapper {
   width: 100%;
   margin-bottom: 32px;

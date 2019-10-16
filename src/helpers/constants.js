@@ -27,3 +27,11 @@ export const ICON_MAP = {
   coding: 'fas fa-code',
   sleep: 'fas fa-bed'
 }
+
+export const CATEGORY_MAP = [
+  { label: 'Physical Health', value: 'physical-health' },
+  { label: 'Mental Health', value: 'mental-health' },
+  { label: 'Relationships', value: 'relationships' },
+  { label: 'Career', value: 'career' },
+  { label: 'Hobbies', value: 'hobbies' }
+]

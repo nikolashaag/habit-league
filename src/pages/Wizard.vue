@@ -8,7 +8,7 @@
           color="primary"
           animated
           dark
-          class="stepper"
+          class="bg-dark stepper-custom"
           active-color="secondary"
           done-color="secondary"
         >
@@ -152,8 +152,9 @@
                 @click="$refs.stepper.next()"
                 color="amber"
                 label="Continue"
+                class="text-dark"
               />
-              <q-btn @click="onSubmit" v-if="step === 3" color="amber" label="Finish" />
+              <q-btn @click="onSubmit" v-if="step === 3" color="amber" class="text-dark" label="Finish" />
               <q-btn
                 v-if="step > 1"
                 flat
@@ -174,7 +175,7 @@
 </style>
 
 <script>
-import { ICON_MAP } from '../helpers/constants'
+import { ICON_MAP, CATEGORY_MAP } from '../helpers/constants'
 import { date } from 'quasar'
 
 export default {
@@ -298,13 +299,7 @@ export default {
       perWeek: null,
       perMonth: null,
       category: { label: 'Physical Health', value: 'physical-health' },
-      categoryValues: [
-        { label: 'Physical Health', value: 'physical-health' },
-        { label: 'Mental Health', value: 'mental-health' },
-        { label: 'Relationships', value: 'relationships' },
-        { label: 'Career', value: 'career' },
-        { label: 'Hobbies', value: 'hobbies' }
-      ],
+      categoryValues: CATEGORY_MAP,
       icon: { label: 'Journal', value: 'journal' },
       perWeekOptions: [1, 2, 3, 4, 5, 6, 7],
       perMonthOptions: [
@@ -445,9 +440,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .wizard {
   margin-bottom: 52px;
+
+  .stepper-custom {
+    box-shadow: 0 1px 5px rgba(0,0,0,0.2), 0 2px 2px rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12);
+    border: none;
+  }
 }
 
 .add-button {

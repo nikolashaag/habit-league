@@ -151,7 +151,7 @@ export default {
 .date {
   position: absolute;
   top: -10px;
-  color: #b1b1b1;
+  color: #e4e4e4;
   transform: translateY(-50%);
 }
 

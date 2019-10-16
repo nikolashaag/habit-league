@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex">
-    <div class="category" v-for="(chartData, category) in challengesByCategory" :key="category.key">
-      <h5>{{category}}</h5>
+    <div class="category text-white" v-for="(chartData, category) in challengesByCategory" :key="category.key">
+      <h5>{{getCategory(category)}}</h5>
       <div class="category__chart">
         <bar-chart :data="chartData"></bar-chart>
       </div>
@@ -15,6 +15,7 @@
 <script>
 import moment from 'moment'
 import BarChart from '../components/BarChart'
+import { CATEGORY_MAP } from '../helpers/constants'
 
 export default {
   name: 'dashboard',
@@ -64,10 +65,16 @@ export default {
         d =>
           d.status === 'complete' &&
           d.user === currentUserId &&
-          moment(d.date, 'YYYY/MM/DD').isBetween(moment().day(0), moment().day(7))
+          moment(d.date, 'YYYY/MM/DD').isBetween(
+            moment().day(0),
+            moment().day(7)
+          )
       ).length
 
       return Math.ceil((loggedDays / frequency) * 100)
+    },
+    getCategory(category) {
+      return CATEGORY_MAP.find(cat => cat.value === category).label
     }
   },
   created: async function() {
@@ -86,17 +93,35 @@ export default {
         )
         return habit
       })
-
+      const title = this.getCategory(category)
       let categoryChartData = {
+        title,
         labels: habits.map(h => h.title),
         datasets: [
           {
-            label: category,
+            label: title,
             backgroundColor: 'rgba(226, 212, 2,0.7)',
-            borderColor: 'transparent',
             data: habits.map(h => h.successRate)
           }
-        ]
+        ],
+        options: {
+          scales: {
+            xAxes: [
+              {
+                gridLines: {
+                  color: 'rgb(94, 94, 94)'
+                }
+              }
+            ],
+            yAxes: [
+              {
+                gridLines: {
+                  color: 'rgb(94, 94, 94)'
+                }
+              }
+            ]
+          }
+        }
       }
       groupedChallenges[category] = categoryChartData
     }
@@ -110,6 +135,7 @@ export default {
 .category {
   width: 100%;
   padding: 0 20px;
+
   &__chart {
     padding-bottom: 50px;
   }
