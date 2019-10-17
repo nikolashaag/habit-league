@@ -8,12 +8,13 @@
         :class="['wrapper q-pa-md top', showTooltip && 'top--big']"
         v-if="challenges.length > 0 && !this.oneChallengeExpanded"
       >
-        <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
+        <note v-if="showTooltip" class="text-dark" title="HOW TO USE" :onClose="onTipClose">
           <p>In this view you see a weekly overview for each habit. When you tab on a habit, it will expand and show more details, like the calendar.</p>
         </note>
         <transition name="expand">
           <div class="search wrapper">
-            <q-input dark color="amber" v-model="search" label="Search for a habit" />
+            <q-input dark color="amber" v-model="search" label="find  habit" />
+            <q-icon name="fas  fa-filter" @click="isCompletedHidden = !isCompletedHidden" />
           </div>
         </transition>
       </div>
@@ -84,6 +85,7 @@
 </style>
 
 <script>
+import moment from 'moment'
 import Challenge from 'components/Challenge.vue'
 import Spinner from 'components/Spinner.vue'
 import Note from 'components/Note.vue'
@@ -128,13 +130,21 @@ export default {
       return this.getChallengesByFrequency('per-month')
     },
     filterdChallenges() {
+      let filterdChallenges = this.localChallenges
       if (this.search) {
-        return this.localChallenges.filter(challenge => {
+        filterdChallenges = filterdChallenges.filter(challenge => {
           const title = challenge.title.toLowerCase()
           return title.includes(this.search.toLowerCase())
         })
       }
-      return this.localChallenges
+
+      if (this.isCompletedHidden) {
+        filterdChallenges = filterdChallenges.filter(challenge => {
+          return !this.isChallengeCompleted(challenge)
+        })
+      }
+
+      return filterdChallenges
     }
   },
   watch: {
@@ -147,7 +157,8 @@ export default {
       localChallenges: [],
       oneChallengeExpanded: false,
       isLoading: true,
-      search: ''
+      search: '',
+      isCompletedHidden: false
     }
   },
   methods: {
@@ -194,6 +205,35 @@ export default {
       if (this.oneChallengeExpanded) {
         this.$scrollTo('body', 1000)
       }
+    },
+    isChallengeCompleted: function(challenge) {
+      let isCompleted = false
+      const currentUserId = this.$store.state.user.currentUser.uid
+      const frequency = challenge.frequency
+      const loggedDaysThisWeek = (challenge.loggedDays || []).filter(log => {
+        return (
+          log.status === 'complete' &&
+          log.user === currentUserId &&
+          moment(log.date, 'YYYY/MM/DD').isBetween(
+            moment().day(0),
+            moment().day(7)
+          )
+        )
+      })
+
+      switch (frequency) {
+        case 'per-week':
+          let target = challenge.perWeek
+          isCompleted = target <= loggedDaysThisWeek.length
+          break
+        case 'specific':
+          target = challenge.specificDays.length
+          console.log('target', target)
+          isCompleted = target <= loggedDaysThisWeek.length
+          break
+      }
+
+      return isCompleted
     }
   },
   async created() {
@@ -232,6 +272,14 @@ export default {
 .search {
   width: 100%;
   height: 56px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  label {
+    flex-grow: 1;
+    margin-right: 20px;
+  }
 }
 
 .top {
