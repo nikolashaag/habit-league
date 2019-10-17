@@ -1,15 +1,11 @@
 <template>
   <q-page class="flex flex-center text-white">
-    <note v-if="showTooltip" title="HOW TO USE" :onClose="onTipClose">
-      <p>
-        Browse what habits are other people developing. by joining a habit, you make it a challenge and can compete with them.
-      </p>
+    <note v-if="showTooltip" class="text-dark" title="HOW TO USE" :onClose="onTipClose">
+      <p>Browse what habits are other people developing. by joining a habit, you make it a challenge and can compete with them.</p>
     </note>
-    <h5>
-      Public challenges
-    </h5>
+    <h5>Public challenges</h5>
     <div class="q-pa-md wrapper">
-      <public-challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key"/>
+      <public-challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key" />
     </div>
   </q-page>
 </template>
@@ -31,7 +27,9 @@ export default {
     showTooltip: {
       get() {
         const userId = this.$store.state.user.currentUser.uid
-        const user = (this.$store.state.user.users || []).find(user => user.uid === userId)
+        const user = (this.$store.state.user.users || []).find(
+          user => user.uid === userId
+        )
         if (!user) {
           return false
         }
@@ -40,7 +38,7 @@ export default {
       }
     },
     challenges: {
-      get () {
+      get() {
         return (this.$store.state.app.challenges || []).filter(challenge => {
           let dt1 = new Date(challenge.startDate)
           let dt2 = new Date()
@@ -55,12 +53,12 @@ export default {
           return progress <= 0.3
         })
       },
-      set (val) {
+      set(val) {
         // this.$store.commit('showcase/updateDrawerState', val)
       }
     }
   },
-  created () {
+  created() {
     if (!this.$store.state.app.syncStatus) {
       this.$store.dispatch('app/fetchChallenges')
       this.$store.dispatch('user/fetchUsers')
