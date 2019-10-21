@@ -1,5 +1,8 @@
 import firebase from 'firebase'
-import { isChallengePast } from '../../helpers/calendar'
+import {
+  isChallengePast,
+  isChallengeOlderThanAWeek
+} from '../../helpers/calendar'
 import { Notify } from 'quasar'
 
 export function fetchChallenges({ commit, state, rootState }) {
@@ -12,12 +15,14 @@ export function fetchChallenges({ commit, state, rootState }) {
         querySnapshot.forEach(doc => {
           const challenge = doc.data()
           const isPast = isChallengePast(challenge)
+          const isOlderThanAWeek = isChallengeOlderThanAWeek(challenge)
+          challenge.isPast = isPast
 
           if (
             challenge.members.find(
               member => member.id === rootState.user.currentUser.uid
             ) &&
-            !isPast
+            !isOlderThanAWeek
           ) {
             commit('addMyChallengeToState', {
               ...challenge,

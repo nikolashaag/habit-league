@@ -41,6 +41,7 @@ export default {
   transition: all 0.2s ease-in-out;
   padding-bottom: 0;
   margin-bottom: 10px;
+  color: #1f1f1f;
 }
 .leaderboard-row {
   width: calc(100% + 32px);

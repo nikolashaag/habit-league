@@ -10,7 +10,13 @@
         text-color="black"
         @click="$emit('noteProgressForDay', day,$event)"
       >
-        <span class="date">{{day.date.getDate()}} <span class="month" v-if="day.date.getDate() === 1">{{getMonthWritten(day.date.getMonth())}}</span>  </span>
+        <span class="date">
+          {{day.date.getDate()}}
+          <span
+            class="month"
+            v-if="day.date.getDate() === 1"
+          >{{getMonthWritten(day.date.getMonth())}}</span>
+        </span>
         {{day.label}}
       </q-btn>
       <hr :class="`hr hr--${getChainColor(index)}`" />
@@ -19,6 +25,8 @@
 </template>
 
 <script>
+import { getMonthWritten } from '../helpers/calendar'
+
 export default {
   name: 'week',
   data() {
@@ -33,33 +41,8 @@ export default {
 
       return true
     },
-    getMonthWritten(month) {
-      switch (month) {
-        case 0:
-          return 'Jan'
-        case 1:
-          return 'Feb'
-        case 2:
-          return 'Mar'
-        case 3:
-          return 'Apr'
-        case 4:
-          return 'May'
-        case 5:
-          return 'Jun'
-        case 6:
-          return 'Jul'
-        case 7:
-          return 'Aug'
-        case 8:
-          return 'Sep'
-        case 9:
-          return 'Okt'
-        case 10:
-          return 'Nov'
-        case 11:
-          return 'Dec'
-      }
+    getMonthWrittenLocal(month) {
+      return getMonthWritten(month)
     },
     getChainColor(index) {
       let color = 'amber'
@@ -72,23 +55,44 @@ export default {
       const perWeek = this.challenge.frequency === 'per-week'
       const factorPerWeek = this.challenge.perWeek || 0
 
-      const weekHasFactorCompletions = this.week.filter(day => {
-        return this.getColor(day) === 'green'
-      }).length >= factorPerWeek
+      const weekHasFactorCompletions =
+        this.week.filter(day => {
+          return this.getColor(day) === 'green'
+        }).length >= factorPerWeek
       const dayBeforeIsGreen = dayBefore && this.getColor(dayBefore) === 'green'
-      const currentDayIsGreen = currentDay && this.getColor(currentDay) === 'green'
-      const currentDayIsNotRed = currentDay && this.getColor(currentDay) !== 'red'
-      const nextDayIsGreen = this.isDayChainable(currentDay) && nextDay && this.getColor(nextDay) === 'green'
-      const dayAfterIsGreen = nextDay && this.getColor(nextDay) !== 'red' && dayAfter && this.getColor(dayAfter) === 'green'
+      const currentDayIsGreen =
+        currentDay && this.getColor(currentDay) === 'green'
+      const currentDayIsNotRed =
+        currentDay && this.getColor(currentDay) !== 'red'
+      const nextDayIsGreen =
+        this.isDayChainable(currentDay) &&
+        nextDay &&
+        this.getColor(nextDay) === 'green'
+      const dayAfterIsGreen =
+        nextDay &&
+        this.getColor(nextDay) !== 'red' &&
+        dayAfter &&
+        this.getColor(dayAfter) === 'green'
 
       // Custom chain behaviour in per-week habits
       if (perWeek && weekHasFactorCompletions && !dayIsInFuture && !isSunday) {
         return 'green'
       }
-      if (perWeek && factorPerWeek < 4 && dayBeforeIsGreen && nextDayIsGreen && currentDayIsNotRed) {
+      if (
+        perWeek &&
+        factorPerWeek < 4 &&
+        dayBeforeIsGreen &&
+        nextDayIsGreen &&
+        currentDayIsNotRed
+      ) {
         return 'green'
       }
-      if (perWeek && factorPerWeek < 4 && currentDayIsGreen && dayAfterIsGreen) {
+      if (
+        perWeek &&
+        factorPerWeek < 4 &&
+        currentDayIsGreen &&
+        dayAfterIsGreen
+      ) {
         return 'green'
       }
       if (nextDayIsGreen && currentDayIsGreen) {
@@ -117,7 +121,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "./src/css/breakpoints.scss";
+@import './src/css/breakpoints.scss';
 .week-wrapper {
   margin-top: 16px;
 }

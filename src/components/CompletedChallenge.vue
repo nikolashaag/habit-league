@@ -45,17 +45,34 @@
         <div class="text-subtitle">{{readableFrequency}}</div>
         <p v-if="options.expanded">{{options.description}}</p>
       </div>
-      <div v-if="leader">Leader: {{leader}}</div>
     </q-card-section>
-    <q-card-section class="countdown flex flex-center" v-if="isInFuture">
-      <h6>{{countdown}}</h6>
+    <q-card-section class="results flex flex-center">
+      <div class="row results-row">
+        <div class="col-xs-4 col-sm-4 col-md-4">
+          <div class="number">
+            <q-icon name="fas fa-flag-checkered" />
+            {{formatDate(endDate)}}
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+          <div class="name">
+            <q-icon name="fas fa-chart-line" />{{score}} %
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+          <div class="status">
+            <q-icon name="fas fa-trophy" />
+            {{leader}}
+          </div>
+        </div>
+      </div>
     </q-card-section>
     <leader-board
       :members="sortedMembers"
       v-if="options.expanded === true && options.members.length > 1"
     ></leader-board>
 
-    <q-card-actions class="weeks">
+    <q-card-actions class="weeks" v-if="options.expanded">
       <transition name="fade">
         <week
           v-if="isCurrentWeek(firstWeek) || options.expanded === true"
@@ -99,13 +116,9 @@
       class="progress"
       style="height: 10px"
       color="warning"
-      :value="progress"
+      :value="-1"
     />
-    <dialog-popup
-      title="Note day"
-      :model="noteProgress"
-      align='center'
-    >
+    <dialog-popup title="Note day" :model="noteProgress" align="center">
       <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
       <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
       <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
@@ -137,7 +150,8 @@ import {
   getFirstWeek,
   getLastWeek,
   getAllOtherWeeks,
-  getReadableFrequency
+  getReadableFrequency,
+  getMonthWritten
 } from '../helpers/calendar'
 
 export default {
@@ -148,8 +162,6 @@ export default {
       expanded: false,
       deleteChallenge: false,
       leaveChallenge: false,
-      countdown: '',
-      countdownInterval: null,
       firstWeek: null,
       lastWeek: null,
       leftOverWeeks: null
@@ -173,6 +185,19 @@ export default {
         )
       }
     },
+    score: {
+      get() {
+        try {
+          const completions = this.loggedDays.filter(l => l.status === 'complete').length
+          console.log('completions x', completions)
+          console.log('this.challenge.duration x', this.options.duration)
+          console.log('score', (100 * completions) / this.options.duration)
+          return Math.round((100 * completions) / this.options.duration)
+        } catch {
+          return 0
+        }
+      }
+    },
     readableFrequency: {
       get() {
         return getReadableFrequency(
@@ -181,13 +206,6 @@ export default {
           this.options.perMonth,
           this.options.specificDays
         )
-      }
-    },
-    isInFuture: {
-      get() {
-        const startDate = new Date(this.options.startDate)
-        const today = new Date()
-        return startDate.setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
       }
     },
     iAmAuthor: {
@@ -206,6 +224,14 @@ export default {
         }
       }
     },
+    leader: {
+      get() {
+        if (this.sortedMembers.length > 0) {
+          return this.sortedMembers ? this.sortedMembers[0].name : ''
+        }
+        return null
+      }
+    },
     progress: {
       get() {
         let dt1 = new Date(this.options.startDate)
@@ -219,51 +245,15 @@ export default {
         diff = diff || 1
         return diff / (this.options.duration / 100) / 100
       }
-    },
-    leader: {
-      get() {
-        if (this.sortedMembers.length > 0) {
-          return this.sortedMembers ? this.sortedMembers[0].name : ''
-        }
-        return null
-      }
     }
   },
   methods: {
-    createCountdown: function() {
-      // Set the date we're counting down to
-      const countDownDate = new Date(this.options.startDate).getTime()
+    formatDate: function(date) {
+      const day = date.getDate()
+      const monthIndex = date.getMonth()
+      const year = date.getFullYear()
 
-      // Update the count down every 1 second
-      this.countdownInterval = setInterval(() => {
-        // Get today's date and time
-        const now = new Date().getTime()
-        // Find the distance between now and the count down date
-        const distance = countDownDate - now
-        // Time calculations for days, hours, minutes and seconds
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24))
-        const hours = Math.floor(
-          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        )
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000)
-        // Output the result in an element with id="demo"
-        this.countdown =
-          'Starting in: ' +
-          days +
-          'd ' +
-          hours +
-          'h ' +
-          minutes +
-          'm ' +
-          seconds +
-          's '
-        // If the count down is over, write some text
-        if (distance < 0) {
-          clearInterval(this.countdownInterval)
-          this.countdown = 'Challenge starting'
-        }
-      }, 1000)
+      return day + ' ' + getMonthWritten(monthIndex) + ' ' + year
     },
     editHabit: function() {
       this.$store.commit('app/setActiveChallenge', this.options)
@@ -282,7 +272,7 @@ export default {
           .length || 0
       )
     },
-    onDelete () {
+    onDelete() {
       console.log('onDelete')
       this.deleteChallenge = !this.deleteChallenge
     },
@@ -368,14 +358,6 @@ export default {
   },
   created: function() {
     this.calculateDays()
-    if (this.isInFuture) {
-      this.createCountdown()
-    }
-  },
-  beforeDestroy: function() {
-    if (this.countdownInterval) {
-      clearInterval(this.countdownInterval)
-    }
   }
 }
 </script>
@@ -551,8 +533,27 @@ export default {
   }
 }
 
-.countdown h6 {
-  margin-top: 24px;
-  margin-bottom: 24px;
+.results {
+  width: 100%;
+  margin-left: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 45px;
+
+  @include sm {
+    width: 80%;
+    font-size: 1rem;
+    margin-left: 10%;
+  }
+}
+
+.results-row {
+  width: 100%;
+
+  .q-icon {
+    padding-right: 10px;
+    font-size: 1.25rem;
+  }
 }
 </style>

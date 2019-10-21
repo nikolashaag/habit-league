@@ -29,10 +29,16 @@
         </transition>
 
         <challenge
-          v-for="(challenge, key) in dailyChallenges"
+          v-for="(challenge, key) in dailyChallenges.filter(c => !c.isPast)"
           :options="challenge"
           :onExpand="onExpand"
           :key="key"
+        />
+        <completed-challenge
+          v-for="(challenge, key) in dailyChallenges.filter(c => c.isPast)"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key + 'completed'"
         />
       </div>
       <div class="q-pa-md wrapper" v-if="specificDaysChallenges.length">
@@ -48,6 +54,12 @@
           :onExpand="onExpand"
           :key="key"
         />
+        <completed-challenge
+          v-for="(challenge, key) in specificDaysChallenges.filter(c => c.isPast)"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key + 'completed'"
+        />
       </div>
       <div class="q-pa-md wrapper" v-if="weeklyChallenges.length">
         <transition name="expand">
@@ -61,6 +73,12 @@
           :onExpand="onExpand"
           :key="key"
         />
+        <completed-challenge
+          v-for="(challenge, key) in weeklyChallenges.filter(c => c.isPast)"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key + 'completed'"
+        />
       </div>
       <div class="q-pa-md wrapper" v-if="monthlyChallenges.length">
         <transition name="expand">
@@ -69,10 +87,16 @@
           </div>
         </transition>
         <challenge
-          v-for="(challenge, key) in monthlyChallenges"
+          v-for="(challenge, key) in monthlyChallenges.filter(c => !c.isPast)"
           :options="challenge"
           :onExpand="onExpand"
           :key="key"
+        />
+        <completed-challenge
+          v-for="(challenge, key) in monthlyChallenges.filter(c => c.isPast)"
+          :options="challenge"
+          :onExpand="onExpand"
+          :key="key + 'completed'"
         />
       </div>
     </div>
@@ -87,6 +111,7 @@
 <script>
 import moment from 'moment'
 import Challenge from 'components/Challenge.vue'
+import CompletedChallenge from 'components/CompletedChallenge.vue'
 import Spinner from 'components/Spinner.vue'
 import Note from 'components/Note.vue'
 import { initMessaging } from '../helpers/messaging'
@@ -95,6 +120,7 @@ export default {
   name: 'Weekly',
   components: {
     Challenge,
+    CompletedChallenge,
     Spinner,
     Note
   },
