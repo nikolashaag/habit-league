@@ -189,9 +189,11 @@ export default {
       get() {
         try {
           const completions = this.loggedDays.filter(l => l.status === 'complete').length
-          console.log('completions x', completions)
-          console.log('this.challenge.duration x', this.options.duration)
-          console.log('score', (100 * completions) / this.options.duration)
+          // console.log('--------------------------------')
+          // console.log('completions x', this.options.title)
+          // console.log('completions x', completions)
+          // console.log('this.challenge.duration x', this.options.duration)
+          // console.log('score', (100 * completions) / this.options.duration)
           return Math.round((100 * completions) / this.options.duration)
         } catch {
           return 0
@@ -293,7 +295,9 @@ export default {
     calculateDays: function() {
       let startDate = new Date(this.options.startDate)
       this.endDate = new Date(this.options.startDate)
-      this.endDate.setDate(startDate.getDate() + Number(this.options.duration))
+      const diffDays =
+        Number(this.options.duration) === 0 ? 0 : Number(this.options.duration) - 1
+      this.endDate.setDate(startDate.getDate() + diffDays)
       this.firstWeek = getFirstWeek({ startDate })
       this.lastWeek = getLastWeek({ endDate: this.endDate })
       this.leftOverWeeks = getAllOtherWeeks({

@@ -101,11 +101,7 @@
       color="warning"
       :value="progress"
     />
-    <dialog-popup
-      title="Note day"
-      :model="noteProgress"
-      align='center'
-    >
+    <dialog-popup title="Note day" :model="noteProgress" align="center">
       <q-btn label="Complete" color="primary" @click="log('complete')" v-close-popup />
       <q-btn label="Fail" color="primary" @click="log('fail')" v-close-popup />
       <q-btn label="Skip" color="primary" @click="log('skip')" v-close-popup />
@@ -282,7 +278,7 @@ export default {
           .length || 0
       )
     },
-    onDelete () {
+    onDelete() {
       console.log('onDelete')
       this.deleteChallenge = !this.deleteChallenge
     },
@@ -303,7 +299,9 @@ export default {
     calculateDays: function() {
       let startDate = new Date(this.options.startDate)
       this.endDate = new Date(this.options.startDate)
-      this.endDate.setDate(startDate.getDate() + Number(this.options.duration))
+      const diffDays =
+        Number(this.options.duration) === 0 ? 0 : Number(this.options.duration) - 1
+      this.endDate.setDate(startDate.getDate() + diffDays)
       this.firstWeek = getFirstWeek({ startDate })
       this.lastWeek = getLastWeek({ endDate: this.endDate })
       this.leftOverWeeks = getAllOtherWeeks({

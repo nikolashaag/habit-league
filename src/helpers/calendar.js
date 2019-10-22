@@ -85,7 +85,7 @@ export const getLastWeek = ({ endDate }) => {
 export const getAllOtherWeeks = ({ duration, startDate, endDate }) => {
   let split = startDate.getDay() - 1
   split = split > -1 ? split : 6
-  let lastWeekSplit = endDate.getDay() - 1
+  let lastWeekSplit = endDate.getDay()
   lastWeekSplit = lastWeekSplit > -1 ? lastWeekSplit : 6
   const leftOverDays = Number(duration) - (7 - split) - lastWeekSplit
   const prototype = [...new Array(leftOverDays / 7)]
@@ -106,7 +106,10 @@ export const isChallengePast = challenge => {
   const startDate = new Date(challenge.startDate)
   const endDate = new Date(challenge.startDate)
   const today = new Date()
-  endDate.setDate(startDate.getDate() + Number(challenge.duration))
+  const diffDays =
+    Number(challenge.duration) === 0 ? 0 : Number(challenge.duration) - 1
+  endDate.setDate(startDate.getDate() + diffDays)
+
   return endDate.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)
 }
 
@@ -114,8 +117,9 @@ export const isChallengeOlderThanAWeek = challenge => {
   const startDate = new Date(challenge.startDate)
   const endDate = new Date(challenge.startDate)
   const today = new Date()
-
-  endDate.setDate(startDate.getDate() + Number(challenge.duration))
+  const diffDays =
+    Number(challenge.duration) === 0 ? 0 : Number(challenge.duration) - 1
+  endDate.setDate(startDate.getDate() + diffDays)
   endDate.setDate(endDate.getDate() + 7)
   return endDate.setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0)
 }
