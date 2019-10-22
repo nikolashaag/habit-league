@@ -56,7 +56,8 @@
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4">
           <div class="name">
-            <q-icon name="fas fa-chart-line" />{{score}} %
+            <q-icon name="fas fa-chart-line" />
+            {{score}} %
           </div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4">
@@ -188,13 +189,25 @@ export default {
     score: {
       get() {
         try {
-          const completions = this.loggedDays.filter(l => l.status === 'complete').length
-          // console.log('--------------------------------')
-          // console.log('completions x', this.options.title)
-          // console.log('completions x', completions)
-          // console.log('this.challenge.duration x', this.options.duration)
-          // console.log('score', (100 * completions) / this.options.duration)
-          return Math.round((100 * completions) / this.options.duration)
+          const completions = this.loggedDays.filter(
+            l => l.status === 'complete'
+          ).length
+          if (this.options.frequency === 'daily') {
+            return Math.round((100 * completions) / this.options.duration)
+          }
+          if (this.options.frequency === 'per-week') {
+            const weeks = Number(this.options.duration) / 7
+            const goal = weeks * Number(this.options.perWeek)
+            return Math.round((100 * completions) / goal)
+          }
+          if (this.options.frequency === 'per-month') {
+            const months = Number(this.options.duration) / 31
+            const goal = months * Number(this.options.perMonth)
+            return Math.round((100 * completions) / goal)
+          }
+          const weeks = Number(this.options.duration) / 7
+          const goal = weeks * Number(this.options.specificDays.length)
+          return Math.round((100 * completions) / goal)
         } catch {
           return 0
         }
@@ -296,7 +309,9 @@ export default {
       let startDate = new Date(this.options.startDate)
       this.endDate = new Date(this.options.startDate)
       const diffDays =
-        Number(this.options.duration) === 0 ? 0 : Number(this.options.duration) - 1
+        Number(this.options.duration) === 0
+          ? 0
+          : Number(this.options.duration) - 1
       this.endDate.setDate(startDate.getDate() + diffDays)
       this.firstWeek = getFirstWeek({ startDate })
       this.lastWeek = getLastWeek({ endDate: this.endDate })
