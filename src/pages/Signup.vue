@@ -1,13 +1,13 @@
 <template>
   <q-page class="flex flex-center">
-    <div class='sign-up'>
+    <div class='sign-up text-white'>
       <h3>Create a new account </h3>
-      <q-input color="amber" standout v-model="email" label="Email" type="text" :error="Boolean(emailError)">
+      <q-input color="amber" standout dark v-model="email" label="Email" type="text" :error="Boolean(emailError)">
         <template v-slot:error>
           {{emailError}}
         </template>
       </q-input>
-      <q-input color="amber" standout v-model="password" label="Password" type="password" :error="Boolean(passwordError)">
+      <q-input color="amber" standout dark v-model="password" label="Password" type="password" :error="Boolean(passwordError)">
         <template v-slot:error>
           {{passwordError}}
         </template>
@@ -21,6 +21,7 @@
         color="amber"
         size="lg"
         label="Sign Up"
+        class="text-dark"
         @click='signUp'
       />
       <span>

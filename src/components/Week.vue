@@ -15,7 +15,7 @@
           <span
             class="month"
             v-if="day.date.getDate() === 1"
-          >{{getMonthWritten(day.date.getMonth())}}</span>
+          >{{getMonthWrittenLocal(day.date.getMonth())}}</span>
         </span>
         {{day.label}}
       </q-btn>

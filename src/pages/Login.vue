@@ -2,12 +2,12 @@
   <q-page class="flex flex-center">
     <div class='login'>
       <h3>Sign In</h3>
-      <q-input color="amber" standout v-model="email" label="Email" type="text" :error="Boolean(emailError)">
+      <q-input color="amber" standout dark v-model="email" label="Email" type="text" :error="Boolean(emailError)">
         <template v-slot:error>
           {{emailError}}
         </template>
       </q-input>
-      <q-input color="amber" standout v-model="password" label="Password" type="password" :error="Boolean(passwordError)">
+      <q-input color="amber" standout dark v-model="password" label="Password" type="password" :error="Boolean(passwordError)">
         <template v-slot:error>
           {{passwordError}}
         </template>
@@ -21,9 +21,10 @@
         color="amber"
         size="lg"
         label="Login"
+        class="text-dark"
         @click='login'
       />
-      <p>
+      <p class="text-white">
         or Sign In with Google
         <br />
         <q-btn
@@ -34,7 +35,7 @@
         @click='socialLogin'
       />
       </p>
-      <p>
+      <p class="text-white">
         You don't have an account ? You can
         <router-link to='/sign-up'>create one</router-link>
       </p>
@@ -105,6 +106,7 @@ export default {
 
 h3 {
   text-align: center;
+  color: #fff;
 }
 input {
   margin: 10px 0;
