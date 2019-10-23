@@ -252,6 +252,7 @@ export default {
       const frequency = challenge.frequency
       const loggedDaysThisWeek = (challenge.loggedDays || []).filter(log => {
         return (
+          log.user === currentUserId &&
           log.status === 'complete' &&
           moment(log.date, 'YYYY/MM/DD').isBetween(
             moment().day(0),
