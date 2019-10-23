@@ -42,6 +42,9 @@ export function noteDay(state, data) {
   })
 }
 
+export function toggleIsCompleted(state) {
+  state.isCompletedHidden = !state.isCompletedHidden
+}
 export function removeDay(state, data) {
   state.myChallenges = state.myChallenges.map(challenge => {
     if (challenge.id === data.challengeId) {

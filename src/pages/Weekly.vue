@@ -18,7 +18,7 @@
               class="join-button text-dark"
               color="amber"
               :label="`${isCompletedHidden ?'Show': 'Hide'} completed`"
-              @click="() => isCompletedHidden = !isCompletedHidden"
+              @click="toggleIsCompletedHidden"
             />
           </div>
         </transition>
@@ -134,6 +134,9 @@ export default {
     Note
   },
   computed: {
+    isCompletedHidden() {
+      return this.$store.state.app.isCompletedHidden
+    },
     showTooltip: {
       get() {
         const userId = this.$store.state.user.currentUser.uid
@@ -192,11 +195,13 @@ export default {
       localChallenges: [],
       oneChallengeExpanded: false,
       isLoading: true,
-      search: '',
-      isCompletedHidden: false
+      search: ''
     }
   },
   methods: {
+    toggleIsCompletedHidden() {
+      this.$store.commit('app/toggleIsCompleted')
+    },
     onTipClose() {
       this.$store.dispatch('user/closeTip', {
         userId: this.$store.state.user.currentUser.uid,
