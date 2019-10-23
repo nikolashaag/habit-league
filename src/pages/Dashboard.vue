@@ -1,6 +1,10 @@
 <template>
   <q-page class="flex">
-    <div class="category text-white" v-for="(chartData, category) in challengesByCategory" :key="category.key">
+    <div
+      class="category text-white"
+      v-for="(chartData, category) in challengesByCategory"
+      :key="category.key"
+    >
       <h5>{{getCategory(category)}}</h5>
       <div class="category__chart">
         <bar-chart :data="chartData"></bar-chart>
@@ -13,10 +17,12 @@
 </style>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import BarChart from '../components/BarChart'
 import { CATEGORY_MAP } from '../helpers/constants'
-
+moment()
+  .tz('Europe/Berlin')
+  .format()
 export default {
   name: 'dashboard',
   components: { BarChart },
