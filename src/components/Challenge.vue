@@ -31,6 +31,9 @@
             <q-item v-if="!iAmAuthor" clickable @click="() => leaveChallenge = !leaveChallenge">
               <q-item-section>Leave Habit</q-item-section>
             </q-item>
+            <q-item clickable @click="copyUrl">
+              <q-item-section>Challenge</q-item-section>
+            </q-item>
           </q-list>
         </q-menu>
       </q-btn>
@@ -226,6 +229,18 @@ export default {
     }
   },
   methods: {
+    copyUrl: function() {
+      if (typeof navigator.share === 'function') {
+        navigator
+          .share({
+            title: 'Hey, I dare you!',
+            text: `Let's change our habits`,
+            url: window.location.href
+          })
+          .then(() => console.log('Successful share! 🎉'))
+          .catch(err => console.error(err))
+      }
+    },
     createCountdown: function() {
       // Set the date we're counting down to
       const countDownDate = new Date(this.options.startDate).getTime()
