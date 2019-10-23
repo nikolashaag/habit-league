@@ -94,7 +94,9 @@ export default {
     showTooltip: {
       get() {
         const userId = this.$store.state.user.currentUser.uid
-        const user = (this.$store.state.user.users || []).find(user => user.uid === userId)
+        const user = (this.$store.state.user.users || []).find(
+          user => user.uid === userId
+        )
         if (!user) {
           return false
         }
@@ -116,7 +118,7 @@ export default {
                 .find(
                   day =>
                     date.formatDate(day.date, 'YYYY/MM/DD') ===
-                      date.formatDate(new Date(), 'YYYY/MM/DD')
+                    date.formatDate(new Date(), 'YYYY/MM/DD')
                 )
             })
             // Filter out challenges which haven't started yet
@@ -189,7 +191,7 @@ export default {
             .find(
               day =>
                 date.formatDate(day.date, 'YYYY/MM/DD') ===
-                  date.formatDate(new Date(), 'YYYY/MM/DD')
+                date.formatDate(new Date(), 'YYYY/MM/DD')
             )
         })
       }
@@ -259,7 +261,7 @@ export default {
 
 <style lang="scss" scoped>
 .daily {
-margin-bottom: 52px;
+  margin-bottom: 52px;
 }
 
 .hidden {
@@ -279,6 +281,7 @@ margin-bottom: 52px;
   text-align: center;
   margin-top: 48px;
   margin-bottom: 16px;
+  color: #ccc;
 }
 
 .item-wrapper {
