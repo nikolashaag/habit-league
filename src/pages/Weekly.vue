@@ -14,7 +14,12 @@
         <transition name="expand">
           <div class="search wrapper">
             <q-input dark color="amber" v-model="search" label="find  habit" />
-            <q-icon name="fas  fa-filter" @click="isCompletedHidden = !isCompletedHidden" />
+            <q-btn
+              class="join-button text-dark"
+              color="amber"
+              :label="`${isCompletedHidden ?'Show': 'Hide'} completed`"
+              @click="() => isCompletedHidden = !isCompletedHidden"
+            />
           </div>
         </transition>
       </div>
@@ -109,12 +114,16 @@
 </style>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import Challenge from 'components/Challenge.vue'
 import CompletedChallenge from 'components/CompletedChallenge.vue'
 import Spinner from 'components/Spinner.vue'
 import Note from 'components/Note.vue'
 import { initMessaging } from '../helpers/messaging'
+
+moment()
+  .tz('Europe/Berlin')
+  .format()
 
 export default {
   name: 'Weekly',
@@ -239,7 +248,6 @@ export default {
       const loggedDaysThisWeek = (challenge.loggedDays || []).filter(log => {
         return (
           log.status === 'complete' &&
-          log.user === currentUserId &&
           moment(log.date, 'YYYY/MM/DD').isBetween(
             moment().day(0),
             moment().day(7)
@@ -254,7 +262,6 @@ export default {
           break
         case 'specific':
           target = challenge.specificDays.length
-          console.log('target', target)
           isCompleted = target <= loggedDaysThisWeek.length
           break
       }
