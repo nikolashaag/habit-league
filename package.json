@@ -26,6 +26,7 @@
     "e": "0.0.4",
     "firebase": "^6.3.5",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.27",
     "quasar": "^1.1.1",
     "vue-chartjs": "^3.4.2",
     "vue-i18n": "^8.0.0",
