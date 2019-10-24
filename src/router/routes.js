@@ -31,6 +31,15 @@ const routes = [
     }
   },
   {
+    path: '/invite',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Invite.vue') }],
+    meta: {
+      requiresAuth: true,
+      title: 'Join Challenge'
+    }
+  },
+  {
     path: '/create',
     component: () => import('layouts/MyLayout.vue'),
     children: [{ path: '', component: () => import('pages/Wizard.vue') }],

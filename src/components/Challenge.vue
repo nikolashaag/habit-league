@@ -32,7 +32,7 @@
               <q-item-section>Leave Habit</q-item-section>
             </q-item>
             <q-item clickable @click="copyUrl">
-              <q-item-section>Challenge</q-item-section>
+              <q-item-section>Invite link</q-item-section>
             </q-item>
           </q-list>
         </q-menu>
@@ -235,9 +235,9 @@ export default {
           .share({
             title: 'Hey, I dare you!',
             text: `Let's change our habits`,
-            url: window.location.href
+            url: window.location.origin + '/#/invite?challengeId=' + this.options.id
           })
-          .then(() => console.log('Successful share! 🎉'))
+          .then(() => console.log('Successful share! 🎉', window.location.origin + '/#/invite?challengeId=' + this.options.id))
           .catch(err => console.error(err))
       }
     },
