@@ -48,7 +48,7 @@ export default {
       expanded: false
     }
   },
-  props: ['options'],
+  props: ['options', 'redirect'],
   computed: {
     progress: {
       get() {
@@ -76,6 +76,9 @@ export default {
     },
     confirm: function() {
       this.$store.dispatch('app/joinChallenge', this.options.id)
+      if (this.redirect) {
+        this.$router.replace('/weekly')
+      }
     },
     cancel: function() {
       this.noteProgress = false

@@ -10,7 +10,7 @@
       You already joined the Challenge
     </h5>
     <div class="q-pa-md wrapper" v-if="challenge">
-      <public-challenge :options="challenge" :key="key" redirect/>
+      <public-challenge :options="challenge" :key="key" :redirect="true" />
     </div>
   </q-page>
 </template>
