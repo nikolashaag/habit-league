@@ -15,18 +15,12 @@
     </transition>
     <spinner v-if="isLoading" />
     <div v-if="!isLoading" class="challenges">
-      <div class="q-pa-md wrapper" v-if="filterdChallenges.length">
+      <div class="q-pa-md wrapper" v-if="allChallenges.length">
         <completed-challenge
-          v-for="(challenge, key) in filterdChallenges.filter(c => c.isPast)"
+          v-for="(challenge, key) in allChallenges"
           :options="challenge"
           :onExpand="onExpand"
           :key="key + 'completed'"
-        />
-        <completed-challenge
-          v-for="(challenge, key) in archive"
-          :options="challenge"
-          :onExpand="onExpand"
-          :key="key + 'archive'"
         />
       </div>
     </div>
@@ -55,11 +49,15 @@ export default {
     Note
   },
   computed: {
-    isCompletedHidden() {
-      return this.$store.state.app.isCompletedHidden
+    archive: {
+      get() {
+        return this.$store.state.app.archive
+      }
     },
-    archive() {
-      return this.$store.state.app.archive
+    allChallenges: {
+      get() {
+        return [...this.localChallenges, ...this.localArchive]
+      }
     },
     showTooltip: {
       get() {
@@ -78,33 +76,20 @@ export default {
       get() {
         return this.$store.state.app.myChallenges
       }
-    },
-    filterdChallenges() {
-      let filterdChallenges = this.localChallenges
-      if (this.search) {
-        filterdChallenges = filterdChallenges.filter(challenge => {
-          const title = challenge.title.toLowerCase()
-          return title.includes(this.search.toLowerCase())
-        })
-      }
-
-      if (this.isCompletedHidden) {
-        filterdChallenges = filterdChallenges.filter(challenge => {
-          return !this.isChallengeCompleted(challenge)
-        })
-      }
-
-      return filterdChallenges
     }
   },
   watch: {
     challenges: function(val) {
       this.updateLocalChallanges(val)
+    },
+    archive: function(val) {
+      this.updateLocalArchive(val)
     }
   },
   data() {
     return {
       localChallenges: [],
+      localArchive: [],
       oneChallengeExpanded: false,
       isLoading: true,
       search: ''
@@ -120,14 +105,20 @@ export default {
         tip: 'history'
       })
     },
-    getChallengesByFrequency(frequency) {
-      return this.filterdChallenges.filter(
-        challenge => challenge.frequency === frequency
-      )
-    },
     updateLocalChallanges: function(val) {
       if (val.length !== this.localChallenges.length) {
-        this.localChallenges = val.map(challenge => {
+        this.localChallenges = val.filter(c => c.isPast).map(challenge => {
+          return {
+            ...challenge,
+            expanded: false,
+            oneChallengeExpanded: false
+          }
+        })
+      }
+    },
+    updateLocalArchive: function(val) {
+      if (val.length !== this.localArchive.length) {
+        this.localArchive = val.map(challenge => {
           return {
             ...challenge,
             expanded: false,
@@ -139,6 +130,20 @@ export default {
     onExpand: function(challengeId) {
       this.oneChallengeExpanded = !this.oneChallengeExpanded
       this.localChallenges = this.localChallenges.map(challenge => {
+        if (challenge.id === challengeId) {
+          return {
+            ...challenge,
+            expanded: this.oneChallengeExpanded,
+            oneChallengeExpanded: this.oneChallengeExpanded
+          }
+        }
+        return {
+          ...challenge,
+          expanded: false,
+          oneChallengeExpanded: this.oneChallengeExpanded
+        }
+      })
+      this.localArchive = this.localArchive.map(challenge => {
         if (challenge.id === challengeId) {
           return {
             ...challenge,
@@ -195,6 +200,7 @@ export default {
       ])
     }
     this.updateLocalChallanges(this.challenges)
+    this.updateLocalArchive(this.archive)
     this.isLoading = false
 
     const currentToken = await initMessaging()

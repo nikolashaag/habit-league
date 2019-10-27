@@ -88,6 +88,9 @@ export const getAllOtherWeeks = ({ duration, startDate, endDate }) => {
   let lastWeekSplit = endDate.getDay()
   lastWeekSplit = lastWeekSplit > -1 ? lastWeekSplit : 6
   const leftOverDays = Number(duration) - (7 - split) - lastWeekSplit
+  if (leftOverDays < 7) {
+    return []
+  }
   const prototype = [...new Array(leftOverDays / 7)]
   return prototype.map((week, weekIndex) => {
     return WEEK_MASK.map((day, index) => {

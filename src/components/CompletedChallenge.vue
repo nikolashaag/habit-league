@@ -172,9 +172,7 @@ export default {
     loggedDays: {
       get() {
         const loggedDays =
-          this.$store.state.app.myChallenges.find(
-            challenge => challenge.id === this.options.id
-          ).loggedDays || []
+          this.options.loggedDays || []
         return loggedDays.filter(
           day => day.user === this.$store.state.user.currentUser.uid
         )
