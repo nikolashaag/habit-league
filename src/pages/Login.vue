@@ -1,43 +1,49 @@
 <template>
   <q-page class="flex flex-center">
-    <div class='login'>
+    <div class="login">
       <h3>Sign In</h3>
-      <q-input color="amber" standout dark v-model="email" label="Email" type="text" :error="Boolean(emailError)">
-        <template v-slot:error>
-          {{emailError}}
-        </template>
+      <q-input
+        color="amber"
+        standout
+        dark
+        v-model="email"
+        label="Email"
+        type="text"
+        :error="Boolean(emailError)"
+      >
+        <template v-slot:error>{{emailError}}</template>
       </q-input>
-      <q-input color="amber" standout dark v-model="password" label="Password" type="password" :error="Boolean(passwordError)">
-        <template v-slot:error>
-          {{passwordError}}
-        </template>
+      <q-input
+        color="amber"
+        standout
+        dark
+        v-model="password"
+        label="Password"
+        type="password"
+        :error="Boolean(passwordError)"
+      >
+        <template v-slot:error>{{passwordError}}</template>
       </q-input>
 
       <div v-if="error" class="error">
         <br />
         {{error}}
       </div>
-      <q-btn
-        color="amber"
-        size="lg"
-        label="Login"
-        class="text-dark"
-        @click='login'
-      />
+      <q-btn color="amber" size="lg" label="Login" class="text-dark" @click="login" />
       <p class="text-white">
         or Sign In with Google
         <br />
         <q-btn
-        icon-right="fab fa-google"
-        color="red"
-        size="lg"
-        label="Login with Gmail"
-        @click='socialLogin'
-      />
+          icon-right="fab fa-google"
+          color="red"
+          size="lg"
+          label="Login with Gmail"
+          @click="socialLogin"
+        />
       </p>
       <p class="text-white">
         You don't have an account ? You can
-        <router-link to='/sign-up'>create one</router-link>
+        <router-link to="/sign-up">create one</router-link>
       </p>
     </div>
   </q-page>
@@ -48,17 +54,23 @@ import firebase from 'firebase'
 
 export default {
   name: 'login',
-  data () {
+  data() {
     return {
       email: '',
       password: '',
       error: null,
       passwordError: null,
-      emailError: null
+      emailError: null,
+      prevRoute: null
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.prevRoute = from
+    })
+  },
   methods: {
-    login () {
+    login() {
       this.emailError = null
       this.passwordError = null
       this.error = null
@@ -67,6 +79,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
+          console.log('prevRoute', this.prevRoute)
           this.$router.replace('/weekly')
         })
         .catch(err => {
@@ -79,13 +92,15 @@ export default {
           }
         })
     },
-    socialLogin () {
+    socialLogin() {
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase
         .auth()
         .signInWithPopup(provider)
         .then(result => {
           console.log('google success saveUser', result)
+          console.log('prevRoute', this.prevRoute)
+
           this.$store.dispatch('user/saveUser', result.user)
 
           this.$router.replace('/weekly')

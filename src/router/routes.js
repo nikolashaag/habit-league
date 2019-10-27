@@ -74,6 +74,15 @@ const routes = [
       requiresAuth: true,
       title: 'Dashboard'
     }
+  },
+  {
+    path: '/history',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/History.vue') }],
+    meta: {
+      requiresAuth: true,
+      title: 'History'
+    }
   }
 ]
 

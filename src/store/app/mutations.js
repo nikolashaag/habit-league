@@ -4,6 +4,9 @@ export function addChallengeToState(state, newChallange) {
 export function addMyChallengeToState(state, newChallange) {
   state.myChallenges = [...state.myChallenges, newChallange]
 }
+export function addToArchive(state, newChallange) {
+  state.archive = [...state.archive, newChallange]
+}
 
 export function setSyncStatus(state, status) {
   state.syncStatus = status

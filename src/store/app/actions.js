@@ -28,6 +28,16 @@ export function fetchChallenges({ commit, state, rootState }) {
               ...challenge,
               id: doc.id
             })
+          } else if (
+            challenge.members.find(
+              member => member.id === rootState.user.currentUser.uid
+            ) &&
+            isOlderThanAWeek
+          ) {
+            commit('addToArchive', {
+              ...challenge,
+              id: doc.id
+            })
           } else if (!isPast && challenge.privacy === 'public') {
             commit('addChallengeToState', {
               ...challenge,

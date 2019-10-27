@@ -25,12 +25,6 @@
             <q-item v-if="iAmAuthor" clickable @click="() => deleteChallenge = !deleteChallenge">
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
-            <q-item v-if="iAmAuthor" clickable @click="editHabit">
-              <q-item-section>Edit Habit</q-item-section>
-            </q-item>
-            <q-item v-if="!iAmAuthor" clickable @click="() => leaveChallenge = !leaveChallenge">
-              <q-item-section>Leave Habit</q-item-section>
-            </q-item>
           </q-list>
         </q-menu>
       </q-btn>

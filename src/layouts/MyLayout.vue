@@ -11,7 +11,7 @@
 
     <q-drawer v-model="leftDrawerOpen" content-class="bg-grey-9">
       <q-list dark>
-        <q-item-label header>Menu</q-item-label>
+        <q-item-label header>Habits</q-item-label>
         <q-item clickable @click="goToPage('daily')">
           <q-item-section avatar>
             <q-icon name="fas fa-calendar-day" />
@@ -48,16 +48,16 @@
             <q-item-label caption>See your progress</q-item-label>
           </q-item-section>
         </q-item>
-
-        <q-item clickable @click="logout">
+        <q-item clickable @click="goToPage('history')">
           <q-item-section avatar>
-            <q-icon name="fas fa-sign-out-alt" />
+            <q-icon name="fas fa-history" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Logout</q-item-label>
-            <q-item-label caption>Logout from the App</q-item-label>
+            <q-item-label>History</q-item-label>
+            <q-item-label caption>Completed Challenges</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item-label header>Account</q-item-label>
         <q-item clickable @click="reportBug">
           <q-item-section avatar>
             <q-icon name="fas fa-bug" />
@@ -65,6 +65,15 @@
           <q-item-section>
             <q-item-label>Report a bug</q-item-label>
             <q-item-label caption>Something's not right yet?</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable @click="logout">
+          <q-item-section avatar>
+            <q-icon name="fas fa-sign-out-alt" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Logout</q-item-label>
+            <q-item-label caption>Logout from the App</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
