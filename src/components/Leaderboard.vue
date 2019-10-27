@@ -4,13 +4,16 @@
       Leaderboard:
       <div class="row leaderboard-row" v-for="(member, key) in activeMembers" :key="key + 'member'">
         <div class="col-xs-2 col-sm-2 col-md-1">
-          <div class="number">{{key + 1}}</div>
+          <div class="number">{{member.position}}</div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-2">
           <div class="name">{{getDisplayName(member.id)}}</div>
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-3">
-          <div class="status">Completed days: {{member.completedDays}}</div>
+        <div class="col-xs-3 col-sm-3 col-md-3">
+          <div class="status">Days: {{member.completedDays}}</div>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3">
+          <div class="status">Score: {{member.score}}</div>
         </div>
       </div>
     </q-card-section>
@@ -29,6 +32,7 @@ export default {
   },
   computed: {
     activeMembers: function() {
+      console.log('members', this.members)
       return this.members.filter(member => member.completedDays)
     }
   }

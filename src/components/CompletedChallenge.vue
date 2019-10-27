@@ -146,7 +146,8 @@ import {
   getLastWeek,
   getAllOtherWeeks,
   getReadableFrequency,
-  getMonthWritten
+  getMonthWritten,
+  getScore
 } from '../helpers/calendar'
 
 export default {
@@ -171,8 +172,7 @@ export default {
   computed: {
     loggedDays: {
       get() {
-        const loggedDays =
-          this.options.loggedDays || []
+        const loggedDays = this.options.loggedDays || []
         return loggedDays.filter(
           day => day.user === this.$store.state.user.currentUser.uid
         )
@@ -180,29 +180,11 @@ export default {
     },
     score: {
       get() {
-        try {
-          const completions = this.loggedDays.filter(
-            l => l.status === 'complete'
-          ).length
-          if (this.options.frequency === 'daily') {
-            return Math.round((100 * completions) / this.options.duration)
-          }
-          if (this.options.frequency === 'per-week') {
-            const weeks = Number(this.options.duration) / 7
-            const goal = weeks * Number(this.options.perWeek)
-            return Math.round((100 * completions) / goal)
-          }
-          if (this.options.frequency === 'per-month') {
-            const months = Number(this.options.duration) / 31
-            const goal = months * Number(this.options.perMonth)
-            return Math.round((100 * completions) / goal)
-          }
-          const weeks = Number(this.options.duration) / 7
-          const goal = weeks * Number(this.options.specificDays.length)
-          return Math.round((100 * completions) / goal)
-        } catch {
-          return 0
-        }
+        return getScore(
+          this.options,
+          this.loggedDays.filter(l => l.status === 'complete').length,
+          this.endDate
+        )
       }
     },
     readableFrequency: {
@@ -284,15 +266,35 @@ export default {
       this.deleteChallenge = !this.deleteChallenge
     },
     sortMembers: function(users) {
-      return sort(
+      const sorted = sort(
         users.map(user => {
           return {
             ...user,
-            completedDays: this.getCompletedDaysForUser(user.id)
+            completedDays: this.getCompletedDaysForUser(user.id),
+            score: getScore(
+              this.options,
+              this.getCompletedDaysForUser(user.id),
+              this.endDate
+            )
           }
         }),
         'completedDays'
       )
+      let withPosition = []
+      for (let i = 0; i < sorted.length; i++) {
+        const position =
+          withPosition[i - 1] &&
+          withPosition[i - 1].completedDays === sorted[i].completedDays
+            ? withPosition[i - 1].position
+            : !withPosition[i - 1]
+              ? 1
+              : withPosition[i - 1].position + 1
+        withPosition.push({
+          position,
+          ...sorted[i]
+        })
+      }
+      return withPosition
     },
     getIconName: function(value) {
       return ICON_MAP[value]

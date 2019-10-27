@@ -136,7 +136,8 @@ import {
   getFirstWeek,
   getLastWeek,
   getAllOtherWeeks,
-  getReadableFrequency
+  getReadableFrequency,
+  getScore
 } from '../helpers/calendar'
 
 export default {
@@ -235,9 +236,19 @@ export default {
           .share({
             title: 'Hey, I dare you!',
             text: `Let's change our habits`,
-            url: window.location.origin + '/#/invite?challengeId=' + this.options.id
+            url:
+              window.location.origin +
+              '/#/invite?challengeId=' +
+              this.options.id
           })
-          .then(() => console.log('Successful share! 🎉', window.location.origin + '/#/invite?challengeId=' + this.options.id))
+          .then(() =>
+            console.log(
+              'Successful share! 🎉',
+              window.location.origin +
+                '/#/invite?challengeId=' +
+                this.options.id
+            )
+          )
           .catch(err => console.error(err))
       }
     },
@@ -298,15 +309,28 @@ export default {
       this.deleteChallenge = !this.deleteChallenge
     },
     sortMembers: function(users) {
-      return sort(
+      const sorted = sort(
         users.map(user => {
           return {
             ...user,
-            completedDays: this.getCompletedDaysForUser(user.id)
+            completedDays: this.getCompletedDaysForUser(user.id),
+            score: getScore(this.options, this.getCompletedDaysForUser(user.id), this.endDate)
           }
         }),
         'completedDays'
       )
+      let withPosition = []
+      for (let i = 0; i < sorted.length; i++) {
+        const position =
+          withPosition[i - 1] && withPosition[i - 1].completedDays === sorted[i].completedDays
+            ? withPosition[i - 1].position
+            : !withPosition[i - 1] ? 1 : withPosition[i - 1].position + 1
+        withPosition.push({
+          position,
+          ...sorted[i]
+        })
+      }
+      return withPosition
     },
     getIconName: function(value) {
       return ICON_MAP[value]

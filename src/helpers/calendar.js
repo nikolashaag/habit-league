@@ -1,4 +1,5 @@
 import { capitalize } from './utils'
+import { date } from 'quasar'
 
 const WEEK_MASK = [
   {
@@ -171,5 +172,41 @@ export const getMonthWritten = month => {
       return 'Nov'
     case 11:
       return 'Dec'
+  }
+}
+
+const isChallengeOngoing = endDate => {
+  const today = new Date()
+  return today <= endDate
+}
+
+const currentDuration = challenge => {
+  const today = new Date()
+  const unit = 'days'
+  return date.getDateDiff(today, challenge.startDate, unit)
+}
+
+export const getScore = (challenge, completions, endDate) => {
+  try {
+    const isOngoing = isChallengeOngoing(endDate)
+    let duration = isOngoing ? currentDuration(challenge) : challenge.duration
+    if (challenge.frequency === 'daily') {
+      return Math.round((100 * completions) / duration)
+    }
+    if (challenge.frequency === 'per-week') {
+      const weeks = Number(duration) / 7
+      const goal = weeks * Number(challenge.perWeek)
+      return Math.round((100 * completions) / goal)
+    }
+    if (challenge.frequency === 'per-month') {
+      const months = Number(duration) / 31
+      const goal = months * Number(challenge.perMonth)
+      return Math.round((100 * completions) / goal)
+    }
+    const weeks = Number(duration) / 7
+    const goal = weeks * Number(challenge.specificDays.length)
+    return Math.round((100 * completions) / goal)
+  } catch {
+    return 0
   }
 }
