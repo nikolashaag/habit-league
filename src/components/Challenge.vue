@@ -84,7 +84,7 @@
           <transition name="fade">
             <week
               v-if="isCurrentWeek(week) || options.expanded === true"
-              :challenge="options"
+              :challenge="{...options, endDate}"
               :loggedDays="loggedDays"
               :week="week"
               @noteProgressForDay="(day, e) => noteProgressForDay(day, e)"

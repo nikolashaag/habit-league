@@ -10,12 +10,15 @@
         text-color="black"
         @click="$emit('noteProgressForDay', day,$event)"
       >
-        <span class="date">
+        <span v-if="!isLastDay(day.date)" class="date">
           {{day.date.getDate()}}
           <span
             class="month"
             v-if="day.date.getDate() === 1"
           >{{getMonthWrittenLocal(day.date.getMonth())}}</span>
+        </span>
+        <span v-if="isLastDay(day.date)" class="date">
+          End
         </span>
         {{day.label}}
       </q-btn>
@@ -26,6 +29,7 @@
 
 <script>
 import { getMonthWritten } from '../helpers/calendar'
+import { date } from 'quasar'
 
 export default {
   name: 'week',
@@ -130,6 +134,12 @@ export default {
         default:
           return 'amber'
       }
+    },
+    isLastDay: function(day) {
+      console.log('aaa', day)
+      console.log('bbb', this.challenge.endDate)
+      console.log('ccc', date.isSameDate(day, this.challenge.endDate, 'day'))
+      return date.isSameDate(day, this.challenge.endDate, 'day')
     }
   }
 }
@@ -172,6 +182,7 @@ export default {
   top: -10px;
   color: #e4e4e4;
   transform: translateY(-50%);
+  text-transform: none;
 }
 
 .month {
