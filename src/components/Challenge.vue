@@ -523,6 +523,11 @@ export default {
 .weeks {
   padding-left: 16px;
   padding-right: 16px;
+
+  @include iphone5 {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
 }
 
 .week-wrapper,
@@ -532,6 +537,9 @@ export default {
 
 .week-wrapper {
   margin-bottom: 16px;
+  @include iphone5 {
+    flex-wrap: nowrap;
+  }
 }
 
 .invisible-buttons {

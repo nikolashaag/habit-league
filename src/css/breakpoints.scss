@@ -3,6 +3,12 @@ $screen-sm-min: 600px;
 $screen-md-min: 960px;
 $screen-lg-min: 1280px;
 $screen-xl-min: 1920px;
+// iPhone 5
+@mixin iphone5 {
+  @media (max-width: #{$screen-xs-min}) {
+      @content;
+  }
+}
 // Extra Small devices
 @mixin xs {
   @media (min-width: #{$screen-xs-min}) {

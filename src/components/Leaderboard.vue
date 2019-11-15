@@ -40,6 +40,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import './src/css/breakpoints.scss';
+
 .leaderboard {
   max-height: 174px;
   transition: all 0.2s ease-in-out;
@@ -52,6 +54,13 @@ export default {
   height: 48px;
   line-height: 48px;
   margin-left: -16px;
+
+  .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 5px;
+  }
 }
 .rows-2 {
   max-height: (48 * 2)+20px;
@@ -69,19 +78,34 @@ export default {
   max-height: (48 * 6)+20px;
 }
 .leaderboard-row:nth-child(1) {
-  background: #ffc107;
+  background: #ffee00;
 }
 .leaderboard-row:nth-child(2) {
-  background: #ffb300;
+  background: #ffe600;
 }
 .leaderboard-row:nth-child(3) {
-  background: #ffa000;
+  background: #f1e102;
 }
 .leaderboard-row:nth-child(4) {
-  background: #ff8f00;
+  background: #ffd207;
 }
 .leaderboard-row:nth-child(5) {
+  background: #ffc107;
+}
+.leaderboard-row:nth-child(6) {
+  background: #ffb300;
+}
+.leaderboard-row:nth-child(7) {
+  background: #ffa000;
+}
+.leaderboard-row:nth-child(8) {
+  background: #ff8f00;
+}
+.leaderboard-row:nth-child(9) {
   background: #ff5a04;
+}
+.leaderboard-row:nth-child(10) {
+  background: #e40000;
 }
 
 .number {
@@ -99,5 +123,9 @@ export default {
   margin-top: 0.5rem;
   line-height: 2rem;
   margin-left: 16px;
+
+  @include iphone5 {
+    margin-left: 8px;
+  }
 }
 </style>
