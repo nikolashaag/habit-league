@@ -1,6 +1,10 @@
-export function unique(targetArray, prop) {
+export function unique(targetArray, prop = false) {
   return targetArray.filter((obj, pos, arr) => {
-    return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos
+    if (prop) {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos
+    } else {
+      return arr.map(mapObj => mapObj).indexOf(obj) === pos
+    }
   })
 }
 

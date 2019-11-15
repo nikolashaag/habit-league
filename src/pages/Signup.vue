@@ -21,13 +21,13 @@
         color="amber"
         size="lg"
         label="Sign Up"
-        class="text-dark"
+        class="sign-up-button text-dark"
         @click='signUp'
       />
-      <span>
+      <p>
         or go back to
-        <router-link to='/login'>login</router-link>.
-      </span>
+        <router-link class="text-amber" to='/login'>login</router-link>.
+      </p>
     </div>
   </q-page>
 </template>
@@ -94,6 +94,7 @@ button {
   margin-top: 10px;
   cursor: pointer;
   width: 100%;
+  margin-bottom: 40px;
 }
 span {
   display: block;
@@ -103,5 +104,9 @@ span {
 
 .error {
   color: $red-8;
+}
+
+h3 {
+  text-align: center;
 }
 </style>

@@ -43,7 +43,7 @@
       </p>
       <p class="text-white">
         You don't have an account ? You can
-        <router-link to="/sign-up">create one</router-link>
+        <router-link class="text-amber" to="/sign-up">create one</router-link>
       </p>
     </div>
   </q-page>
@@ -117,6 +117,7 @@ export default {
 .login {
   width: 90%;
   max-width: 370px;
+  margin-bottom: 50px;
 }
 
 h3 {

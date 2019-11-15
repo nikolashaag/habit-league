@@ -1,6 +1,11 @@
 <template>
   <q-card
-    :class="['challenge', 'bg-dark', 'text-white', options.expanded && 'expanded']"
+    :class="[
+      'challenge',
+      'bg-dark',
+      'text-white',
+      options.expanded && 'expanded'
+    ]"
     @click="() => onExpand(options.id)"
     v-if="!(!options.expanded && options.oneChallengeExpanded)"
   >
@@ -22,13 +27,21 @@
       >
         <q-menu cover auto-close>
           <q-list>
-            <q-item v-if="iAmAuthor" clickable @click="() => deleteChallenge = !deleteChallenge">
+            <q-item
+              v-if="iAmAuthor"
+              clickable
+              @click="() => (deleteChallenge = !deleteChallenge)"
+            >
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
             <q-item v-if="iAmAuthor" clickable @click="editHabit">
               <q-item-section>Edit Habit</q-item-section>
             </q-item>
-            <q-item v-if="!iAmAuthor" clickable @click="() => leaveChallenge = !leaveChallenge">
+            <q-item
+              v-if="!iAmAuthor"
+              clickable
+              @click="() => (leaveChallenge = !leaveChallenge)"
+            >
               <q-item-section>Leave Habit</q-item-section>
             </q-item>
             <q-item clickable @click="copyUrl">
@@ -41,17 +54,20 @@
 
     <q-card-section class="content">
       <div class="icon-wrapper">
-        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
+        <q-icon
+          :name="getIconName(options.icon)"
+          class="category-icon"
+        ></q-icon>
       </div>
       <div class="header">
-        <div class="text-title">{{options.title}}</div>
-        <div class="text-subtitle">{{readableFrequency}}</div>
-        <p v-if="options.expanded">{{options.description}}</p>
+        <div class="text-title">{{ options.title }}</div>
+        <div class="text-subtitle">{{ readableFrequency }}</div>
+        <p v-if="options.expanded">{{ options.description }}</p>
       </div>
-      <div v-if="leader">Leader: {{leader}}</div>
+      <div v-if="leader">Leader: {{ leader }}</div>
     </q-card-section>
     <q-card-section class="countdown flex flex-center" v-if="isInFuture">
-      <h6>{{countdown}}</h6>
+      <h6>{{ countdown }}</h6>
     </q-card-section>
     <leader-board
       :members="sortedMembers"
@@ -59,20 +75,10 @@
     ></leader-board>
 
     <q-card-actions class="weeks">
-      <transition name="fade">
-        <week
-          v-if="isCurrentWeek(firstWeek) || options.expanded === true"
-          :challenge="options"
-          :loggedDays="loggedDays"
-          :week="firstWeek"
-          @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
-        ></week>
-      </transition>
-
-      <div :class="`leftover-wrapper rows-${leftOverWeeks.length}`">
+      <div :class="`leftover-wrapper rows-${weeks.length}`">
         <div
-          v-for="(week, key) in leftOverWeeks"
-          :key="key + 'leftOverWeeks' + options.title"
+          v-for="(week, key) in weeks"
+          :key="key + 'weeks' + options.title"
           class="row justify-between"
         >
           <transition name="fade">
@@ -81,20 +87,11 @@
               :challenge="options"
               :loggedDays="loggedDays"
               :week="week"
-              @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
+              @noteProgressForDay="(day, e) => noteProgressForDay(day, e)"
             ></week>
           </transition>
         </div>
       </div>
-      <transition name="fade">
-        <week
-          v-if="isCurrentWeek(lastWeek) || options.expanded === true"
-          :challenge="options"
-          :loggedDays="loggedDays"
-          :week="lastWeek"
-          @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
-        ></week>
-      </transition>
     </q-card-actions>
     <q-linear-progress
       rounded
@@ -105,21 +102,35 @@
       :value="progress"
     />
     <dialog-popup title="Note day" :model="noteProgress" align="center">
-      <q-btn label="Complete" color="green" @click="log('complete')" v-close-popup />
-      <q-btn label="Skip" color="amber" class="text-dark" @click="log('skip')" v-close-popup />
+      <q-btn
+        label="Complete"
+        color="green"
+        @click="log('complete')"
+        v-close-popup
+      />
+      <q-btn
+        label="Skip"
+        color="amber"
+        class="text-dark"
+        @click="log('skip')"
+        v-close-popup
+      />
       <q-btn label="Downfall" color="red" @click="log('fail')" v-close-popup />
     </dialog-popup>
     <dialog-popup
       title="Are you sure you want to delete this Habit?"
       :model="deleteChallenge"
-      :confirm="{label: 'Delete', onClick: removeChallenge}"
-      :cancel="{label: 'Cancel', onClick: onDelete.bind(this)}"
+      :confirm="{ label: 'Delete', onClick: removeChallenge }"
+      :cancel="{ label: 'Cancel', onClick: onDelete.bind(this) }"
     />
     <dialog-popup
       title="Are you sure you want to leave the Challenge?"
       :model="leaveChallenge"
-      :confirm="{label: 'Leave', onClick: leaveChallengeAction}"
-      :cancel="{label: 'Cancel', onClick: e => leaveChallenge = !leaveChallenge}"
+      :confirm="{ label: 'Leave', onClick: leaveChallengeAction }"
+      :cancel="{
+        label: 'Cancel',
+        onClick: e => (leaveChallenge = !leaveChallenge)
+      }"
     />
   </q-card>
 </template>
@@ -133,11 +144,9 @@ import LeaderBoard from './Leaderboard'
 import DialogPopup from './DialogPopup.vue'
 
 import {
-  getFirstWeek,
-  getLastWeek,
-  getAllOtherWeeks,
   getReadableFrequency,
-  getScore
+  getScore,
+  getWeeks
 } from '../helpers/calendar'
 
 export default {
@@ -150,9 +159,7 @@ export default {
       leaveChallenge: false,
       countdown: '',
       countdownInterval: null,
-      firstWeek: null,
-      lastWeek: null,
-      leftOverWeeks: null
+      weeks: null
     }
   },
   components: {
@@ -314,7 +321,11 @@ export default {
           return {
             ...user,
             completedDays: this.getCompletedDaysForUser(user.id),
-            score: getScore(this.options, this.getCompletedDaysForUser(user.id), this.endDate)
+            score: getScore(
+              this.options,
+              this.getCompletedDaysForUser(user.id),
+              this.endDate
+            )
           }
         }),
         'completedDays'
@@ -322,9 +333,12 @@ export default {
       let withPosition = []
       for (let i = 0; i < sorted.length; i++) {
         const position =
-          withPosition[i - 1] && withPosition[i - 1].completedDays === sorted[i].completedDays
+          withPosition[i - 1] &&
+          withPosition[i - 1].completedDays === sorted[i].completedDays
             ? withPosition[i - 1].position
-            : !withPosition[i - 1] ? 1 : withPosition[i - 1].position + 1
+            : !withPosition[i - 1]
+              ? 1
+              : withPosition[i - 1].position + 1
         withPosition.push({
           position,
           ...sorted[i]
@@ -343,9 +357,7 @@ export default {
           ? 0
           : Number(this.options.duration) - 1
       this.endDate.setDate(startDate.getDate() + diffDays)
-      this.firstWeek = getFirstWeek({ startDate })
-      this.lastWeek = getLastWeek({ endDate: this.endDate })
-      this.leftOverWeeks = getAllOtherWeeks({
+      this.weeks = getWeeks({
         duration: this.options.duration,
         startDate,
         endDate: this.endDate
