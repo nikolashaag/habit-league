@@ -8,16 +8,16 @@ export function unique(targetArray, prop = false) {
   })
 }
 
-export function sort(arrayToSort, prop) {
+export function sort(arrayToSort, prop, ascending = false) {
   if (arrayToSort.length < 1) {
     return []
   }
   function compare(a, b) {
     if (a[prop] > b[prop]) {
-      return -1
+      return ascending ? 1 : -1
     }
     if (a[prop] < b[prop]) {
-      return 1
+      return ascending ? -1 : 1
     }
     return 0
   }

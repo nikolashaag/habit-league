@@ -1,4 +1,4 @@
-import { capitalize, unique } from './utils'
+import { capitalize, unique, sort } from './utils'
 import { date } from 'quasar'
 import moment from 'moment-timezone'
 
@@ -161,4 +161,31 @@ export const getScore = (challenge, completions, endDate) => {
   } catch {
     return 0
   }
+}
+
+export const getBestStreak = (challenge, completions) => {
+  const sortedCompletions = sort(completions, 'date', true)
+
+  let streaks = []
+  const previousIsStreak = (today, dayBefore) => {
+    let yesterdayDate = new Date(today.date)
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1)
+    return (
+      dayBefore &&
+      date.isSameDate(new Date(dayBefore.date), yesterdayDate, 'day')
+    )
+  }
+  for (let i = 0; i < sortedCompletions.length; i++) {
+    if (
+      !completions[i - 1] ||
+      !previousIsStreak(completions[i], completions[i - 1])
+    ) {
+      streaks.push(1)
+    } else {
+      const last = streaks[streaks.length - 1]
+      streaks.push(parseInt(last, 10) + 1)
+    }
+  }
+
+  return Math.max(...streaks)
 }

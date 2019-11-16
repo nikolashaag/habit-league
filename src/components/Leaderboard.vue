@@ -1,19 +1,42 @@
 <template>
   <transition name="fade">
     <q-card-section :class="`leaderboard rows-${activeMembers.length}`">
-      Leaderboard:
-      <div class="row leaderboard-row" v-for="(member, key) in activeMembers" :key="key + 'member'">
+      <div class="row leaderboard-heading">
         <div class="col-xs-2 col-sm-2 col-md-1">
-          <div class="number">{{member.position}}</div>
+          <div class="">Order</div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-2">
-          <div class="name">{{getDisplayName(member.id)}}</div>
+          <div class="">Name</div>
         </div>
-        <div class="col-xs-3 col-sm-3 col-md-3">
-          <div class="status">Days: {{member.completedDays}}</div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="">Score</div>
         </div>
-        <div class="col-xs-3 col-sm-3 col-md-3">
-          <div class="status">Score: {{member.score}}</div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="">Days</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="">Streak</div>
+        </div>
+      </div>
+      <div
+        class="row leaderboard-row"
+        v-for="(member, key) in activeMembers"
+        :key="key + 'member'"
+      >
+        <div class="col-xs-2 col-sm-2 col-md-1">
+          <div class="number">{{ member.position }}</div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-2">
+          <div class="name">{{ getDisplayName(member.id) }}</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="status">{{ member.score }} %</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="status">{{ member.completedDays }}</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="status">{{ member.bestStreak }}</div>
         </div>
       </div>
     </q-card-section>
@@ -127,5 +150,16 @@ export default {
   @include iphone5 {
     margin-left: 8px;
   }
+}
+
+.status {
+  text-align: center;
+}
+
+.leaderboard-heading {
+  color: #e4e4e4;
+  text-align: center;
+  width: calc(100% + 32px);
+  margin-left: -16px;
 }
 </style>

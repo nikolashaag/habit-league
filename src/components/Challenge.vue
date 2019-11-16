@@ -146,7 +146,8 @@ import DialogPopup from './DialogPopup.vue'
 import {
   getReadableFrequency,
   getScore,
-  getWeeks
+  getWeeks,
+  getBestStreak
 } from '../helpers/calendar'
 
 export default {
@@ -325,6 +326,10 @@ export default {
               this.options,
               this.getCompletedDaysForUser(user.id),
               this.endDate
+            ),
+            bestStreak: getBestStreak(
+              this.options,
+              this.getLoggedDaysPerUser(user.id)
             )
           }
         }),
@@ -348,6 +353,18 @@ export default {
     },
     getIconName: function(value) {
       return ICON_MAP[value]
+    },
+    getLoggedDaysPerUser: function(uid) {
+      const challengeId = this.options.id
+
+      const currentChallenge = this.$store.state.app.myChallenges.find(
+        challenge => challenge.id === challengeId
+      )
+      const loggedDays = (currentChallenge && currentChallenge.loggedDays) || []
+
+      return (
+        loggedDays.filter(day => day.user === uid && day.status === 'complete') || []
+      )
     },
     calculateDays: function() {
       let startDate = new Date(this.options.startDate)

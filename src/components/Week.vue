@@ -136,9 +136,6 @@ export default {
       }
     },
     isLastDay: function(day) {
-      console.log('aaa', day)
-      console.log('bbb', this.challenge.endDate)
-      console.log('ccc', date.isSameDate(day, this.challenge.endDate, 'day'))
       return date.isSameDate(day, this.challenge.endDate, 'day')
     }
   }
