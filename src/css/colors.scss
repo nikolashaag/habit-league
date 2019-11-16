@@ -1,5 +1,9 @@
 .bg-amber {
   background-color: #E8DD4E !important;
+  &[disabled] {
+    opacity: 1 !important;
+    background-color: #98913D !important;
+  }
 }
 .bg-green {
   background-color: #45BD41 !important;

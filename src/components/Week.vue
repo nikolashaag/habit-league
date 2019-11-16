@@ -1,29 +1,41 @@
 <template>
   <div class="row week-wrapper justify-between">
-    <div class="day" v-for="(day, index) in week" :key="index + 'last' + challenge.title">
+    <div
+      class="day"
+      v-for="(day, index) in week"
+      :key="index + 'last' + challenge.title"
+      :style="`order: ${2 * (index + 1) - 1}`"
+    >
       <q-btn
         class="day-button"
         :title="day.date"
-        :disabled="day.isAfterHabitEnds || day.isInFuture || day.isBeforeHabitStart"
+        :disabled="
+          day.isAfterHabitEnds || day.isInFuture || day.isBeforeHabitStart
+        "
         round
         :color="getColor(day)"
         text-color="black"
-        @click="$emit('noteProgressForDay', day,$event)"
+        @click="$emit('noteProgressForDay', day, $event)"
       >
         <span v-if="!isLastDay(day.date)" class="date">
-          {{day.date.getDate()}}
-          <span
-            class="month"
-            v-if="day.date.getDate() === 1"
-          >{{getMonthWrittenLocal(day.date.getMonth())}}</span>
+          {{ day.date.getDate() }}
+          <span class="month" v-if="day.date.getDate() === 1">{{
+            getMonthWrittenLocal(day.date.getMonth())
+          }}</span>
         </span>
         <span v-if="isLastDay(day.date)" class="date">
           End
         </span>
-        {{day.label}}
+        {{ day.label }}
       </q-btn>
-      <hr :class="`hr hr--${getChainColor(index)}`" />
+      <!-- <hr :class="`hr hr--${getChainColor(index)}`" /> -->
     </div>
+    <div
+      :class="`hr hr--${getChainColor(index)}`"
+      v-for="(day, index) in week.slice(0, 6)"
+      :key="index + 'line' + challenge.title"
+      :style="`order: ${2 * (index + 1)}`"
+    ></div>
   </div>
 </template>
 
@@ -150,9 +162,11 @@ export default {
 
 .day {
   display: flex;
-  flex-grow: 1;
+  flex-grow: 0;
+  flex-shrink: 0;
   align-items: center;
   position: relative;
+  z-index: 1;
 }
 
 .day-button {
@@ -163,11 +177,43 @@ export default {
 }
 
 .hr {
-  width: 100%;
   margin: 0;
   border: 0px;
+  height: 40px;
+  margin-left: -10px;
+  margin-right: -10px;
+  position: relative;
+  flex-grow: 1;
   &--green {
-    border: 2px solid green;
+    background-color: green;
+
+    &:before {
+      width: calc(100% + 2px);
+      height: 20px;
+      border-radius: 50%;
+      background-color: #1f1f1f;
+      display: inline-block;
+      vertical-align: middle;
+      /* margin-right: 10px; */
+      content: '';
+      top: -9px;
+      position: absolute;
+      left: -1px;
+    }
+
+    &:after {
+      width: 100%;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #1f1f1f;
+      display: inline-block;
+      vertical-align: middle;
+      /* margin-right: 10px; */
+      content: '';
+      bottom: -9px;
+      position: absolute;
+      left: 0;
+    }
   }
   &--red {
     border: 2px solid red;
