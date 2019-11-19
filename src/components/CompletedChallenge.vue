@@ -68,26 +68,16 @@
     ></leader-board>
 
     <q-card-actions class="weeks" v-if="options.expanded">
-      <transition name="fade">
-        <week
-          v-if="isCurrentWeek(firstWeek) || options.expanded === true"
-          :challenge="options"
-          :loggedDays="loggedDays"
-          :week="firstWeek"
-          @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
-        ></week>
-      </transition>
-
-      <div :class="`leftover-wrapper rows-${leftOverWeeks.length}`">
+      <div :class="`leftover-wrapper rows-${weeks.length}`">
         <div
-          v-for="(week, key) in leftOverWeeks"
-          :key="key + 'leftOverWeeks' + options.title"
+          v-for="(week, key) in weeks"
+          :key="key + 'weeks' + options.title"
           class="row justify-between"
         >
           <transition name="fade">
             <week
               v-if="isCurrentWeek(week) || options.expanded === true"
-              :challenge="options"
+              :challenge="{...options, endDate}"
               :loggedDays="loggedDays"
               :week="week"
               @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
@@ -95,15 +85,6 @@
           </transition>
         </div>
       </div>
-      <transition name="fade">
-        <week
-          v-if="isCurrentWeek(lastWeek) || options.expanded === true"
-          :challenge="options"
-          :loggedDays="loggedDays"
-          :week="lastWeek"
-          @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
-        ></week>
-      </transition>
     </q-card-actions>
     <q-linear-progress
       rounded
@@ -142,9 +123,7 @@ import LeaderBoard from './Leaderboard'
 import DialogPopup from './DialogPopup.vue'
 
 import {
-  getFirstWeek,
-  getLastWeek,
-  getAllOtherWeeks,
+  getWeeks,
   getReadableFrequency,
   getMonthWritten,
   getScore
@@ -158,9 +137,7 @@ export default {
       expanded: false,
       deleteChallenge: false,
       leaveChallenge: false,
-      firstWeek: null,
-      lastWeek: null,
-      leftOverWeeks: null
+      weeks: null
     }
   },
   components: {
@@ -307,9 +284,7 @@ export default {
           ? 0
           : Number(this.options.duration) - 1
       this.endDate.setDate(startDate.getDate() + diffDays)
-      this.firstWeek = getFirstWeek({ startDate })
-      this.lastWeek = getLastWeek({ endDate: this.endDate })
-      this.leftOverWeeks = getAllOtherWeeks({
+      this.weeks = getWeeks({
         duration: this.options.duration,
         startDate,
         endDate: this.endDate

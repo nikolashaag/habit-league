@@ -1,19 +1,23 @@
-export function unique(targetArray, prop) {
+export function unique(targetArray, prop = false) {
   return targetArray.filter((obj, pos, arr) => {
-    return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos
+    if (prop) {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos
+    } else {
+      return arr.map(mapObj => mapObj).indexOf(obj) === pos
+    }
   })
 }
 
-export function sort(arrayToSort, prop) {
+export function sort(arrayToSort, prop, ascending = false) {
   if (arrayToSort.length < 1) {
     return []
   }
   function compare(a, b) {
     if (a[prop] > b[prop]) {
-      return -1
+      return ascending ? 1 : -1
     }
     if (a[prop] < b[prop]) {
-      return 1
+      return ascending ? -1 : 1
     }
     return 0
   }

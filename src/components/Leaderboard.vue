@@ -1,19 +1,42 @@
 <template>
   <transition name="fade">
     <q-card-section :class="`leaderboard rows-${activeMembers.length}`">
-      Leaderboard:
-      <div class="row leaderboard-row" v-for="(member, key) in activeMembers" :key="key + 'member'">
+      <div class="row leaderboard-heading">
         <div class="col-xs-2 col-sm-2 col-md-1">
-          <div class="number">{{member.position}}</div>
+          <div class="">Order</div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-2">
-          <div class="name">{{getDisplayName(member.id)}}</div>
+          <div class="">Name</div>
         </div>
-        <div class="col-xs-3 col-sm-3 col-md-3">
-          <div class="status">Days: {{member.completedDays}}</div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="">Score</div>
         </div>
-        <div class="col-xs-3 col-sm-3 col-md-3">
-          <div class="status">Score: {{member.score}}</div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="">Days</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="">Streak</div>
+        </div>
+      </div>
+      <div
+        class="row leaderboard-row"
+        v-for="(member, key) in activeMembers"
+        :key="key + 'member'"
+      >
+        <div class="col-xs-2 col-sm-2 col-md-1">
+          <div class="number">{{ member.position }}</div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-2">
+          <div class="name">{{ getDisplayName(member.id) }}</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="status">{{ member.score }} %</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="status">{{ member.completedDays }}</div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="status">{{ member.bestStreak }}</div>
         </div>
       </div>
     </q-card-section>
@@ -40,6 +63,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import './src/css/breakpoints.scss';
+
 .leaderboard {
   max-height: 174px;
   transition: all 0.2s ease-in-out;
@@ -52,6 +77,13 @@ export default {
   height: 48px;
   line-height: 48px;
   margin-left: -16px;
+
+  .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 5px;
+  }
 }
 .rows-2 {
   max-height: (48 * 2)+20px;
@@ -69,19 +101,34 @@ export default {
   max-height: (48 * 6)+20px;
 }
 .leaderboard-row:nth-child(1) {
-  background: #ffc107;
+  background: #ffee00;
 }
 .leaderboard-row:nth-child(2) {
-  background: #ffb300;
+  background: #ffe600;
 }
 .leaderboard-row:nth-child(3) {
-  background: #ffa000;
+  background: #f1e102;
 }
 .leaderboard-row:nth-child(4) {
-  background: #ff8f00;
+  background: #ffd207;
 }
 .leaderboard-row:nth-child(5) {
+  background: #ffc107;
+}
+.leaderboard-row:nth-child(6) {
+  background: #ffb300;
+}
+.leaderboard-row:nth-child(7) {
+  background: #ffa000;
+}
+.leaderboard-row:nth-child(8) {
+  background: #ff8f00;
+}
+.leaderboard-row:nth-child(9) {
   background: #ff5a04;
+}
+.leaderboard-row:nth-child(10) {
+  background: #e40000;
 }
 
 .number {
@@ -99,5 +146,20 @@ export default {
   margin-top: 0.5rem;
   line-height: 2rem;
   margin-left: 16px;
+
+  @include iphone5 {
+    margin-left: 8px;
+  }
+}
+
+.status {
+  text-align: center;
+}
+
+.leaderboard-heading {
+  color: #e4e4e4;
+  text-align: center;
+  width: calc(100% + 32px);
+  margin-left: -16px;
 }
 </style>

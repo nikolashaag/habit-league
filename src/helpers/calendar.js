@@ -1,5 +1,6 @@
-import { capitalize } from './utils'
+import { capitalize, unique, sort } from './utils'
 import { date } from 'quasar'
+import moment from 'moment-timezone'
 
 const WEEK_MASK = [
   {
@@ -25,82 +26,33 @@ const WEEK_MASK = [
   }
 ]
 
-export const getFirstWeek = ({ startDate }) => {
-  let split = startDate.getDay() - 1
-  split = split > -1 ? split : 6
-
-  return WEEK_MASK.map((day, index) => {
+export const getWeeks = ({ duration, startDate, endDate }) => {
+  const weekNumbers = []
+  for (let i = 0; i < duration; i++) {
     let newDate = new Date(startDate)
-    let today = new Date()
-
-    // Set hours to zero, so that comparisons work properly
-    newDate.setHours(0, 0, 0, 0)
-    today.setHours(0, 0, 0, 0)
-
-    if (index >= split) {
-      newDate.setDate(newDate.getDate() + (index - split))
-      return {
-        label: day.label,
-        date: newDate,
-        isInFuture: newDate > today
-      }
+    newDate.setDate(startDate.getDate() + i)
+    const weekNumber = {
+      week: moment(newDate).isoWeek(),
+      year: moment(newDate).year(),
+      date: newDate
     }
-    newDate.setDate(newDate.getDate() - (split - index))
-    return {
-      ...day,
-      date: newDate,
-      isBeforeHabitStart: true
-    }
-  })
-}
-
-export const getLastWeek = ({ endDate }) => {
-  let lastWeekSplit = endDate.getDay() - 1
-  lastWeekSplit = lastWeekSplit > -1 ? lastWeekSplit : 6
-
-  return WEEK_MASK.map((day, index) => {
-    let newDate = new Date(endDate)
-    let today = new Date()
-
-    // Set hours to zero, so that comparisons work properly
-    newDate.setHours(0, 0, 0, 0)
-    today.setHours(0, 0, 0, 0)
-
-    if (index <= lastWeekSplit) {
-      newDate.setDate(newDate.getDate() - (lastWeekSplit - index))
-      return {
-        label: day.label,
-        date: newDate,
-        isInFuture: newDate > today
-      }
-    }
-    newDate.setDate(newDate.getDate() - (lastWeekSplit - index))
-    return {
-      ...day,
-      date: newDate,
-      isAfterHabitEnds: true
-    }
-  })
-}
-
-export const getAllOtherWeeks = ({ duration, startDate, endDate }) => {
-  let split = startDate.getDay() - 1
-  split = split > -1 ? split : 6
-  let lastWeekSplit = endDate.getDay()
-  lastWeekSplit = lastWeekSplit > -1 ? lastWeekSplit : 6
-  const leftOverDays = Number(duration) - (7 - split) - lastWeekSplit
-  if (leftOverDays < 7) {
-    return []
+    weekNumbers.push(weekNumber)
   }
-  const prototype = [...new Array(leftOverDays / 7)]
-  return prototype.map((week, weekIndex) => {
+  let actualWeeks = unique(weekNumbers, 'week')
+  return actualWeeks.map(week => {
+    const mondayOfTheWeek = moment()
+      .isoWeek(week.week)
+      .day(1)
+      .toDate()
     return WEEK_MASK.map((day, index) => {
-      let newDate = new Date(startDate)
-      newDate.setDate(startDate.getDate() + (7 - split + index) + weekIndex * 7)
+      let newDate = new Date(mondayOfTheWeek)
+      newDate.setDate(newDate.getDate() + index)
       return {
         label: day.label,
-        date: newDate,
-        isInFuture: newDate > new Date()
+        date: new Date(newDate.setHours(0, 0, 0, 0)),
+        isInFuture: newDate > new Date(),
+        isAfterHabitEnds: newDate > endDate,
+        isBeforeHabitStart: newDate < startDate
       }
     })
   })
@@ -209,4 +161,31 @@ export const getScore = (challenge, completions, endDate) => {
   } catch {
     return 0
   }
+}
+
+export const getBestStreak = (challenge, completions) => {
+  const sortedCompletions = sort(completions, 'date', true)
+
+  let streaks = []
+  const previousIsStreak = (today, dayBefore) => {
+    let yesterdayDate = new Date(today.date)
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1)
+    return (
+      dayBefore &&
+      date.isSameDate(new Date(dayBefore.date), yesterdayDate, 'day')
+    )
+  }
+  for (let i = 0; i < sortedCompletions.length; i++) {
+    if (
+      !completions[i - 1] ||
+      !previousIsStreak(completions[i], completions[i - 1])
+    ) {
+      streaks.push(1)
+    } else {
+      const last = streaks[streaks.length - 1]
+      streaks.push(parseInt(last, 10) + 1)
+    }
+  }
+
+  return Math.max(...streaks)
 }
