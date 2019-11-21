@@ -65,7 +65,9 @@ module.exports = function(ctx) {
         'QSpinnerGrid',
         'QTabs',
         'QTab',
-        'QRouteTab'
+        'QRouteTab',
+        'QTime',
+        'QBadge'
       ],
 
       directives: ['Ripple', 'ClosePopup'],

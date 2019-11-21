@@ -64,3 +64,12 @@ export function removeDay(state, data) {
     return challenge
   })
 }
+
+export function updateChallenge(state, updatedChallenge) {
+  state.myChallenges = state.myChallenges.map(challenge => {
+    if (challenge.id === updatedChallenge.id) {
+      return updatedChallenge
+    }
+    return challenge
+  })
+}

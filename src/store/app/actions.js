@@ -5,6 +5,8 @@ import {
 } from '../../helpers/calendar'
 import { Notify } from 'quasar'
 
+import { unique } from '../../helpers/utils'
+
 export function fetchChallenges({ commit, state, rootState }) {
   return new Promise((resolve, reject) => {
     commit('clearState')
@@ -209,5 +211,33 @@ export async function deleteHabit({ commit, state, dispatch }, data) {
     })
     .catch(function(error) {
       console.error('Error removing document: ', error)
+    })
+}
+
+export function setHabitReminder(
+  { commit, state, rootState },
+  { challenge, startDate, repeatOn }
+) {
+  let reminders = challenge.reminders || []
+  reminders.unshift({
+    startDate: startDate,
+    repeatOn,
+    userID: rootState.user.currentUser.uid
+  })
+  reminders = unique(reminders, 'userID')
+
+  commit('updateChallenge', { ...challenge, reminders })
+
+  var db = firebase.firestore()
+  db.collection('challenges')
+    .doc(challenge.id)
+    .update({
+      reminders
+    })
+    .then(function(docRef) {
+      // update challenge in store
+    })
+    .catch(function(error) {
+      console.error('Setting a reminder failed', error)
     })
 }
