@@ -11,7 +11,7 @@
         type="text"
         :error="Boolean(emailError)"
       >
-        <template v-slot:error>{{emailError}}</template>
+        <template v-slot:error>{{ emailError }}</template>
       </q-input>
       <q-input
         color="amber"
@@ -22,14 +22,20 @@
         type="password"
         :error="Boolean(passwordError)"
       >
-        <template v-slot:error>{{passwordError}}</template>
+        <template v-slot:error>{{ passwordError }}</template>
       </q-input>
 
       <div v-if="error" class="error">
         <br />
-        {{error}}
+        {{ error }}
       </div>
-      <q-btn color="amber" size="lg" label="Login" class="text-dark" @click="login" />
+      <q-btn
+        color="amber"
+        size="lg"
+        label="Login"
+        class="text-dark"
+        @click="login"
+      />
       <p class="text-white">
         or Sign In with Google
         <br />
@@ -94,14 +100,16 @@ export default {
     },
     socialLogin() {
       const provider = new firebase.auth.GoogleAuthProvider()
+      provider.addScope('https://www.googleapis.com/auth/calendar')
       firebase
         .auth()
         .signInWithPopup(provider)
         .then(result => {
           console.log('google success saveUser', result)
           console.log('prevRoute', this.prevRoute)
-
-          this.$store.dispatch('user/saveUser', result.user)
+          const googleToken = result.credential.accessToken
+          console.log('user', { ...result.user, googleToken })
+          this.$store.dispatch('user/saveUser', { ...result.user, googleToken })
 
           this.$router.replace('/weekly')
         })

@@ -4,6 +4,15 @@ const routes = [
     redirect: '/login'
   },
   {
+    path: '/onboarding',
+    component: () => import('layouts/Onboarding.vue'),
+    children: [{ path: '', component: () => import('pages/Onboarding.vue') }],
+    meta: {
+      requiresAuth: false,
+      title: 'Welcome'
+    }
+  },
+  {
     path: '/weekly',
     component: () => import('layouts/MyLayout.vue'),
     children: [{ path: '', component: () => import('pages/Weekly.vue') }],

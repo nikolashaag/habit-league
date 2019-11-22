@@ -9,7 +9,21 @@ export async function saveUser({ commit, state }, user) {
     db.collection('users')
       .add({
         displayName: user.displayName,
-        uid: user.uid
+        uid: user.uid,
+        googleToken: user.googleToken
+      })
+      .then(function(docRef) {
+        console.log('Document written with ID: ', docRef)
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error)
+      })
+  } else {
+    console.log('match', match.id)
+    db.collection('users')
+      .doc(match.id)
+      .update({
+        googleToken: user.googleToken
       })
       .then(function(docRef) {
         console.log('Document written with ID: ', docRef)
@@ -84,6 +98,35 @@ export async function saveToken({ commit, state, rootState }, token) {
           .doc(doc.id)
           .update({
             notificationsToken: token
+          })
+          .then(function(docRef) {
+            console.log('successfully updated message token', docRef)
+          })
+          .catch(function(error) {
+            console.error('Error updating message token: ', error)
+          })
+      })
+    })
+    .catch(function(error) {
+      console.log('coudnt find user: ', error)
+    })
+}
+
+export async function saveGoogleToken({ commit, state, rootState }, token) {
+  const db = firebase.firestore()
+  db.collection('users')
+    .where('uid', '==', rootState.user.currentUser.uid)
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        if (!doc.exists) {
+          console.log('user not available')
+          return
+        }
+        db.collection('users')
+          .doc(doc.id)
+          .update({
+            googleToken: token
           })
           .then(function(docRef) {
             console.log('successfully updated message token', docRef)

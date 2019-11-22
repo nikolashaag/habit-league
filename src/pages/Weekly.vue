@@ -13,12 +13,30 @@
         </note>
         <transition name="expand">
           <div class="search wrapper">
-            <q-input dark color="amber" v-model="search" label="find  habit" />
-            <q-btn
+            <q-input dark color="amber" :dense="true" v-model="search" label="Find habit" >
+              <template v-slot:prepend>
+                <q-icon class="search-icon" name="fas fa-search" />
+              </template>
+            </q-input>
+            <!-- <q-input
+              :rules="[val => !!val || 'Field is required']"
+              dark
+              standout
+              v-model="title"
+              label="Habit title"
+            /> -->
+            <!-- <q-btn
               class="join-button text-dark"
               color="amber"
               :label="`${isCompletedHidden ?'Show': 'Hide'} completed`"
               @click="toggleIsCompletedHidden"
+            /> -->
+            <q-toggle
+              v-model="isCompletedHidden"
+              label="Hide completed"
+              left-label
+              color="amber"
+
             />
           </div>
         </transition>
@@ -134,9 +152,6 @@ export default {
     Note
   },
   computed: {
-    isCompletedHidden() {
-      return this.$store.state.app.isCompletedHidden
-    },
     showTooltip: {
       get() {
         const userId = this.$store.state.user.currentUser.uid
@@ -195,13 +210,11 @@ export default {
       localChallenges: [],
       oneChallengeExpanded: false,
       isLoading: true,
-      search: ''
+      search: '',
+      isCompletedHidden: false
     }
   },
   methods: {
-    toggleIsCompletedHidden() {
-      this.$store.commit('app/toggleIsCompleted')
-    },
     onTipClose() {
       this.$store.dispatch('user/closeTip', {
         userId: this.$store.state.user.currentUser.uid,
@@ -336,6 +349,10 @@ export default {
   h5 {
     color: #e1e1e1;
   }
+}
+
+.search-icon {
+  font-size: 16px;
 }
 
 .wrapper {
