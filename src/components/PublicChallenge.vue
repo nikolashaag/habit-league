@@ -1,25 +1,26 @@
 <template>
   <q-card class="challenge text-white bg-dark" @click="() => expanded = !expanded">
-    <q-card-section>
+    <q-card-section class="challenge__header">
       <div class="icon-wrapper">
         <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
       </div>
       <div class="header">
         <div class="text-h6">{{options.title}}</div>
-        <div class="text-subtitle2">{{options.description}}</div>
+        <div v-if="options.description" class="text-subtitle2">{{options.description}}</div>
       </div>
     </q-card-section>
 
-    <q-card-section class="row">
+    <q-card-section class="row" v-if="options.description">
       <p>{{options.description}}</p>
     </q-card-section>
     <q-card-section class="justify-end row">
-      <q-btn class="join-button" color="amber" label="Join Challenge" @click="e => joinChallenge(e)" />
+      <q-btn
+        class="join-button"
+        color="amber"
+        label="Join Challenge"
+        @click="e => joinChallenge(e)"
+      />
     </q-card-section>
-
-    <!-- <q-separator dark /> -->
-
-    <q-card-actions></q-card-actions>
     <q-linear-progress rounded stripe style="height: 10px" color="warning" :value="progress" />
     <dialog-popup
       title="Are you sure you want to join this challenge?"
@@ -88,7 +89,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .caret {
   position: absolute;
   right: 0.5rem;
@@ -99,6 +100,11 @@ export default {
 .challenge {
   margin-bottom: 16px;
   background: linear-gradient(to left, #3a404d, #181c26);
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+  }
 }
 
 .leaderboard-row {
@@ -163,17 +169,7 @@ export default {
 }
 
 .icon-wrapper i {
-  position: absolute; /*it can be fixed too*/
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.header {
-  display: inline-block;
-  height: 54px;
+  margin-right: 5px;
 }
 
 .join-button {

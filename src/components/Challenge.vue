@@ -27,25 +27,20 @@
       >
         <q-menu cover auto-close>
           <q-list>
-            <q-item
-              v-if="iAmAuthor"
-              clickable
-              @click="() => (deleteChallenge = !deleteChallenge)"
-            >
+            <q-item v-if="iAmAuthor" clickable @click="() => (deleteChallenge = !deleteChallenge)">
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
             <q-item v-if="iAmAuthor" clickable @click="editHabit">
               <q-item-section>Edit Habit</q-item-section>
             </q-item>
-            <q-item
-              v-if="!iAmAuthor"
-              clickable
-              @click="() => (leaveChallenge = !leaveChallenge)"
-            >
+            <q-item v-if="!iAmAuthor" clickable @click="() => (leaveChallenge = !leaveChallenge)">
               <q-item-section>Leave Habit</q-item-section>
             </q-item>
             <q-item clickable @click="copyUrl">
               <q-item-section>Invite link</q-item-section>
+            </q-item>
+            <q-item clickable @click="isDatePickerVisible = true">
+              <q-item-section>Set a reminder</q-item-section>
             </q-item>
           </q-list>
         </q-menu>
@@ -54,10 +49,7 @@
 
     <q-card-section class="content">
       <div class="icon-wrapper">
-        <q-icon
-          :name="getIconName(options.icon)"
-          class="category-icon"
-        ></q-icon>
+        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
       </div>
       <div class="header">
         <div class="text-title">{{ options.title }}</div>
@@ -65,6 +57,11 @@
         <p v-if="options.expanded">{{ options.description }}</p>
       </div>
       <div v-if="leader">Leader: {{ leader }}</div>
+      <date-picker
+        :is-visible="isDatePickerVisible"
+        @close="isDatePickerVisible = false"
+        :challenge="options"
+      ></date-picker>
     </q-card-section>
     <q-card-section class="countdown flex flex-center" v-if="isInFuture">
       <h6>{{ countdown }}</h6>
@@ -102,19 +99,8 @@
       :value="progress"
     />
     <dialog-popup title="Note day" :model="noteProgress" align="center">
-      <q-btn
-        label="Complete"
-        color="green"
-        @click="log('complete')"
-        v-close-popup
-      />
-      <q-btn
-        label="Skip"
-        color="amber"
-        class="text-dark"
-        @click="log('skip')"
-        v-close-popup
-      />
+      <q-btn label="Complete" color="green" @click="log('complete')" v-close-popup />
+      <q-btn label="Skip" color="amber" class="text-dark" @click="log('skip')" v-close-popup />
       <q-btn label="Downfall" color="red" @click="log('fail')" v-close-popup />
     </dialog-popup>
     <dialog-popup
@@ -142,7 +128,7 @@ import { sort } from '../helpers/utils'
 import week from './Week'
 import LeaderBoard from './Leaderboard'
 import DialogPopup from './DialogPopup.vue'
-
+import DatePicker from './Reminders/DatePicker.vue'
 import {
   getReadableFrequency,
   getScore,
@@ -160,13 +146,15 @@ export default {
       leaveChallenge: false,
       countdown: '',
       countdownInterval: null,
-      weeks: null
+      weeks: null,
+      isDatePickerVisible: false
     }
   },
   components: {
     week,
     LeaderBoard,
-    DialogPopup
+    DialogPopup,
+    DatePicker
   },
   props: ['options', 'onExpand'],
   computed: {
@@ -363,7 +351,9 @@ export default {
       const loggedDays = (currentChallenge && currentChallenge.loggedDays) || []
 
       return (
-        loggedDays.filter(day => day.user === uid && day.status === 'complete') || []
+        loggedDays.filter(
+          day => day.user === uid && day.status === 'complete'
+        ) || []
       )
     },
     calculateDays: function() {

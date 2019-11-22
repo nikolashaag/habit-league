@@ -69,7 +69,9 @@ module.exports = function(ctx) {
         'QToggle',
         'QCarousel',
         'QCarouselControl',
-        'QCarouselSlide'
+        'QCarouselSlide',
+        'QTime',
+        'QBadge'
       ],
 
       directives: ['Ripple', 'ClosePopup'],
