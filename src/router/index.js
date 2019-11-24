@@ -35,6 +35,10 @@ export default function(/* { store, ssrContext } */) {
       })
     }
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+    console.log('requiresAuth', requiresAuth)
+    // if (!requiresAuth) {
+    //   next()
+    // }
     if (requiresAuth && !currentUser) next('login')
     else if (!requiresAuth && currentUser) next('/weekly')
     else next()

@@ -34,10 +34,20 @@
         <img src="~assets/flamenco-group.png" style="width:90vw;" />
 
         <div class="heading">
-          <span>It's time to build </span><b>some habits!</b>
+          <span>...or together with </span><b>your friends</b>
         </div>
-        <div class="paragraph">
-          <p>Are you ready?<br />We gonna help get better step by step!</p>
+      </q-carousel-slide>
+      <q-carousel-slide name="fourth" class="third column no-wrap flex-center">
+        <div class="heading">
+          <span
+            >Let's start by creating an account so your habit data doesn't get
+            lost!</span
+          >
+        </div>
+        <img src="~assets/flamenco-success.png" style="width:90vw;" />
+
+        <div class="heading">
+          <b>Ready?</b>
         </div>
       </q-carousel-slide>
     </q-carousel>
@@ -68,11 +78,18 @@ export default {
   },
   methods: {
     next: function() {
-      console.log('this.slide', this.slide)
-      if (this.slide === 'second') {
-        this.slide = 'third'
-      } else {
-        this.slide = 'second'
+      switch (this.slide) {
+        case 'second':
+          this.slide = 'third'
+          break
+        case 'third':
+          this.slide = 'fourth'
+          break
+        case 'fourth':
+          this.$router.push({ path: '/sign-up' })
+          break
+        default:
+          this.slide = 'second'
       }
     }
   }
@@ -92,8 +109,16 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+
+  .q-carousel__slide {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 70px;
+  }
   img {
     max-height: 50vh;
+    max-width: 100%;
+    object-fit: contain;
   }
 
   .heading {
@@ -118,7 +143,6 @@ export default {
 
   .second {
     .heading {
-
       b {
         font-size: 54px;
         padding-bottom: 80px;
@@ -133,7 +157,7 @@ export default {
   }
 
   .carousel {
-    height: calc(100% - 51px);
+    height: calc(100vh - 51px);
   }
 }
 </style>

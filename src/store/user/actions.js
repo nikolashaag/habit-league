@@ -10,7 +10,8 @@ export async function saveUser({ commit, state }, user) {
       .add({
         displayName: user.displayName,
         uid: user.uid,
-        googleToken: user.googleToken
+        googleToken: user.googleToken,
+        googleRefreshToken: user.refreshToken
       })
       .then(function(docRef) {
         console.log('Document written with ID: ', docRef)
@@ -23,7 +24,8 @@ export async function saveUser({ commit, state }, user) {
     db.collection('users')
       .doc(match.id)
       .update({
-        googleToken: user.googleToken
+        googleToken: user.googleToken,
+        googleRefreshToken: user.refreshToken
       })
       .then(function(docRef) {
         console.log('Document written with ID: ', docRef)
