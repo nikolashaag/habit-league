@@ -72,7 +72,7 @@ const routes = [
     children: [{ path: '', component: () => import('pages/Signup.vue') }],
     meta: {
       requiresAuth: false,
-      title: 'Signup'
+      title: 'Create Account'
     }
   },
   {

@@ -84,7 +84,7 @@
         <router-view />
       </transition>
     </q-page-container>
-    <secondary-nav />
+    <secondary-nav v-if="requiresAuth" />
   </q-layout>
 </template>
 
@@ -104,7 +104,8 @@ export default {
     return {
       leftDrawerOpen: false,
       transitionName: 'slide-left',
-      title: this.$route.matched.find(record => record.meta.title).meta.title
+      title: this.$route.matched.find(record => record.meta.title).meta.title,
+      requiresAuth: this.$route.matched.find(record => record.meta.title).meta.requiresAuth
     }
   },
   watch: {
@@ -124,8 +125,9 @@ export default {
       } else {
         this.transitionName = 'slide-right'
       }
-      console.log('to', to.matched.find(record => record.meta.title).meta.title)
+      console.log('to', to)
       this.title = to.matched.find(record => record.meta.title).meta.title
+      this.requiresAuth = to.matched.find(record => record.meta.title).meta.requiresAuth
     }
   },
   methods: {
