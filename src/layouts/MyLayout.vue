@@ -1,5 +1,5 @@
 <template>
-  <q-layout class="background" view="lHh Lpr lFf">
+  <q-layout :class="['background', !requiresAuth && 'not-authenticated']" view="lHh Lpr lFf">
     <q-header elevated class="header bg-dark">
       <q-toolbar class="navbar">
         <q-btn class="burger" flat dense size="lg" round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
@@ -165,6 +165,9 @@ export default {
 
 .background {
   background: #121212;
+  &.not-authenticated {
+    background: #1f1f1f !important;
+  }
 }
 
 .q-header {

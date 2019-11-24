@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <div class="sign-up text-white">
-      <img src="~assets/flamenco-sign-up.png" style="width:90vw;" />
+      <img src="~assets/flamenco-sign-up.png" />
       <q-btn
         icon-right="fab fa-google"
         color="red"
@@ -101,6 +101,25 @@ export default {
             }
           }
         )
+    },
+    socialLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider()
+      provider.addScope('https://www.googleapis.com/auth/calendar')
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(result => {
+          console.log('google success saveUser', result)
+          console.log('prevRoute', this.prevRoute)
+          const googleToken = result.credential.accessToken
+          console.log('user', { ...result.user, googleToken })
+          this.$store.dispatch('user/saveUser', { ...result.user, googleToken })
+
+          this.$router.replace('/weekly')
+        })
+        .catch(err => {
+          alert('Oops. ' + err.message)
+        })
     }
   }
 }
@@ -109,11 +128,12 @@ export default {
 <style lang="scss" scoped>
 .sign-up {
   width: 90%;
-  max-width: 370px;
+  max-width: 360px;
   padding-top: 16px;
 
   img {
     height: 200px;
+    width: 100%;
     object-fit: contain;
   }
 }

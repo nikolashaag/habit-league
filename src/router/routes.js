@@ -1,7 +1,12 @@
 const routes = [
   {
     path: '*',
-    redirect: '/login'
+    redirect: route => {
+      if (!localStorage || !localStorage.getItem('onboardingComplete')) {
+        return '/onboarding'
+      }
+      return '/login'
+    }
   },
   {
     path: '/onboarding',

@@ -124,7 +124,7 @@ export default {
 <style lang="scss" scoped>
 .login {
   width: 90%;
-  max-width: 370px;
+  max-width: 360px;
   margin-bottom: 50px;
 }
 
