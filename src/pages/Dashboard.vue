@@ -98,7 +98,7 @@ export default {
           this.$store.state.user.currentUser.uid
         )
         return habit
-      })
+      }).filter(habit => !habit.isPast)
       const title = this.getCategory(category)
       let categoryChartData = {
         title,
