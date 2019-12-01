@@ -6,6 +6,7 @@
           v-model="step"
           ref="stepper"
           color="primary"
+          vertical
           animated
           dark
           class="bg-dark stepper-custom"
@@ -442,7 +443,7 @@ export default {
 
 <style lang="scss">
 .wizard {
-  margin-bottom: 52px;
+  padding-bottom: 52px;
 
   .stepper-custom {
     box-shadow: 0 1px 5px rgba(0,0,0,0.2), 0 2px 2px rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12);
@@ -468,9 +469,9 @@ label {
   margin-bottom: 16px;
 }
 
-.q-stepper__step-inner {
-  padding: 16px !important;
-}
+// .q-stepper__step-inner {
+//   padding: 16px !important;
+// }
 
 .q-stepper__tab {
   justify-content: flex-start !important;
