@@ -280,16 +280,17 @@ export function archiveHabit({ commit, state, rootState }, challenge) {
       return obj
     }, {})
   console.log('to archive', { ...cleanedHabit, archived: true })
+  const existingArchive = challenge.archived || []
   commit('updateChallenge', {
     ...cleanedHabit,
-    archived: true,
+    archived: [...existingArchive, rootState.user.currentUser.uid],
     id: challenge.id
   })
   var db = firebase.firestore()
   db.collection('challenges')
     .doc(challenge.id)
     .update({
-      archived: true
+      archived: [...existingArchive, rootState.user.currentUser.uid]
     })
     .then(function(docRef) {
       // update challenge in store

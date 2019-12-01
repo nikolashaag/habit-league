@@ -1,19 +1,34 @@
 <template>
   <q-page class="flex flex-center challenges-page">
-    <h5
-      v-if="!isLoading && challenges.length === 0"
-    >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
+    <h5 v-if="!isLoading && challenges.length === 0">
+      You don't have any challenges yet. Quick start one by clicking the plus
+      button
+    </h5>
     <transition name="expand">
       <div
         :class="['wrapper q-pa-md top', showTooltip && 'top--big']"
         v-if="challenges.length > 0 && !this.oneChallengeExpanded"
       >
-        <note v-if="showTooltip" class="text-dark" title="HOW TO USE" :onClose="onTipClose">
-          <p>In this view you see a weekly overview for each habit. When you tab on a habit, it will expand and show more details, like the calendar.</p>
+        <note
+          v-if="showTooltip"
+          class="text-dark"
+          title="HOW TO USE"
+          :onClose="onTipClose"
+        >
+          <p>
+            In this view you see a weekly overview for each habit. When you tab
+            on a habit, it will expand and show more details, like the calendar.
+          </p>
         </note>
         <transition name="expand">
           <div class="search wrapper">
-            <q-input dark color="amber" :dense="true" v-model="search" label="Find habit" >
+            <q-input
+              dark
+              color="amber"
+              :dense="true"
+              v-model="search"
+              label="Find habit"
+            >
               <template v-slot:prepend>
                 <q-icon class="search-icon" name="fas fa-search" />
               </template>
@@ -23,7 +38,6 @@
               label="Hide completed"
               left-label
               color="amber"
-
             />
           </div>
         </transition>
@@ -46,6 +60,7 @@
         />
         <completed-challenge
           v-for="(challenge, key) in dailyChallenges.filter(c => c.isPast)"
+          :archivable="true"
           :options="challenge"
           :onExpand="onExpand"
           :key="key + 'completed'"
@@ -65,7 +80,9 @@
           :key="key"
         />
         <completed-challenge
-          v-for="(challenge, key) in specificDaysChallenges.filter(c => c.isPast)"
+          v-for="(challenge, key) in specificDaysChallenges.filter(
+            c => c.isPast
+          )"
           :options="challenge"
           :onExpand="onExpand"
           :key="key + 'completed'"
@@ -115,8 +132,7 @@
   </q-page>
 </template>
 
-<style>
-</style>
+<style></style>
 
 <script>
 import moment from 'moment-timezone'
@@ -215,13 +231,23 @@ export default {
     },
     updateLocalChallanges: function(val) {
       if (val.length !== this.localChallenges.length) {
-        this.localChallenges = val.filter(challenge => !challenge.archived).map(challenge => {
-          return {
-            ...challenge,
-            expanded: false,
-            oneChallengeExpanded: false
-          }
-        })
+        this.localChallenges = val
+          .filter(
+            challenge =>
+              !(
+                challenge.archived &&
+                challenge.archived.indexOf(
+                  this.$store.state.user.currentUser.uid
+                ) > -1
+              )
+          )
+          .map(challenge => {
+            return {
+              ...challenge,
+              expanded: false,
+              oneChallengeExpanded: false
+            }
+          })
       }
     },
     onExpand: function(challengeId) {

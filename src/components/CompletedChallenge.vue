@@ -34,6 +34,13 @@
             >
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
+            <q-item
+              v-if="archivable"
+              clickable
+              @click="archiveHabit"
+            >
+              <q-item-section >Archive Habit</q-item-section>
+            </q-item>
           </q-list>
         </q-menu>
       </q-btn>
@@ -221,7 +228,7 @@ export default {
     LeaderBoard,
     DialogPopup
   },
-  props: ['options', 'onExpand'],
+  props: ['options', 'onExpand', 'archivable'],
   computed: {
     loggedDays: {
       get() {
@@ -398,10 +405,13 @@ export default {
     },
     restartHabitAction: function() {
       this.$store.dispatch('app/restartChallenge', this.options)
-      this.$store.dispatch('app/archiveHabit', this.options)
       this.restartHabit = false
-      Notify.create('Old habit was archived.')
       Notify.create('New habit was created.')
+      this.archiveHabit()
+    },
+    archiveHabit: function() {
+      this.$store.dispatch('app/archiveHabit', this.options)
+      Notify.create('Expired habit was archived.')
     },
     prolongHabitAction: function() {
       this.$store.dispatch('app/prolongChallenge', this.options.id)
