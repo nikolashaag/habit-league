@@ -40,7 +40,7 @@ export const getWeeks = ({ duration, startDate, endDate }) => {
   }
   let actualWeeks = unique(weekNumbers, 'week')
   return actualWeeks.map(week => {
-    const mondayOfTheWeek = moment()
+    const mondayOfTheWeek = moment(week.year, 'YYYY')
       .isoWeek(week.week)
       .day(1)
       .toDate()
