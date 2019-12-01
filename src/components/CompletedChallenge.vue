@@ -1,6 +1,11 @@
 <template>
   <q-card
-    :class="['challenge', 'bg-dark', 'text-white', options.expanded && 'expanded']"
+    :class="[
+      'challenge',
+      'bg-dark',
+      'text-white',
+      options.expanded && 'expanded'
+    ]"
     @click="() => onExpand(options.id)"
     v-if="!(!options.expanded && options.oneChallengeExpanded)"
   >
@@ -22,7 +27,11 @@
       >
         <q-menu cover auto-close>
           <q-list>
-            <q-item v-if="iAmAuthor" clickable @click="() => deleteChallenge = !deleteChallenge">
+            <q-item
+              v-if="iAmAuthor"
+              clickable
+              @click="() => (deleteChallenge = !deleteChallenge)"
+            >
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
           </q-list>
@@ -32,12 +41,15 @@
 
     <q-card-section class="content">
       <div class="icon-wrapper">
-        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
+        <q-icon
+          :name="getIconName(options.icon)"
+          class="category-icon"
+        ></q-icon>
       </div>
       <div class="header">
-        <div class="text-title">{{options.title}}</div>
-        <div class="text-subtitle">{{readableFrequency}}</div>
-        <p v-if="options.expanded">{{options.description}}</p>
+        <div class="text-title">{{ options.title }}</div>
+        <div class="text-subtitle">{{ readableFrequency }}</div>
+        <p v-if="options.expanded">{{ options.description }}</p>
       </div>
     </q-card-section>
     <q-card-section class="results flex flex-center">
@@ -45,19 +57,19 @@
         <div class="col-xs-4 col-sm-4 col-md-4">
           <div class="number">
             <q-icon name="fas fa-flag-checkered" />
-            {{formatDate(endDate)}}
+            {{ formatDate(endDate) }}
           </div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4">
           <div class="name">
             <q-icon name="fas fa-chart-line" />
-            {{score}} %
+            {{ score }} %
           </div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4">
           <div class="status">
             <q-icon name="fas fa-trophy" />
-            {{leader}}
+            {{ leader }}
           </div>
         </div>
       </div>
@@ -76,16 +88,45 @@
         >
           <transition name="fade">
             <week
-              v-if="isCurrentWeek(week) || options.expanded === true"
-              :challenge="{...options, endDate}"
+              v-if="options.expanded === true"
+              :challenge="{ ...options, endDate }"
               :loggedDays="loggedDays"
               :week="week"
-              @noteProgressForDay="(day,e) => noteProgressForDay(day,e)"
+              @noteProgressForDay="(day, e) => noteProgressForDay(day, e)"
             ></week>
           </transition>
         </div>
       </div>
     </q-card-actions>
+    <q-card-section class="button-section">
+      <q-btn
+        @click="() => (prolongHabit = !prolongHabit)"
+        color="dark"
+        size="sm"
+        text-color="white"
+        outline
+        class="habit-cta"
+      >
+        <div>Prolong habit</div>
+        <q-icon right size="1em" name="fas fa-long-arrow-alt-right" />
+      </q-btn>
+      <q-btn
+        @click="
+          e => {
+            restartHabit = !restartHabit
+            e.stopPropagation()
+          }
+        "
+        color="dark"
+        size="sm"
+        text-color="white"
+        outline
+        class="habit-cta"
+      >
+        <div>Restart habit</div>
+        <q-icon right size="1em" name="fas fa-undo-alt" />
+      </q-btn>
+    </q-card-section>
     <q-linear-progress
       rounded
       stripe
@@ -95,27 +136,60 @@
       :value="-1"
     />
     <dialog-popup title="Note day" :model="noteProgress" align="center">
-      <q-btn label="Complete" color="green" @click="log('complete')" v-close-popup />
-      <q-btn label="Skip" color="amber" class="text-dark" @click="log('skip')" v-close-popup />
+      <q-btn
+        label="Complete"
+        color="green"
+        @click="log('complete')"
+        v-close-popup
+      />
+      <q-btn
+        label="Skip"
+        color="amber"
+        class="text-dark"
+        @click="log('skip')"
+        v-close-popup
+      />
       <q-btn label="Fail" color="red" @click="log('fail')" v-close-popup />
     </dialog-popup>
     <dialog-popup
       title="Are you sure you want to delete this Habit?"
       :model="deleteChallenge"
-      :confirm="{label: 'Delete', onClick: removeChallenge}"
-      :cancel="{label: 'Cancel', onClick: onDelete.bind(this)}"
+      :confirm="{ label: 'Delete', onClick: removeChallenge }"
+      :cancel="{ label: 'Cancel', onClick: onDelete.bind(this) }"
     />
     <dialog-popup
       title="Are you sure you want to leave the Challenge?"
       :model="leaveChallenge"
-      :confirm="{label: 'Leave', onClick: leaveChallengeAction}"
-      :cancel="{label: 'Cancel', onClick: e => leaveChallenge = !leaveChallenge}"
+      :confirm="{ label: 'Leave', onClick: leaveChallengeAction }"
+      :cancel="{
+        label: 'Cancel',
+        onClick: e => (leaveChallenge = !leaveChallenge)
+      }"
+    />
+    <dialog-popup
+      title="Do you want to restart this habit?"
+      description="A new habit will be created with the same data like the original, but starting today."
+      :model="restartHabit"
+      :confirm="{ label: 'Restart', onClick: restartHabitAction }"
+      :cancel="{
+        label: 'Cancel',
+        onClick: e => (restartHabit = !restartHabit)
+      }"
+    />
+    <dialog-popup
+      title="Are you sure you want to leave the Challenge?"
+      :model="leaveChallenge"
+      :confirm="{ label: 'Leave', onClick: leaveChallengeAction }"
+      :cancel="{
+        label: 'Cancel',
+        onClick: e => (leaveChallenge = !leaveChallenge)
+      }"
     />
   </q-card>
 </template>
 
 <script>
-import { date } from 'quasar'
+import { Notify, date } from 'quasar'
 import { ICON_MAP } from '../helpers/constants'
 import { sort } from '../helpers/utils'
 import week from './Week'
@@ -136,6 +210,8 @@ export default {
       noteProgress: false,
       expanded: false,
       deleteChallenge: false,
+      restartHabit: false,
+      prolongHabit: false,
       leaveChallenge: false,
       weeks: null
     }
@@ -290,18 +366,6 @@ export default {
         endDate: this.endDate
       })
     },
-    isCurrentWeek: function(week) {
-      const today = new Date()
-      const startOfWeek = week[0].date
-      const endOfWeek = date.addToDate(week[0].date, { days: 7 })
-      return (
-        week.length > 0 &&
-        date.isBetweenDates(today, startOfWeek, endOfWeek, {
-          inclusiveFrom: true,
-          inclusiveTo: true
-        })
-      )
-    },
     getColor: function(day) {
       const log = this.loggedDays.find(loggedDay => {
         return new Date(loggedDay.date).getTime() === day.date.getTime()
@@ -331,6 +395,16 @@ export default {
     },
     leaveChallengeAction: function() {
       this.$store.dispatch('app/leaveChallenge', this.options.id)
+    },
+    restartHabitAction: function() {
+      this.$store.dispatch('app/restartChallenge', this.options)
+      this.$store.dispatch('app/archiveHabit', this.options)
+      this.restartHabit = false
+      Notify.create('Old habit was archived.')
+      Notify.create('New habit was created.')
+    },
+    prolongHabitAction: function() {
+      this.$store.dispatch('app/prolongChallenge', this.options.id)
     },
     log: function(status) {
       this.$store.dispatch('app/noteDayProgress', {
@@ -527,7 +601,8 @@ export default {
   font-size: 0.75rem;
   font-weight: 500;
   text-align: center;
-  margin-top: 45px;
+  margin-top: 2rempx;
+  padding-bottom: 2rem;
 
   @include sm {
     width: 80%;
@@ -542,6 +617,16 @@ export default {
   .q-icon {
     padding-right: 10px;
     font-size: 1.25rem;
+  }
+}
+
+.button-section {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2rem;
+  button {
+    width: calc(50% - 0.5rem);
+    padding: 4px 8px;
   }
 }
 </style>

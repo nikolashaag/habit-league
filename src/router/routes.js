@@ -95,7 +95,7 @@ const routes = [
     children: [{ path: '', component: () => import('pages/History.vue') }],
     meta: {
       requiresAuth: true,
-      title: 'History'
+      title: 'Archive'
     }
   }
 ]

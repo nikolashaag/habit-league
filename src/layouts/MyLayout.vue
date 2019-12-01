@@ -53,7 +53,7 @@
             <q-icon name="fas fa-history" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>History</q-item-label>
+            <q-item-label>Archive</q-item-label>
             <q-item-label caption>Completed Challenges</q-item-label>
           </q-item-section>
         </q-item>

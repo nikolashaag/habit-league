@@ -3,9 +3,10 @@ import {
   isChallengePast,
   isChallengeOlderThanAWeek
 } from '../../helpers/calendar'
-import { Notify } from 'quasar'
+import { Notify, date } from 'quasar'
 
 import { unique } from '../../helpers/utils'
+import { ALLOWED_HABIT_FIELDS } from '../../helpers/constants'
 
 export function fetchChallenges({ commit, state, rootState }) {
   return new Promise((resolve, reject) => {
@@ -60,6 +61,35 @@ export function addChallenge({ commit, state }, challenge) {
     .then(function(docRef) {
       commit('addMyChallengeToState', {
         ...challenge,
+        id: docRef.id
+      })
+    })
+    .catch(function(error) {
+      console.error('Error adding challenge: ', error)
+    })
+}
+
+export function restartChallenge({ commit, state }, challenge) {
+  const count = (challenge.repeated || 0) + 2
+  const newChallenge = {
+    ...challenge,
+    loggedDays: [],
+    repeated: challenge.repeated ? challenge.repeated + 1 : 1,
+    startDate: date.formatDate(new Date(), 'YYYY/MM/DD'),
+    title: challenge.title + ' part ' + count
+  }
+  const cleanedHabit = Object.keys(newChallenge)
+    .filter(key => ALLOWED_HABIT_FIELDS.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = newChallenge[key]
+      return obj
+    }, {})
+  var db = firebase.firestore()
+  db.collection('challenges')
+    .add(cleanedHabit)
+    .then(function(docRef) {
+      commit('addMyChallengeToState', {
+        ...cleanedHabit,
         id: docRef.id
       })
     })
@@ -233,6 +263,33 @@ export function setHabitReminder(
     .doc(challenge.id)
     .update({
       reminders
+    })
+    .then(function(docRef) {
+      // update challenge in store
+    })
+    .catch(function(error) {
+      console.error('Setting a reminder failed', error)
+    })
+}
+
+export function archiveHabit({ commit, state, rootState }, challenge) {
+  const cleanedHabit = Object.keys(challenge)
+    .filter(key => ALLOWED_HABIT_FIELDS.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = challenge[key]
+      return obj
+    }, {})
+  console.log('to archive', { ...cleanedHabit, archived: true })
+  commit('updateChallenge', {
+    ...cleanedHabit,
+    archived: true,
+    id: challenge.id
+  })
+  var db = firebase.firestore()
+  db.collection('challenges')
+    .doc(challenge.id)
+    .update({
+      archived: true
     })
     .then(function(docRef) {
       // update challenge in store

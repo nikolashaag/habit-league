@@ -215,7 +215,7 @@ export default {
     },
     updateLocalChallanges: function(val) {
       if (val.length !== this.localChallenges.length) {
-        this.localChallenges = val.map(challenge => {
+        this.localChallenges = val.filter(challenge => !challenge.archived).map(challenge => {
           return {
             ...challenge,
             expanded: false,

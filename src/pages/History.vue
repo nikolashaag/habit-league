@@ -162,34 +162,6 @@ export default {
       if (this.oneChallengeExpanded) {
         this.$scrollTo('body', 1000)
       }
-    },
-    isChallengeCompleted: function(challenge) {
-      let isCompleted = false
-      const currentUserId = this.$store.state.user.currentUser.uid
-      const frequency = challenge.frequency
-      const loggedDaysThisWeek = (challenge.loggedDays || []).filter(log => {
-        return (
-          log.user === currentUserId &&
-          log.status === 'complete' &&
-          moment(log.date, 'YYYY/MM/DD').isBetween(
-            moment().day(0),
-            moment().day(7)
-          )
-        )
-      })
-
-      switch (frequency) {
-        case 'per-week':
-          let target = challenge.perWeek
-          isCompleted = target <= loggedDaysThisWeek.length
-          break
-        case 'specific':
-          target = challenge.specificDays.length
-          isCompleted = target <= loggedDaysThisWeek.length
-          break
-      }
-
-      return isCompleted
     }
   },
   async created() {

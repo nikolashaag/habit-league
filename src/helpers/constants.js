@@ -35,3 +35,24 @@ export const CATEGORY_MAP = [
   { label: 'Career', value: 'career' },
   { label: 'Hobbies', value: 'hobbies' }
 ]
+
+export const ALLOWED_HABIT_FIELDS = [
+  'author',
+  'category',
+  'description',
+  'duration',
+  'frequency',
+  'icon',
+  'loggedDays',
+  'members',
+  'perMonth',
+  'perWeek',
+  'privacy',
+  'reminders',
+  'specificDays',
+  'stake',
+  'startDate',
+  'title',
+  'repeated',
+  'archived'
+]
