@@ -109,6 +109,8 @@ export default {
       get() {
         return (
           this.$store.state.app.myChallenges
+            // Filter out alredy finished challenges
+            .filter(chal => !chal.isPast)
             // Filter for not yet logged
             .filter(chal => {
               const loggedDays = chal.loggedDays || []
