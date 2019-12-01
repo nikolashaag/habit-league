@@ -18,19 +18,6 @@
                 <q-icon class="search-icon" name="fas fa-search" />
               </template>
             </q-input>
-            <!-- <q-input
-              :rules="[val => !!val || 'Field is required']"
-              dark
-              standout
-              v-model="title"
-              label="Habit title"
-            /> -->
-            <!-- <q-btn
-              class="join-button text-dark"
-              color="amber"
-              :label="`${isCompletedHidden ?'Show': 'Hide'} completed`"
-              @click="toggleIsCompletedHidden"
-            /> -->
             <q-toggle
               v-model="isCompletedHidden"
               label="Hide completed"
@@ -260,6 +247,9 @@ export default {
       }
     },
     isChallengeCompleted: function(challenge) {
+      if (challenge.isPast) {
+        return true
+      }
       let isCompleted = false
       const currentUserId = this.$store.state.user.currentUser.uid
       const frequency = challenge.frequency
