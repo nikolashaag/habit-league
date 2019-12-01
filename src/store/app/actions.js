@@ -299,3 +299,32 @@ export function archiveHabit({ commit, state, rootState }, challenge) {
       console.error('Setting a reminder failed', error)
     })
 }
+
+export function prolongChallenge(
+  { commit, state, rootState },
+  { challenge, duration }
+) {
+  const cleanedHabit = Object.keys(challenge)
+    .filter(key => ALLOWED_HABIT_FIELDS.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = challenge[key]
+      return obj
+    }, {})
+  commit('updateChallenge', {
+    ...cleanedHabit,
+    duration,
+    id: challenge.id
+  })
+  var db = firebase.firestore()
+  db.collection('challenges')
+    .doc(challenge.id)
+    .update({
+      duration
+    })
+    .then(function(docRef) {
+      // update challenge in store
+    })
+    .catch(function(error) {
+      console.error('Setting a reminder failed', error)
+    })
+}

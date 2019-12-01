@@ -34,12 +34,8 @@
             >
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
-            <q-item
-              v-if="archivable"
-              clickable
-              @click="archiveHabit"
-            >
-              <q-item-section >Archive Habit</q-item-section>
+            <q-item v-if="archivable" clickable @click="archiveHabit">
+              <q-item-section>Archive Habit</q-item-section>
             </q-item>
           </q-list>
         </q-menu>
@@ -107,9 +103,9 @@
     </q-card-actions>
     <q-card-section class="button-section">
       <q-btn
-        @click="() => (prolongHabit = !prolongHabit)"
+        @click="() => (isDatePickerVisible = !isDatePickerVisible)"
         color="dark"
-        size="sm"
+        size="md"
         text-color="white"
         outline
         class="habit-cta"
@@ -125,7 +121,7 @@
           }
         "
         color="dark"
-        size="sm"
+        size="md"
         text-color="white"
         outline
         class="habit-cta"
@@ -192,6 +188,25 @@
         onClick: e => (leaveChallenge = !leaveChallenge)
       }"
     />
+    <q-dialog v-model="isDatePickerVisible">
+      <q-date
+        v-model="newEndDate"
+        mask="YYYY/MM/DD"
+        color="amber"
+        title="Choose end date"
+        subtitle="Prolong habit"
+        @input="confirmProlong = !confirmProlong;isDatePickerVisible = !isDatePickerVisible"
+      ></q-date>
+    </q-dialog>
+    <dialog-popup
+      :title="`Do you want to prolong the challenge until ${newEndDate} ?`"
+      :model="confirmProlong"
+      :confirm="{ label: 'Leave', onClick: prolongHabitAction }"
+      :cancel="{
+        label: 'Cancel',
+        onClick: e => (confirmProlong = !confirmProlong)
+      }"
+    />
   </q-card>
 </template>
 
@@ -215,12 +230,15 @@ export default {
   data() {
     return {
       noteProgress: false,
+      isDatePickerVisible: false,
       expanded: false,
       deleteChallenge: false,
       restartHabit: false,
       prolongHabit: false,
+      confirmProlong: false,
       leaveChallenge: false,
-      weeks: null
+      weeks: null,
+      newEndDate: date.formatDate(new Date(), 'YYYY/MM/DD')
     }
   },
   components: {
@@ -413,8 +431,11 @@ export default {
       this.$store.dispatch('app/archiveHabit', this.options)
       Notify.create('Expired habit was archived.')
     },
-    prolongHabitAction: function() {
-      this.$store.dispatch('app/prolongChallenge', this.options.id)
+    prolongHabitAction: function(newDate) {
+      console.log('newEndDate', this.newEndDate)
+      const newDuration = date.getDateDiff(this.newEndDate, this.options.startDate, 'days')
+      console.log('prolongHabitAction', date.getDateDiff(this.newEndDate, this.options.startDate, 'days'))
+      this.$store.dispatch('app/prolongChallenge', { challenge: this.options, duration: newDuration })
     },
     log: function(status) {
       this.$store.dispatch('app/noteDayProgress', {
@@ -637,6 +658,10 @@ export default {
   button {
     width: calc(50% - 0.5rem);
     padding: 4px 8px;
+
+    @include iphone5 {
+      font-size: 10px !important;
+    }
   }
 }
 </style>
