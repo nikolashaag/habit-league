@@ -19,13 +19,13 @@
       >
         <span v-if="!isLastDay(day.date)" class="date">
           {{ day.date.getDate() }}
-          <span class="month" v-if="day.date.getDate() === 1">{{
+          <span class="month" v-if="day.date.getDate() === 1">
+            {{
             getMonthWrittenLocal(day.date.getMonth())
-          }}</span>
+            }}
+          </span>
         </span>
-        <span v-if="isLastDay(day.date)" class="date">
-          End
-        </span>
+        <span v-if="isLastDay(day.date)" class="date">End</span>
         {{ day.label }}
       </q-btn>
       <!-- <hr :class="`hr hr--${getChainColor(index)}`" /> -->
@@ -42,6 +42,11 @@
 <script>
 import { getMonthWritten } from '../helpers/calendar'
 import { date } from 'quasar'
+import moment from 'moment-timezone'
+
+moment()
+  .tz('Europe/Berlin')
+  .format()
 
 export default {
   name: 'week',
@@ -135,17 +140,20 @@ export default {
       const log = this.loggedDays.find(loggedDay => {
         return new Date(loggedDay.date).getTime() === day.date.getTime()
       })
-      if (!log) {
-        return 'amber'
-      }
-      switch (log.status) {
+      switch (log && log.status) {
         case 'complete':
           return 'green'
         case 'fail':
           return 'red'
         default:
-          return 'amber'
+          const isToday =
+            moment().format('YYYY/MM/DD') ===
+            moment(day.date).format('YYYY/MM/DD')
+          if (isToday) {
+            return 'amber-borderd'
+          }
       }
+      return 'amber'
     },
     isLastDay: function(day) {
       return date.isSameDate(day, this.challenge.endDate, 'day')
@@ -230,5 +238,11 @@ export default {
 
 .month {
   text-transform: none;
+}
+/deep/ {
+  .bg-amber-borderd {
+    border: 1px solid yellow;
+    background: #e4e4e4;
+  }
 }
 </style>

@@ -475,15 +475,17 @@ export default {
   }
 }
 .challenge {
+  position: relative;
   margin-bottom: 16px;
-  transition: min-height 0.5s ease;
+  // transition: min-height 0.5s ease;
   min-height: 192px;
 }
 
 .challenge.expanded {
-  min-height: calc(100vh - 161px);
-  transition: min-height 0.5s ease-in-out;
+  // min-height: calc(100vh - 161px);
+  // transition: min-height 0.5s ease-in-out;
   width: 100%;
+  // overflow: scroll;
 
   .content {
     padding-bottom: 16px;
@@ -554,6 +556,14 @@ export default {
   @include iphone5 {
     padding-left: 8px;
     padding-right: 8px;
+  }
+}
+
+.challenge.expanded {
+  .weeks {
+    position: relative;
+    min-height: calc(100vh - 161px);
+    overflow: scroll;
   }
 }
 
