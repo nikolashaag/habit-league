@@ -32,7 +32,7 @@ const routes = [
     children: [{ path: '', component: () => import('pages/Browse.vue') }],
     meta: {
       requiresAuth: true,
-      title: 'Browse Challenges'
+      title: 'Public Challenges'
     }
   },
   {

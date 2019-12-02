@@ -3,7 +3,7 @@
     <note v-if="showTooltip" class="text-dark" title="HOW TO USE" :onClose="onTipClose">
       <p>Browse what habits are other people developing. by joining a habit, you make it a challenge and can compete with them.</p>
     </note>
-    <h5>Public challenges</h5>
+    <h6>Improve your habits with your friends</h6>
     <div class="q-pa-md wrapper">
       <public-challenge v-for="(challenge, key) in challenges" :options="challenge" :key="key" />
     </div>

@@ -2,7 +2,15 @@
   <q-layout :class="['background', !requiresAuth && 'not-authenticated']" view="lHh Lpr lFf">
     <q-header elevated class="header bg-dark">
       <q-toolbar class="navbar">
-        <q-btn class="burger" flat dense size="lg" round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
+        <q-btn
+          class="burger"
+          flat
+          dense
+          size="lg"
+          round
+          @click="leftDrawerOpen = !leftDrawerOpen"
+          aria-label="Menu"
+        >
           <q-icon name="menu" />
         </q-btn>
         <q-toolbar-title>{{title}}</q-toolbar-title>
@@ -35,7 +43,7 @@
             <q-icon name="record_voice_over" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Browse Challenges</q-item-label>
+            <q-item-label>Public Challenges</q-item-label>
             <q-item-label caption>Join other people</q-item-label>
           </q-item-section>
         </q-item>
@@ -105,12 +113,18 @@ export default {
       leftDrawerOpen: false,
       transitionName: 'slide-left',
       title: this.$route.matched.find(record => record.meta.title).meta.title,
-      requiresAuth: this.$route.matched.find(record => record.meta.title).meta.requiresAuth
+      requiresAuth: this.$route.matched.find(record => record.meta.title).meta
+        .requiresAuth
     }
   },
   watch: {
-    '$route' (to, from) {
-      if ((from.path === '/daily' && to.path === '/weekly') || to.path === '/dashboard' || from.path === '/login' || from.path === '/signup') {
+    $route(to, from) {
+      if (
+        (from.path === '/daily' && to.path === '/weekly') ||
+        to.path === '/dashboard' ||
+        from.path === '/login' ||
+        from.path === '/signup'
+      ) {
         this.transitionName = 'slide-left'
       } else if (from.path === '/weekly' && to.path === '/browse') {
         this.transitionName = 'slide-left'
@@ -127,12 +141,14 @@ export default {
       }
       console.log('to', to)
       this.title = to.matched.find(record => record.meta.title).meta.title
-      this.requiresAuth = to.matched.find(record => record.meta.title).meta.requiresAuth
+      this.requiresAuth = to.matched.find(
+        record => record.meta.title
+      ).meta.requiresAuth
     }
   },
   methods: {
     openURL,
-    reportBug: function () {
+    reportBug: function() {
       this.leftDrawerOpen = false
 
       Sentry.captureException('Bug report')
@@ -162,7 +178,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .background {
   background: #121212;
   &.not-authenticated {
@@ -184,8 +199,9 @@ export default {
   min-height: 64px;
 }
 
-.slide-right-enter-active, .slide-right-leave-active {
-  transition: left .3s ease-out;
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: left 0.3s ease-out;
   min-height: 804px;
   position: absolute;
   width: 100%;
@@ -203,8 +219,9 @@ export default {
 .slide-right-leave-to {
   left: 100%;
 }
-.slide-left-enter-active, .slide-left-leave-active {
-  transition: left .3s ease-out;
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: left 0.3s ease-out;
   min-height: 804px;
   position: absolute;
   width: 100%;
