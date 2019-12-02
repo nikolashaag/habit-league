@@ -29,10 +29,10 @@
               dark
               standout
               v-model="title"
-              label="Habit title"
+              label="Habit Name"
             />
             <div class="spacing"></div>
-            <q-input dark standout v-model="description" label="Description (Optional)" />
+            <q-input dark standout v-model="description" label="Remember your 'why?'" />
             <div class="spacing"></div>
             <div class="row">
               <label for>Choose frequency</label>
@@ -72,13 +72,13 @@
               label="Days per Month"
             />
             <div class="row">
-              <label for>Choose category</label>
+              <label for>Category</label>
             </div>
             <q-select dark standout v-model="category" :options="categoryValues" label="Category" />
             <div class="spacing"></div>
 
             <div class="row">
-              <label for>Choose icon</label>
+              <label for>Icon</label>
             </div>
             <q-select dark standout v-model="icon" :options="icons" label="Icon">
               <template v-slot:option="scope">
@@ -155,14 +155,20 @@
                 label="Continue"
                 class="text-dark"
               />
-              <q-btn @click="onSubmit" v-if="step === 3" color="amber" class="text-dark" label="Finish" />
+              <q-btn
+                @click="onSubmit"
+                v-if="step === 3"
+                color="amber"
+                class="text-dark"
+                label="Finish"
+              />
               <q-btn
                 v-if="step > 1"
                 flat
                 color="amber"
                 @click="$refs.stepper.previous()"
                 label="Back"
-                class="q-ml-sm"
+                class="q-ml-sm float-right"
               />
             </q-stepper-navigation>
           </template>
@@ -446,7 +452,8 @@ export default {
   padding-bottom: 52px;
 
   .stepper-custom {
-    box-shadow: 0 1px 5px rgba(0,0,0,0.2), 0 2px 2px rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.12);
     border: none;
   }
 }
