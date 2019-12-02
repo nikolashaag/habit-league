@@ -435,7 +435,7 @@ export default {
       console.log('newEndDate', this.newEndDate)
       const newDuration = date.getDateDiff(this.newEndDate, this.options.startDate, 'days')
       console.log('prolongHabitAction', date.getDateDiff(this.newEndDate, this.options.startDate, 'days'))
-      this.$store.dispatch('app/prolongChallenge', { challenge: this.options, duration: newDuration })
+      this.$store.dispatch('app/prolongChallenge', { challenge: this.options, duration: newDuration + 1 })
     },
     log: function(status) {
       this.$store.dispatch('app/noteDayProgress', {
