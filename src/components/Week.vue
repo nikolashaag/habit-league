@@ -242,7 +242,8 @@ export default {
 /deep/ {
   .bg-amber-borderd {
     border: 1px solid yellow;
-    background: #e4e4e4;
+    background: balck;
+    color: yellow !important;
   }
 }
 </style>
