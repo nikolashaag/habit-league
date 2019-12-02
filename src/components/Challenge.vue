@@ -350,8 +350,8 @@ export default {
           withPosition[i - 1].completedDays === sorted[i].completedDays
             ? withPosition[i - 1].position
             : !withPosition[i - 1]
-            ? 1
-            : withPosition[i - 1].position + 1
+              ? 1
+              : withPosition[i - 1].position + 1
         withPosition.push({
           position,
           ...sorted[i]
