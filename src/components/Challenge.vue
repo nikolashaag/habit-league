@@ -57,7 +57,7 @@
         <p v-if="options.expanded">{{ options.description }}</p>
       </div>
       <div v-if="currentUser">
-        <div class="row results-row">
+        <div class="row results-row text-center">
           <div class="col-xs-4 col-sm-4 col-md-4">
             <div class="status">
               <q-icon name="fas fa-trophy" />
@@ -350,8 +350,8 @@ export default {
           withPosition[i - 1].completedDays === sorted[i].completedDays
             ? withPosition[i - 1].position
             : !withPosition[i - 1]
-              ? 1
-              : withPosition[i - 1].position + 1
+            ? 1
+            : withPosition[i - 1].position + 1
         withPosition.push({
           position,
           ...sorted[i]
