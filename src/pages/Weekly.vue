@@ -9,12 +9,7 @@
         :class="['wrapper q-pa-md top', showTooltip && 'top--big']"
         v-if="challenges.length > 0 && !this.oneChallengeExpanded"
       >
-        <note
-          v-if="showTooltip"
-          class="text-dark"
-          title="HOW TO USE"
-          :onClose="onTipClose"
-        >
+        <note v-if="showTooltip" class="text-dark" title="HOW TO USE" :onClose="onTipClose">
           <p>
             In this view you see a weekly overview for each habit. When you tab
             on a habit, it will expand and show more details, like the calendar.
@@ -22,23 +17,12 @@
         </note>
         <transition name="expand">
           <div class="search wrapper">
-            <q-input
-              dark
-              color="amber"
-              :dense="true"
-              v-model="search"
-              label="Find habit"
-            >
+            <q-input dark color="amber" :dense="true" v-model="search" label="Find habit">
               <template v-slot:prepend>
                 <q-icon class="search-icon" name="fas fa-search" />
               </template>
             </q-input>
-            <q-toggle
-              v-model="isCompletedHidden"
-              label="Hide completed"
-              left-label
-              color="amber"
-            />
+            <q-toggle v-model="isCompletedHidden" label="Hide completed" left-label color="amber" />
           </div>
         </transition>
       </div>
@@ -291,6 +275,7 @@ export default {
       })
 
       switch (frequency) {
+        case 'daily':
         case 'per-week':
           let target = challenge.perWeek
           isCompleted = target <= loggedDaysThisWeek.length
