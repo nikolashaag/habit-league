@@ -274,6 +274,15 @@ export default {
 
       switch (frequency) {
         case 'daily':
+          const loggedToday = !!(challenge.loggedDays || []).filter(log => {
+            return (
+              log.user === currentUserId &&
+              log.status === 'complete' &&
+              log.date === moment().format('YYYY/MM/DD')
+            )
+          }).length
+          isCompleted = loggedToday
+          break
         case 'per-week':
           let target = challenge.perWeek
           isCompleted = target <= loggedDaysThisWeek.length
