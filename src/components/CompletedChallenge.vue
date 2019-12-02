@@ -27,11 +27,7 @@
       >
         <q-menu cover auto-close>
           <q-list>
-            <q-item
-              v-if="iAmAuthor"
-              clickable
-              @click="() => (deleteChallenge = !deleteChallenge)"
-            >
+            <q-item v-if="iAmAuthor" clickable @click="() => (deleteChallenge = !deleteChallenge)">
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
             <q-item v-if="archivable" clickable @click="archiveHabit">
@@ -44,10 +40,7 @@
 
     <q-card-section class="content">
       <div class="icon-wrapper">
-        <q-icon
-          :name="getIconName(options.icon)"
-          class="category-icon"
-        ></q-icon>
+        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
       </div>
       <div class="header">
         <div class="text-title">{{ options.title }}</div>
@@ -139,19 +132,8 @@
       :value="-1"
     />
     <dialog-popup title="Note day" :model="noteProgress" align="center">
-      <q-btn
-        label="Complete"
-        color="green"
-        @click="log('complete')"
-        v-close-popup
-      />
-      <q-btn
-        label="Skip"
-        color="amber"
-        class="text-dark"
-        @click="log('skip')"
-        v-close-popup
-      />
+      <q-btn label="Complete" color="green" @click="log('complete')" v-close-popup />
+      <q-btn label="Skip" color="amber" class="text-dark" @click="log('skip')" v-close-popup />
       <q-btn label="Fail" color="red" @click="log('fail')" v-close-popup />
     </dialog-popup>
     <dialog-popup
@@ -201,7 +183,7 @@
     <dialog-popup
       :title="`Do you want to prolong the challenge until ${newEndDate} ?`"
       :model="confirmProlong"
-      :confirm="{ label: 'Leave', onClick: prolongHabitAction }"
+      :confirm="{ label: 'Prolong', onClick: prolongHabitAction }"
       :cancel="{
         label: 'Cancel',
         onClick: e => (confirmProlong = !confirmProlong)
@@ -365,8 +347,8 @@ export default {
           withPosition[i - 1].completedDays === sorted[i].completedDays
             ? withPosition[i - 1].position
             : !withPosition[i - 1]
-              ? 1
-              : withPosition[i - 1].position + 1
+            ? 1
+            : withPosition[i - 1].position + 1
         withPosition.push({
           position,
           ...sorted[i]
@@ -433,9 +415,24 @@ export default {
     },
     prolongHabitAction: function(newDate) {
       console.log('newEndDate', this.newEndDate)
-      const newDuration = date.getDateDiff(this.newEndDate, this.options.startDate, 'days')
-      console.log('prolongHabitAction', date.getDateDiff(this.newEndDate, this.options.startDate, 'days'))
-      this.$store.dispatch('app/prolongChallenge', { challenge: this.options, duration: newDuration })
+      const newDuration = date.getDateDiff(
+        this.newEndDate,
+        this.options.startDate,
+        'days'
+      )
+      console.log(
+        'prolongHabitAction',
+        date.getDateDiff(this.newEndDate, this.options.startDate, 'days')
+      )
+      this.$store
+        .dispatch('app/prolongChallenge', {
+          challenge: this.options,
+          duration: newDuration
+        })
+        .then(() => {
+          this.confirmProlong = false
+          this.$router.push('/weekly')
+        })
     },
     log: function(status) {
       this.$store.dispatch('app/noteDayProgress', {

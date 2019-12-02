@@ -300,8 +300,8 @@ export function archiveHabit({ commit, state, rootState }, challenge) {
     })
 }
 
-export function prolongChallenge(
-  { commit, state, rootState },
+export async function prolongChallenge(
+  { commit, state, rootState, dispatch },
   { challenge, duration }
 ) {
   const cleanedHabit = Object.keys(challenge)
@@ -323,6 +323,7 @@ export function prolongChallenge(
     })
     .then(function(docRef) {
       // update challenge in store
+      dispatch('fetchChallenges')
     })
     .catch(function(error) {
       console.error('Setting a reminder failed', error)

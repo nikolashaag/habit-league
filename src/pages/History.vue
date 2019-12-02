@@ -107,13 +107,15 @@ export default {
     },
     updateLocalChallanges: function(val) {
       if (val.length !== this.localChallenges.length) {
-        this.localChallenges = val.filter(c => c.isPast).map(challenge => {
-          return {
-            ...challenge,
-            expanded: false,
-            oneChallengeExpanded: false
-          }
-        })
+        this.localChallenges = val
+          .filter(c => c.isPast)
+          .map(challenge => {
+            return {
+              ...challenge,
+              expanded: false,
+              oneChallengeExpanded: false
+            }
+          })
       }
     },
     updateLocalArchive: function(val) {
