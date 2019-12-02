@@ -67,13 +67,13 @@
           <div class="col-xs-4 col-sm-4 col-md-4">
             <div class="status">
               <q-icon name="fas fa-check-double" />
-              {{ currentUser.score }}
+              {{ currentUser.completedDays }}
             </div>
           </div>
           <div class="col-xs-4 col-sm-4 col-md-4">
             <div class="name">
               <q-icon name="fas fa-chart-line" />
-              {{ currentUser.completedDays }} %
+              {{ currentUser.score }} %
             </div>
           </div>
         </div>
