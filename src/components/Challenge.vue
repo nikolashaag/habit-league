@@ -56,7 +56,28 @@
         <div class="text-subtitle">{{ readableFrequency }}</div>
         <p v-if="options.expanded">{{ options.description }}</p>
       </div>
-      <div v-if="leader">Leader: {{ leader }}</div>
+      <div v-if="currentUser">
+        <div class="row results-row">
+          <div class="col-xs-4 col-sm-4 col-md-4">
+            <div class="status">
+              <q-icon name="fas fa-trophy" />
+              {{ currentUser.bestStreak }}
+            </div>
+          </div>
+          <div class="col-xs-4 col-sm-4 col-md-4">
+            <div class="status">
+              <q-icon name="fas fa-check-double" />
+              {{ currentUser.score }}
+            </div>
+          </div>
+          <div class="col-xs-4 col-sm-4 col-md-4">
+            <div class="name">
+              <q-icon name="fas fa-chart-line" />
+              {{ currentUser.completedDays }} %
+            </div>
+          </div>
+        </div>
+      </div>
       <date-picker
         :is-visible="isDatePickerVisible"
         @close="isDatePickerVisible = false"
@@ -216,12 +237,11 @@ export default {
         return diff / (this.options.duration / 100) / 100
       }
     },
-    leader: {
+    currentUser: {
       get() {
-        if (this.sortedMembers.length > 0) {
-          return this.sortedMembers ? this.sortedMembers[0].name : ''
-        }
-        return null
+        return this.sortedMembers.find(
+          member => member.id === this.$store.state.user.currentUser.uid
+        )
       }
     }
   },
@@ -330,8 +350,8 @@ export default {
           withPosition[i - 1].completedDays === sorted[i].completedDays
             ? withPosition[i - 1].position
             : !withPosition[i - 1]
-              ? 1
-              : withPosition[i - 1].position + 1
+            ? 1
+            : withPosition[i - 1].position + 1
         withPosition.push({
           position,
           ...sorted[i]
