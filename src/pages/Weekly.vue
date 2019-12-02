@@ -111,8 +111,6 @@
         />
       </div>
     </div>
-
-    <transition name="fade"></transition>
   </q-page>
 </template>
 
