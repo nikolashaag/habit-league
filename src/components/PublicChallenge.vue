@@ -9,11 +9,7 @@
         <div v-if="options.description" class="text-subtitle2">{{options.description}}</div>
       </div>
     </q-card-section>
-
-    <q-card-section class="row" v-if="options.description">
-      <p>{{options.description}}</p>
-    </q-card-section>
-    <q-card-section class="justify-end row">
+    <q-card-section class="justify-end row p-0">
       <q-btn
         class="join-button"
         color="amber"
@@ -174,5 +170,8 @@ export default {
 
 .join-button {
   color: #1f1f1f !important;
+}
+.p-0 {
+  padding: 0 10px;
 }
 </style>
