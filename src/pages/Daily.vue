@@ -7,19 +7,22 @@
         <i>skip</i>) or tick the checkbox.
       </p>
     </note>
-    <div class="progress-wrapper row flex flex-center">
-      <q-knob
-        show-value
-        readonly
-        font-size="24px"
-        v-model="progress"
-        size="150px"
-        :thickness="0.22"
-        color="teal"
-        track-color="grey-3"
-        class="q-ma-md text-white"
-      >{{ progress }}%</q-knob>
-    </div>
+    <h5 class="text-white block progress-header">
+      <template v-if="progress">
+        <span>You are {{progress}}% there !</span>
+        <q-linear-progress
+          rounded
+          stripe
+          style="height: 10px"
+          color="warning"
+          :value="progress/100"
+        />
+      </template>
+      <template v-else>
+        <span>Let's get started !</span>
+      </template>
+    </h5>
+
     <h5
       v-if="challenges.length === 0 && completedToday.length === 0"
       class="text-white"
@@ -303,6 +306,14 @@ export default {
 
 .was-completed {
   transform: translate3d(2000px, 0, 0);
+}
+.progress-header {
+  width: 100vw;
+  text-align: center;
+  span {
+    display: inline-block;
+    margin-bottom: 15px;
+  }
 }
 
 /deep/ .q-slide-item__content {

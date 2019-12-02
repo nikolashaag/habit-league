@@ -1,19 +1,18 @@
 <template>
-    <q-card :class="['challenge text-white row bg-dark', complete ?  'was-completed' : '']">
-      <q-card-section class="col-10 main-header">
-        <div class="icon-wrapper">
-          <q-icon :name="getIconName(options.icon)" class="category-icon" >
-          </q-icon>
-        </div>
-        <div class="header">
-          <div class="text-h6">{{options.title}}</div>
-          <div class="text-subtitle2">{{readableFrequency}}</div>
-        </div>
-      </q-card-section>
-      <q-card-section class="col-2 flex flex-center button-wrapper">
-        <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck"/>
-      </q-card-section>
-    </q-card>
+  <q-card :class="['challenge text-white row bg-dark', complete ?  'was-completed' : '']">
+    <q-card-section class="col-10 main-header">
+      <div class="icon-wrapper">
+        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
+      </div>
+      <div class="header">
+        <div class="text-h6">{{options.title}}</div>
+        <div class="text-subtitle2">{{readableFrequency}}</div>
+      </div>
+    </q-card-section>
+    <q-card-section class="col-2 flex flex-center button-wrapper">
+      <q-checkbox dark v-model="complete" color="teal" class="checkbox" @input="onCheck" />
+    </q-card-section>
+  </q-card>
 </template>
 
 <style>
@@ -25,7 +24,7 @@ import { getReadableFrequency } from '../helpers/calendar'
 
 export default {
   name: 'ChallengeDaily',
-  data () {
+  data() {
     return {
       noteProgress: false,
       complete: false
@@ -34,30 +33,40 @@ export default {
   props: ['options', 'onComplete'],
   computed: {
     progress: {
-      get () {
+      get() {
         let dt1 = new Date(this.options.startDate)
         let dt2 = new Date()
-        const diff = Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) / (1000 * 60 * 60 * 24))
+        const diff = Math.floor(
+          (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+            Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+            (1000 * 60 * 60 * 24)
+        )
         return this.options.duration / diff / 10
       }
     },
     readableFrequency: {
-      get () {
-        return getReadableFrequency(this.options.frequency, this.options.perWeek, this.options.perMonth, this.options.specificDays)
+      get() {
+        return getReadableFrequency(
+          this.options.frequency,
+          this.options.perWeek,
+          this.options.perMonth,
+          this.options.specificDays
+        )
       }
     }
   },
   methods: {
-    onCheck: function (e) {
+    onCheck: function(e) {
       if (e) {
         this.onComplete(this.options.id)
       }
     },
-    getIconName: function (value) {
+    getIconName: function(value) {
       return ICON_MAP[value]
     },
-    getDisplayName: function (id) {
-      return this.$store.state.user.users.find(user => user.uid === id).displayName
+    getDisplayName: function(id) {
+      return this.$store.state.user.users.find(user => user.uid === id)
+        .displayName
     }
   }
 }
@@ -70,7 +79,7 @@ export default {
   display: flex;
   justify-content: space-between;
   transition: transform 0.2s ease-in;
-  transition-delay: .5s;
+  transition-delay: 0.5s;
 }
 
 .name {
@@ -84,13 +93,16 @@ export default {
   height: 54px;
   position: relative;
   flex: 0 1 auto;
+  margin-right: 10px;
 }
 
 .icon-wrapper i {
   position: absolute; /*it can be fixed too*/
-  left:0; right:0;
-  top:0; bottom:0;
-  margin:auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 .header {
@@ -113,6 +125,7 @@ export default {
   flex-wrap: nowrap;
   display: flex;
   flex-direction: row;
+  padding: 10px 5px;
 }
 
 .header {
@@ -125,7 +138,7 @@ export default {
 }
 
 .was-completed {
-  transform: translate3d(2000px,0,0);
+  transform: translate3d(2000px, 0, 0);
 }
 
 .hidden {
@@ -138,5 +151,4 @@ export default {
   width: auto;
   white-space: nowrap;
 }
-
 </style>
