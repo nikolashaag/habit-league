@@ -24,6 +24,9 @@
               for="title"
             >Select how the challenge should look like.How ofte do you want to do this habit? Select the frequency.</label>
             <div class="spacing"></div>
+            <div class="row">
+              <label for>Title</label>
+            </div>
             <q-input
               :rules="[val => !!val || 'Field is required']"
               dark
@@ -31,7 +34,9 @@
               v-model="title"
               label="Habit Name"
             />
-            <div class="spacing"></div>
+            <div class="row">
+              <label for>Description (optional)</label>
+            </div>
             <q-input dark standout v-model="description" label="Remember your 'why?'" />
             <div class="spacing"></div>
             <div class="row">

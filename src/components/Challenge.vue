@@ -92,7 +92,22 @@
       v-if="options.expanded === true && options.members.length > 1"
     ></leader-board>
 
-    <q-card-actions class="weeks">
+    <div class="weeks">
+      <div v-if="options.expanded && weeks.length > 5" class="justify-center pagination-wrapper">
+        <q-btn
+          @click="onPaginationClick"
+          color="amber"
+          size="md"
+          class="text-dark"
+        >
+          <div class="row items-center no-wrap">
+            <div class="text-center">
+              {{expandedPagination ? 'Show less' : 'Show more'}}
+            </div>
+            <q-icon right size="xs" :name="expandedPagination ? 'fas fa-chevron-down' : 'fas fa-chevron-up'" />
+          </div>
+        </q-btn>
+      </div>
       <div :class="`leftover-wrapper rows-${weeks.length}`">
         <div
           v-for="(week, key) in weeks"
@@ -101,7 +116,7 @@
         >
           <transition name="fade">
             <week
-              v-if="isCurrentWeek(week) || options.expanded === true"
+              v-if="shouldShowWeek(week, weeks.length, key)"
               :challenge="{...options, endDate}"
               :loggedDays="loggedDays"
               :week="week"
@@ -110,7 +125,7 @@
           </transition>
         </div>
       </div>
-    </q-card-actions>
+    </div>
     <q-linear-progress
       rounded
       stripe
@@ -168,6 +183,7 @@ export default {
       countdown: '',
       countdownInterval: null,
       weeks: null,
+      expandedPagination: false,
       isDatePickerVisible: false
     }
   },
@@ -243,9 +259,23 @@ export default {
           member => member.id === this.$store.state.user.currentUser.uid
         )
       }
+    },
+    shouldShowWeek() {
+      return (week, habitLength, index) => {
+        if (habitLength < 6) {
+          return this.isCurrentWeek(week) || this.options.expanded === true
+        }
+        const isLastFive = (habitLength - index) < 6
+        return this.isCurrentWeek(week) || (this.options.expanded === true && (isLastFive || this.expandedPagination === true))
+      }
     }
   },
   methods: {
+    onPaginationClick: function(e) {
+      this.expandedPagination = !this.expandedPagination
+      e.preventDefault()
+      e.stopPropagation()
+    },
     copyUrl: function() {
       if (typeof navigator.share === 'function') {
         navigator
@@ -550,8 +580,7 @@ export default {
 }
 
 .weeks {
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 8px 16px;
 
   @include iphone5 {
     padding-left: 8px;
@@ -650,5 +679,12 @@ export default {
 .countdown h6 {
   margin-top: 24px;
   margin-bottom: 24px;
+}
+
+.pagination-wrapper {
+  width: 100%;
+  display: flex;
+  height: 36px;
+  margin-bottom: 1rem;
 }
 </style>
