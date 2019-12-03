@@ -11,6 +11,15 @@
         <note v-if="showTooltip" class="text-dark" title="HOW TO USE" :onClose="onTipClose">
           <p>Here you can see all completed Challenges, check your scores. You can also restart old challenges.</p>
         </note>
+        <transition name="expand">
+          <div class="search wrapper">
+            <q-input dark color="amber" :dense="true" v-model="search" label="Find habit">
+              <template v-slot:prepend>
+                <q-icon class="search-icon" name="fas fa-search" />
+              </template>
+            </q-input>
+          </div>
+        </transition>
       </div>
     </transition>
     <spinner v-if="isLoading" />
@@ -56,7 +65,7 @@ export default {
     },
     allChallenges: {
       get() {
-        return [...this.localChallenges, ...this.localArchive]
+        return [...this.filterdChallenges, ...this.filterdArchive]
       }
     },
     showTooltip: {
@@ -76,6 +85,28 @@ export default {
       get() {
         return this.$store.state.app.myChallenges
       }
+    },
+    filterdChallenges() {
+      let filterdChallenges = this.localChallenges
+      if (this.search) {
+        filterdChallenges = filterdChallenges.filter(challenge => {
+          const title = challenge.title.toLowerCase()
+          return title.includes(this.search.toLowerCase())
+        })
+      }
+
+      return filterdChallenges
+    },
+    filterdArchive() {
+      let filterdChallenges = this.localArchive
+      if (this.search) {
+        filterdChallenges = filterdChallenges.filter(challenge => {
+          const title = challenge.title.toLowerCase()
+          return title.includes(this.search.toLowerCase())
+        })
+      }
+
+      return filterdChallenges
     }
   },
   watch: {
@@ -214,7 +245,7 @@ export default {
 }
 
 .top {
-  height: 76px;
+  height: 86px;
 
   &--big {
     height: 150px;

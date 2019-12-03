@@ -137,7 +137,7 @@
     <dialog-popup title="Note day" :model="noteProgress" align="center">
       <q-btn label="Complete" color="green" @click="log('complete')" v-close-popup />
       <q-btn label="Skip" color="amber" class="text-dark" @click="log('skip')" v-close-popup />
-      <q-btn label="Downfall" color="red" @click="log('fail')" v-close-popup />
+      <q-btn label="Fail" color="red" @click="log('fail')" v-close-popup />
     </dialog-popup>
     <dialog-popup
       title="Are you sure you want to delete this Habit?"
