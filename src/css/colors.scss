@@ -1,15 +1,17 @@
 .bg-amber {
-  background-color: #E8DD4E !important;
+  background-color: #e8dd4e !important;
   &[disabled] {
     opacity: 1 !important;
-    background-color: #98913D !important;
+    background-color: #98913d !important;
   }
 }
 .bg-green {
-  background-color: #45BD41 !important;
+  background-color: #45bd41 !important;
 }
 
-.q-linear-progress__stripe, .q-linear-progress__track, .q-linear-progress__model {
+.q-linear-progress__stripe,
+.q-linear-progress__track,
+.q-linear-progress__model {
   color: #e2d400 !important;
 }
 
@@ -23,4 +25,17 @@
 
 .bg-dark {
   background: #1f1f1f !important;
+}
+
+.q-linear-progress__stripe {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.35) 25%,
+    transparent 43%,
+    transparent 57%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.35) 75%,
+    transparent 75%,
+    transparent
+  ) !important;
 }

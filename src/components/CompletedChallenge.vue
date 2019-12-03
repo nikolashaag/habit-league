@@ -75,7 +75,22 @@
       v-if="options.expanded === true && options.members.length > 1"
     ></leader-board>
 
-    <q-card-actions class="weeks" v-if="options.expanded">
+    <div class="weeks" v-if="options.expanded">
+      <div v-if="options.expanded && weeks.length > 5" class="justify-center pagination-wrapper">
+        <q-btn
+          @click="onPaginationClick"
+          color="amber"
+          size="md"
+          class="text-dark"
+        >
+          <div class="row items-center no-wrap">
+            <div class="text-center">
+              {{expandedPagination ? 'Show less' : 'Show more'}}
+            </div>
+            <q-icon right size="xs" :name="expandedPagination ? 'fas fa-chevron-down' : 'fas fa-chevron-up'" />
+          </div>
+        </q-btn>
+      </div>
       <div :class="`leftover-wrapper rows-${weeks.length}`">
         <div
           v-for="(week, key) in weeks"
@@ -84,7 +99,7 @@
         >
           <transition name="fade">
             <week
-              v-if="options.expanded === true"
+              v-if="shouldShowWeek(week, weeks.length, key)"
               :challenge="{ ...options, endDate }"
               :loggedDays="loggedDays"
               :week="week"
@@ -93,7 +108,7 @@
           </transition>
         </div>
       </div>
-    </q-card-actions>
+    </div>
     <q-card-section class="button-section">
       <q-btn
         @click="() => (isDatePickerVisible = !isDatePickerVisible)"
@@ -219,6 +234,7 @@ export default {
       prolongHabit: false,
       confirmProlong: false,
       leaveChallenge: false,
+      expandedPagination: false,
       weeks: null,
       newEndDate: date.formatDate(new Date(), 'YYYY/MM/DD')
     }
@@ -230,6 +246,15 @@ export default {
   },
   props: ['options', 'onExpand', 'archivable'],
   computed: {
+    shouldShowWeek() {
+      return (week, habitLength, index) => {
+        if (habitLength < 6) {
+          return this.options.expanded === true
+        }
+        const isLastFive = (habitLength - index) < 6
+        return this.options.expanded === true && (isLastFive || this.expandedPagination === true)
+      }
+    },
     loggedDays: {
       get() {
         const loggedDays = this.options.loggedDays || []
@@ -297,6 +322,11 @@ export default {
     }
   },
   methods: {
+    onPaginationClick: function(e) {
+      this.expandedPagination = !this.expandedPagination
+      e.preventDefault()
+      e.stopPropagation()
+    },
     formatDate: function(date) {
       const day = date.getDate()
       const monthIndex = date.getMonth()
@@ -483,6 +513,11 @@ export default {
     padding-bottom: 16px;
     margin-bottom: 16px;
   }
+  .weeks {
+    position: relative;
+    min-height: calc(100vh - 161px);
+    overflow: scroll;
+  }
 }
 
 .expand-enter-active,
@@ -660,5 +695,12 @@ export default {
       font-size: 10px !important;
     }
   }
+}
+
+.pagination-wrapper {
+  width: 100%;
+  display: flex;
+  height: 36px;
+  margin-bottom: 1rem;
 }
 </style>
