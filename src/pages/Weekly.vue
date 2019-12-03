@@ -224,9 +224,10 @@ export default {
               )
           )
           .map(challenge => {
+            const localChallenge = this.localChallenges.find(chal => challenge.id === chal.id)
             return {
               ...challenge,
-              expanded: false,
+              expanded: (localChallenge && localChallenge.expanded) || false,
               oneChallengeExpanded: false
             }
           })
