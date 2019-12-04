@@ -39,8 +39,11 @@
             <q-item clickable @click="copyUrl">
               <q-item-section>Invite link</q-item-section>
             </q-item>
-            <q-item clickable @click="isDatePickerVisible = true">
+            <q-item clickable v-if="!reminder" @click="isReminderVisible = true">
               <q-item-section>Set a reminder</q-item-section>
+            </q-item>
+            <q-item clickable v-if="reminder" @click="deleteReminder">
+              <q-item-section>Delete Reminder</q-item-section>
             </q-item>
           </q-list>
         </q-menu>
@@ -53,7 +56,14 @@
       </div>
       <div class="header">
         <div class="text-title">{{ options.title }}</div>
-        <div class="text-subtitle">{{ readableFrequency }}</div>
+        <div class="text-subtitle">
+          {{ readableFrequency }}
+          <reminder
+            :is-visible="isReminderVisible"
+            @close="isReminderVisible = false"
+            :challenge="options"
+          ></reminder>
+        </div>
         <p v-if="options.expanded">{{ options.description }}</p>
       </div>
       <div v-if="currentUser">
@@ -78,11 +88,6 @@
           </div>
         </div>
       </div>
-      <date-picker
-        :is-visible="isDatePickerVisible"
-        @close="isDatePickerVisible = false"
-        :challenge="options"
-      ></date-picker>
     </q-card-section>
     <q-card-section class="countdown flex flex-center" v-if="isInFuture">
       <h6>{{ countdown }}</h6>
@@ -94,17 +99,14 @@
 
     <div class="weeks">
       <div v-if="options.expanded && weeks.length > 5" class="justify-center pagination-wrapper">
-        <q-btn
-          @click="onPaginationClick"
-          color="amber"
-          size="md"
-          class="text-dark"
-        >
+        <q-btn @click="onPaginationClick" color="amber" size="md" class="text-dark">
           <div class="row items-center no-wrap">
-            <div class="text-center">
-              {{expandedPagination ? 'Show less' : 'Show more'}}
-            </div>
-            <q-icon right size="xs" :name="expandedPagination ? 'fas fa-chevron-down' : 'fas fa-chevron-up'" />
+            <div class="text-center">{{expandedPagination ? 'Show less' : 'Show more'}}</div>
+            <q-icon
+              right
+              size="xs"
+              :name="expandedPagination ? 'fas fa-chevron-down' : 'fas fa-chevron-up'"
+            />
           </div>
         </q-btn>
       </div>
@@ -164,7 +166,7 @@ import { sort } from '../helpers/utils'
 import week from './Week'
 import LeaderBoard from './Leaderboard'
 import DialogPopup from './DialogPopup.vue'
-import DatePicker from './Reminders/DatePicker.vue'
+import Reminder from './Reminder/Index.vue'
 import {
   getReadableFrequency,
   getScore,
@@ -184,14 +186,14 @@ export default {
       countdownInterval: null,
       weeks: null,
       expandedPagination: false,
-      isDatePickerVisible: false
+      isReminderVisible: false
     }
   },
   components: {
     week,
     LeaderBoard,
     DialogPopup,
-    DatePicker
+    Reminder
   },
   props: ['options', 'onExpand'],
   computed: {
@@ -260,17 +262,33 @@ export default {
         )
       }
     },
+    reminder() {
+      let currentUser = this.$store.state.user.currentUser.uid
+      let currentReminder =
+        this.options.reminders &&
+        this.options.reminders.find(reminder => reminder.userID === currentUser)
+      return currentReminder
+    },
     shouldShowWeek() {
       return (week, habitLength, index) => {
         if (habitLength < 6) {
           return this.isCurrentWeek(week) || this.options.expanded === true
         }
-        const isLastFive = (habitLength - index) < 6
-        return this.isCurrentWeek(week) || (this.options.expanded === true && (isLastFive || this.expandedPagination === true))
+        const isLastFive = habitLength - index < 6
+        return (
+          this.isCurrentWeek(week) ||
+          (this.options.expanded === true &&
+            (isLastFive || this.expandedPagination === true))
+        )
       }
     }
   },
   methods: {
+    deleteReminder: function() {
+      this.$store.dispatch('app/deleteHabitReminder', {
+        challenge: this.options
+      })
+    },
     onPaginationClick: function(e) {
       this.expandedPagination = !this.expandedPagination
       e.preventDefault()

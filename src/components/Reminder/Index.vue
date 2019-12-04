@@ -1,8 +1,8 @@
 <template>
-  <div class="q-pa-md text-black" v-if="isVisible || isSet">
+  <div class="inline-block text-black" v-if="isVisible || isSet">
     <div class="q-gutter-sm">
-      <q-badge color="teal">
-        <span class="time" @click="showTimePicker()">{{eventHour}}</span>
+      <q-badge color="white">
+        <span class="text-black" @click="showTimePicker()">@ {{eventHour}}</span>
       </q-badge>
     </div>
 
@@ -17,7 +17,7 @@
 import { date } from 'quasar'
 
 export default {
-  name: 'date-picker',
+  name: 'reminder',
   props: ['challenge', 'isVisible'],
   data: function() {
     return {
@@ -27,6 +27,23 @@ export default {
     }
   },
   watch: {
+    challenge: {
+      handler: function() {
+        let currentUser = this.$store.state.user.currentUser.uid
+        let currentReminder =
+          this.challenge.reminders &&
+          this.challenge.reminders.find(
+            reminder => reminder.userID === currentUser
+          )
+        this.startDate =
+          (currentReminder && currentReminder.startDate) ||
+          date.formatDate(new Date(), 'YYYY-MM-DD HH:mm')
+        this.repeatOn = (currentReminder && currentReminder.repeatOn) || []
+
+        this.isSet = currentReminder && currentReminder.startDate
+      },
+      immediate: true
+    },
     isVisible: function() {
       if (this.isVisible) {
         this.showTimePicker()
@@ -71,18 +88,6 @@ export default {
       this.isSet = true
       this.$emit('close')
     }
-  },
-  created: function() {
-    let currentUser = this.$store.state.user.currentUser.uid
-    let currentReminder =
-      this.challenge.reminders &&
-      this.challenge.reminders.find(reminder => reminder.userID === currentUser)
-    this.startDate =
-      (currentReminder && currentReminder.startDate) ||
-      date.formatDate(new Date(), 'YYYY-MM-DD HH:mm')
-    this.repeatOn = (currentReminder && currentReminder.repeatOn) || []
-
-    this.isSet = currentReminder && currentReminder.startDate
   }
 }
 </script>
