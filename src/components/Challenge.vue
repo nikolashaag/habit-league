@@ -299,7 +299,7 @@ export default {
         navigator
           .share({
             title: 'Hey, I dare you!',
-            text: `Let's change our habits`,
+            text: `Let's Improve our habits, starting with [${this.options.title} ${this.readableFrequency}]`,
             url:
               window.location.origin +
               '/#/invite?challengeId=' +
