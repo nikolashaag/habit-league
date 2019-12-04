@@ -143,11 +143,13 @@ export default {
         }
       }
       groupedChallenges[category].chartData = categoryChartData
+      console.log(habits)
+
       groupedChallenges[category].bestHabits = habits
-        .sort((a, b) => a > b)
+        .sort((a, b) => a.successRate > b.successRate)
         .splice(0, 3)
       groupedChallenges[category].worstHabits = habits
-        .sort((a, b) => a < b)
+        .sort((a, b) => a.successRate < b.successRate)
         .splice(0, 3)
     }
 
