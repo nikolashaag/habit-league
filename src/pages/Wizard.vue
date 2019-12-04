@@ -726,10 +726,10 @@ label {
   align-items: center;
   justify-content: center;
   margin-bottom: 32px;
+  padding-right: 30%;
 
   .title {
-    margin-left: -120px;
-    margin-left: -100px;
+    margin-left: -30%;
     font-size: 24px;
   }
 
@@ -750,6 +750,10 @@ label {
   }
 }
 
-.templates {
+.q-stepper__tab {
+    padding: 12px 1rem !important;
+}
+.q-stepper--vertical .q-stepper__step-inner {
+  padding: 0 24px 32px 44px;
 }
 </style>

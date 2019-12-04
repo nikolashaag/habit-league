@@ -4,16 +4,16 @@
       <div class="icon col-xs-2 col-sm-2 col-md-2">
         <q-icon
           :name="getIconName(challenge.icon)"
-          size="md"
+          size="sm"
           class="category-icon"
         ></q-icon>
       </div>
       <div class="text col-xs-8 col-sm-8 col-md-8">
-        <h5>{{ challenge.title }}</h5>
+        <h6>{{ challenge.title }}</h6>
         <p>{{ challenge.description }}</p>
       </div>
       <div class="add col-xs-2 col-sm-2 col-md-2">
-        <q-icon name="fas fa-plus" size="md" class="category-icon"></q-icon>
+        <q-icon name="fas fa-plus" size="sm" class="category-icon"></q-icon>
       </div>
     </div>
   </q-card>
@@ -37,7 +37,7 @@ export default {
 <style lang="scss" scoped>
 .template {
   background-color: rgba(255, 255, 255, 0.07);
-  margin-left: 2rem;
+  margin-left: 1rem;
   margin-bottom: 1rem;
   height: 4rem;
 
@@ -45,7 +45,7 @@ export default {
     height: 100%;
   }
 
-  h5,
+  h6,
   p {
     margin: 0;
   }
