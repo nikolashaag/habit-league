@@ -272,6 +272,30 @@ export function setHabitReminder(
     })
 }
 
+export function deleteHabitReminder(
+  { commit, state, rootState },
+  { challenge }
+) {
+  let reminders = challenge.reminders || []
+  console.log(reminders.length)
+  reminders.splice(
+    reminders.findIndex(r => r.userID === rootState.user.currentUser.uid)
+  )
+  commit('updateChallenge', { ...challenge, reminders })
+  var db = firebase.firestore()
+  db.collection('challenges')
+    .doc(challenge.id)
+    .update({
+      reminders
+    })
+    .then(function(docRef) {
+      // update challenge in store
+    })
+    .catch(function(error) {
+      console.error('Setting a reminder failed', error)
+    })
+}
+
 export function archiveHabit({ commit, state, rootState }, challenge) {
   const cleanedHabit = Object.keys(challenge)
     .filter(key => ALLOWED_HABIT_FIELDS.includes(key))

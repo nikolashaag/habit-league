@@ -90,9 +90,9 @@ export const getReadableFrequency = (
     case 'daily':
       return 'Daily'
     case 'per-week':
-      return `${perWeek} times per week`
+      return `${perWeek}x / week`
     case 'per-month':
-      return `${perMonth} times per month`
+      return `${perMonth}x / month`
     default:
       return specificDays.map(capitalize).join(', ')
   }
@@ -139,28 +139,27 @@ const currentDuration = challenge => {
 }
 
 export const getScore = (challenge, completions, endDate) => {
-  try {
-    const isOngoing = isChallengeOngoing(endDate)
-    let duration = isOngoing ? currentDuration(challenge) : challenge.duration
-    if (challenge.frequency === 'daily') {
-      return Math.round((100 * completions) / duration)
-    }
-    if (challenge.frequency === 'per-week') {
-      const weeks = Number(duration) / 7
-      const goal = weeks * Number(challenge.perWeek)
-      return Math.round((100 * completions) / goal)
-    }
-    if (challenge.frequency === 'per-month') {
-      const months = Number(duration) / 31
-      const goal = months * Number(challenge.perMonth)
-      return Math.round((100 * completions) / goal)
-    }
+  const isOngoing = isChallengeOngoing(endDate)
+  let duration = isOngoing ? currentDuration(challenge) : challenge.duration
+  if (challenge.frequency === 'daily') {
+    return Math.round((100 * completions) / duration)
+  }
+  if (challenge.frequency === 'per-week') {
     const weeks = Number(duration) / 7
-    const goal = weeks * Number(challenge.specificDays.length)
+    const goal = weeks * Number(challenge.perWeek)
     return Math.round((100 * completions) / goal)
-  } catch {
+  }
+  if (challenge.frequency === 'per-month') {
+    const months = Number(duration) / 31
+    const goal = months * Number(challenge.perMonth)
+    return Math.round((100 * completions) / goal)
+  }
+  const weeks = Number(duration) / 7
+  const goal = weeks * Number(challenge.specificDays.length)
+  if (completions === 0) {
     return 0
   }
+  return Math.round((100 * completions) / goal)
 }
 
 export const getBestStreak = (challenge, completions) => {
@@ -185,6 +184,9 @@ export const getBestStreak = (challenge, completions) => {
       const last = streaks[streaks.length - 1]
       streaks.push(parseInt(last, 10) + 1)
     }
+  }
+  if (!streaks.length) {
+    return 0
   }
 
   return Math.max(...streaks)
