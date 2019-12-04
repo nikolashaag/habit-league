@@ -90,9 +90,9 @@ export const getReadableFrequency = (
     case 'daily':
       return 'Daily'
     case 'per-week':
-      return `${perWeek} times per week`
+      return `${perWeek}x / week`
     case 'per-month':
-      return `${perMonth} times per month`
+      return `${perMonth}x / month`
     default:
       return specificDays.map(capitalize).join(', ')
   }
