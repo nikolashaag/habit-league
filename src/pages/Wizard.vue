@@ -15,14 +15,153 @@
         >
           <q-step
             :name="1"
-            title="Habit info"
+            title="Select a habit"
             icon="settings"
             :done="step > 1"
             class="dialog-inside"
           >
-            <label
-              for="title"
-            >Select how the challenge should look like.How ofte do you want to do this habit? Select the frequency.</label>
+            <q-card
+              class="template-category physical-health"
+              v-if="!expandedCategory || expandedCategory === 'physical-health'"
+              @click="() => expandCategory('physical-health')"
+            >
+              <div class="title">Physical health</div>
+            </q-card>
+            <div
+              class="templates"
+              v-if="expandedCategory === 'physical-health'"
+            >
+              <challenge-template
+                :onTemlateClick="() => templateClick(value)"
+                v-for="(value, key) in getTemplates('physical-health')"
+                :challenge="value"
+                :key="key"
+              />
+              <challenge-template
+                :onTemlateClick="customClick"
+                :challenge="{
+                  title: 'Custom habit',
+                  description: 'Define your own habit',
+                  icon: 'question'
+                }"
+              />
+            </div>
+            <q-card
+              class="template-category mental-health"
+              v-if="!expandedCategory || expandedCategory === 'mental-health'"
+              @click="() => expandCategory('mental-health')"
+            >
+              <div class="title">Mental health</div>
+            </q-card>
+            <div
+              class="templates"
+              v-if="expandedCategory === 'mental-health'"
+            >
+              <challenge-template
+                :onTemlateClick="() => templateClick(value)"
+                v-for="(value, key) in getTemplates('mental-health')"
+                :challenge="value"
+                :key="key"
+              />
+              <challenge-template
+                :onTemlateClick="customClick"
+                :challenge="{
+                  title: 'Custom habit',
+                  description: 'Define your own habit',
+                  icon: 'question'
+                }"
+              />
+            </div>
+            <q-card
+              class="template-category relationships"
+              v-if="!expandedCategory || expandedCategory === 'relationships'"
+              @click="() => expandCategory('relationships')"
+            >
+              <div class="title">Relationships</div>
+            </q-card>
+            <div
+              class="templates"
+              v-if="expandedCategory === 'relationships'"
+            >
+              <challenge-template
+                :onTemlateClick="() => templateClick(value)"
+                v-for="(value, key) in getTemplates('relationships')"
+                :challenge="value"
+                :key="key"
+              />
+              <challenge-template
+                :onTemlateClick="customClick"
+                :challenge="{
+                  title: 'Custom habit',
+                  description: 'Define your own habit',
+                  icon: 'question'
+                }"
+              />
+            </div>
+            <q-card
+              class="template-category career"
+              v-if="!expandedCategory || expandedCategory === 'career'"
+              @click="() => expandCategory('career')"
+            >
+              <div class="title">Career</div>
+            </q-card>
+            <div
+              class="templates"
+              v-if="expandedCategory === 'career'"
+            >
+              <challenge-template
+                :onTemlateClick="() => templateClick(value)"
+                v-for="(value, key) in getTemplates('career')"
+                :challenge="value"
+                :key="key"
+              />
+              <challenge-template
+                :onTemlateClick="customClick"
+                :challenge="{
+                  title: 'Custom habit',
+                  description: 'Define your own habit',
+                  icon: 'question'
+                }"
+              />
+            </div>
+            <q-card
+              class="template-category hobbies"
+              v-if="!expandedCategory || expandedCategory === 'hobbies'"
+              @click="() => expandCategory('hobbies')"
+            >
+              <div class="title">Hobbies</div>
+            </q-card>
+            <div
+              class="templates"
+              v-if="expandedCategory === 'hobbies'"
+            >
+              <challenge-template
+                :onTemlateClick="() => templateClick(value)"
+                v-for="(value, key) in getTemplates('hobbies')"
+                :challenge="value"
+                :key="key"
+              />
+              <challenge-template
+                :onTemlateClick="customClick"
+                :challenge="{
+                  title: 'Custom habit',
+                  description: 'Define your own habit',
+                  icon: 'question'
+                }"
+              />
+            </div>
+          </q-step>
+          <q-step
+            :name="2"
+            title="Habit settings"
+            icon="settings"
+            :done="step > 2"
+            class="dialog-inside"
+          >
+            <label for="title"
+              >Select how the challenge should look like.How ofte do you want to
+              do this habit? Select the frequency.</label
+            >
             <div class="spacing"></div>
             <div class="row">
               <label for>Title</label>
@@ -37,7 +176,12 @@
             <div class="row">
               <label for>Description (optional)</label>
             </div>
-            <q-input dark standout v-model="description" label="Remember your 'why?'" />
+            <q-input
+              dark
+              standout
+              v-model="description"
+              label="Remember your 'why?'"
+            />
             <div class="spacing"></div>
             <div class="row">
               <label for>Choose frequency</label>
@@ -79,13 +223,25 @@
             <div class="row">
               <label for>Category</label>
             </div>
-            <q-select dark standout v-model="category" :options="categoryValues" label="Category" />
+            <q-select
+              dark
+              standout
+              v-model="category"
+              :options="categoryValues"
+              label="Category"
+            />
             <div class="spacing"></div>
 
             <div class="row">
               <label for>Icon</label>
             </div>
-            <q-select dark standout v-model="icon" :options="icons" label="Icon">
+            <q-select
+              dark
+              standout
+              v-model="icon"
+              :options="icons"
+              label="Icon"
+            >
               <template v-slot:option="scope">
                 <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                   <q-item-section avatar>
@@ -104,9 +260,17 @@
             </q-select>
           </q-step>
 
-          <q-step :name="2" title="Make it a challenge" icon="create_new_folder" :done="step > 2">
+          <q-step
+            :name="3"
+            title="Make it a challenge"
+            icon="create_new_folder"
+            :done="step > 3"
+          >
             <div class="row">
-              <label>Select a goal for the challenge to stay motivated. How long should it last? What will the winner get?</label>
+              <label
+                >Select a goal for the challenge to stay motivated. How long
+                should it last? What will the winner get?</label
+              >
             </div>
             <q-input
               dark
@@ -118,8 +282,15 @@
             >
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="startDate" @input="() => $refs.qDateProxy.hide()" />
+                  <q-popup-proxy
+                    ref="qDateProxy"
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date
+                      v-model="startDate"
+                      @input="() => $refs.qDateProxy.hide()"
+                    />
                   </q-popup-proxy>
                 </q-icon>
               </template>
@@ -139,12 +310,23 @@
               v-model="duration"
               label="Custom duration (number of days)"
             />
-            <q-input dark standout v-model="stake" label="Stake or reward (Optional)" />
+            <q-input
+              dark
+              standout
+              v-model="stake"
+              label="Stake or reward (Optional)"
+            />
             <div class="spacing"></div>
           </q-step>
 
-          <q-step :name="3" title="Set privacy" icon="assignment" :done="step > 3">
-            Set the privacy of the challenge. Will it be only for you and your friends? Or make it public and let anybody in the world join in.
+          <q-step
+            :name="4"
+            title="Set privacy"
+            icon="assignment"
+            :done="step > 4"
+          >
+            Set the privacy of the challenge. Will it be only for you and your
+            friends? Or make it public and let anybody in the world join in.
             <div class="q-gutter-sm">
               <q-radio v-model="privacy" val="private" label="Private" />
               <q-radio v-model="privacy" val="public" label="Public" />
@@ -154,7 +336,7 @@
           <template v-slot:navigation>
             <q-stepper-navigation>
               <q-btn
-                v-if="step !== 3"
+                v-if="step !== 4"
                 @click="$refs.stepper.next()"
                 color="amber"
                 label="Continue"
@@ -162,7 +344,7 @@
               />
               <q-btn
                 @click="onSubmit"
-                v-if="step === 3"
+                v-if="step === 4"
                 color="amber"
                 class="text-dark"
                 label="Finish"
@@ -183,20 +365,27 @@
   </q-page>
 </template>
 
-<style>
-</style>
+<style></style>
 
 <script>
 import { ICON_MAP, CATEGORY_MAP } from '../helpers/constants'
+import { HABIT_TEMPLATES } from '../helpers/templates'
 import { date } from 'quasar'
+import ChallengeTemplate from 'components/ChallengeTemplate.vue'
 
 export default {
   name: 'Wizard',
+  components: {
+    ChallengeTemplate
+  },
   computed: {
     isEditMode: {
       get() {
         return this.$route.query.edit
       }
+    },
+    getTemplates() {
+      return category => HABIT_TEMPLATES[category]
     },
     activeHabit: {
       get() {
@@ -206,32 +395,18 @@ export default {
   },
   created() {
     if (this.isEditMode) {
-      for (let key in this.activeHabit) {
-        if (key === 'duration') {
-          this.prefillDuration(this.activeHabit[key])
-        } else if (key === 'icon') {
-          this[key] = this.icons.find(
-            icon => icon.value === this.activeHabit[key]
-          )
-        } else if (key === 'frequency') {
-          this[key] = this.frequencyValues.find(
-            icon => icon.value === this.activeHabit[key]
-          )
-        } else if (key === 'category') {
-          this[key] = this.categoryValues.find(
-            icon => icon.value === this.activeHabit[key]
-          )
-        } else {
-          this[key] =
-            (this.activeHabit.hasOwnProperty(key) && this.activeHabit[key]) ||
-            ''
-        }
-      }
+      this.prefillChallenge()
+    }
+  },
+  mounted() {
+    if (this.isEditMode) {
+      this.$refs.stepper.next()
     }
   },
   data() {
     return {
       step: 1,
+      expandedCategory: null,
       title: '',
       iconMap: ICON_MAP,
       description: '',
@@ -245,6 +420,9 @@ export default {
       specificDays: [],
       icons: [
         { label: 'Exercise', value: 'exercise' },
+        { label: 'Instrument', value: 'guitar' },
+        { label: 'Paint', value: 'paint' },
+        { label: 'Write', value: 'writing' },
         { label: 'Meditate', value: 'meditate' },
         { label: 'Journal', value: 'journal' },
         { label: 'Running', value: 'run' },
@@ -252,6 +430,7 @@ export default {
         { label: 'Swimming', value: 'swim' },
         { label: 'Sweets', value: 'sweets' },
         { label: 'Drink', value: 'drink' },
+        { label: 'Water', value: 'water' },
         { label: 'Coffee', value: 'coffee' },
         { label: 'Sports', value: 'ball' },
         { label: 'Smoking', value: 'smoking' },
@@ -260,6 +439,7 @@ export default {
         { label: 'Pray', value: 'pray' },
         { label: 'Pills', value: 'pills' },
         { label: 'Food', value: 'food' },
+        { label: 'Friends', value: 'friends' },
         { label: 'Veggetables', value: 'veggetables' },
         { label: 'Fruits', value: 'fruits' },
         { label: 'Money', value: 'money' },
@@ -269,6 +449,8 @@ export default {
         { label: 'Shower', value: 'shower' },
         { label: 'Gaming', value: 'gaming' },
         { label: 'Coding', value: 'coding' },
+        { label: 'Phone', value: 'phone' },
+        { label: 'Smartphone', value: 'smartphone' },
         { label: 'Sleep', value: 'sleep' }
       ],
       days: [
@@ -353,6 +535,37 @@ export default {
     }
   },
   methods: {
+    prefillChallenge(challenge) {
+      const challengeToFill = challenge || this.activeHabit
+      for (let key in challengeToFill) {
+        if (key === 'duration') {
+          this.prefillDuration(challengeToFill[key])
+        } else if (key === 'icon') {
+          this[key] = this.icons.find(
+            icon => icon.value === challengeToFill[key]
+          )
+        } else if (key === 'frequency') {
+          this[key] = this.frequencyValues.find(
+            icon => icon.value === challengeToFill[key]
+          )
+        } else if (key === 'category') {
+          this[key] = this.categoryValues.find(
+            icon => icon.value === challengeToFill[key]
+          )
+        } else {
+          this[key] =
+            (challengeToFill.hasOwnProperty(key) && challengeToFill[key]) ||
+            ''
+        }
+      }
+    },
+    expandCategory(category) {
+      if (this.expandedCategory) {
+        this.expandedCategory = null
+      } else {
+        this.expandedCategory = category
+      }
+    },
     getDuration() {
       switch (this.challengeDuration) {
         case '1 Week':
@@ -391,8 +604,17 @@ export default {
           this.duration = duration
       }
     },
+    templateClick(challenge) {
+      for (let key in challenge) {
+        this[key] = challenge[key]
+      }
+      this.prefillChallenge(challenge)
+      this.$refs.stepper.goTo(4)
+    },
+    customClick(challenge) {
+      this.$refs.stepper.next()
+    },
     onSubmit(e) {
-      console.log('onSubmit')
       if (this.title && this.frequency && this.privacy) {
         if (
           this.frequency.value === 'specific' &&
@@ -428,6 +650,8 @@ export default {
               }
             ]
           }
+
+          // TODO: throw toast when succesfully added challenge
           if (this.isEditMode) {
             console.log('edit')
 
@@ -487,5 +711,45 @@ label {
 
 .q-stepper__tab {
   justify-content: flex-start !important;
+}
+
+.template-category {
+  height: 100px;
+  width: 100%;
+  background-size: auto 142%;
+  background-color: rgba(255, 255, 255, 0.07);
+  background-repeat: no-repeat;
+  background-origin: 0;
+  background-position: 105% 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+
+  .title {
+    margin-left: -120px;
+    margin-left: -100px;
+    font-size: 24px;
+  }
+
+  &.physical-health {
+    background-image: url('~assets/marginalia-downloading.png');
+  }
+  &.mental-health {
+    background-image: url('~assets/marginalia-come-back-later.png');
+  }
+  &.relationships {
+    background-image: url('~assets/marginalia-sign-in.png');
+  }
+  &.career {
+    background-image: url('~assets/marginalia-logged-out.png');
+  }
+  &.hobbies {
+    background-image: url('~assets/marginalia-searching.png');
+  }
+}
+
+.templates {
 }
 </style>
