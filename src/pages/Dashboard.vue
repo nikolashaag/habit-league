@@ -5,9 +5,17 @@
       v-for="(chartData, category) in challengesByCategory"
       :key="category.key"
     >
-      <h5>{{getCategory(category)}}</h5>
-      <div class="category__chart">
-        <bar-chart :data="chartData"></bar-chart>
+      <h6>{{getCategory(category)}}</h6>
+      <div class="category__performance">
+        <div class="category__top">
+          <b>Best 3</b>
+          <div v-for="(habit,index) in chartData.bestHabits" :key="index">{{habit.title}}</div>
+          <b>Worst 3</b>
+          <div v-for="(habit,index) in chartData.worstHabits" :key="index">{{habit.title}}</div>
+        </div>
+        <div class="category__chart">
+          <bar-chart :data="chartData.chartData"></bar-chart>
+        </div>
       </div>
     </div>
   </q-page>
@@ -92,44 +100,57 @@ export default {
     let groupedChallenges = this.challengesByCategory
 
     for (let category in groupedChallenges) {
-      let habits = groupedChallenges[category].map(habit => {
-        habit.successRate = this.getHabitSuccessRate(
-          habit,
-          this.$store.state.user.currentUser.uid
-        )
-        return habit
-      }).filter(habit => !habit.isPast)
+      let habits = groupedChallenges[category]
+        .map(habit => {
+          habit.successRate = this.getHabitSuccessRate(
+            habit,
+            this.$store.state.user.currentUser.uid
+          )
+          return habit
+        })
+        .filter(habit => !habit.isPast)
       const title = this.getCategory(category)
       let categoryChartData = {
         title,
         labels: habits.map(h => h.title),
         datasets: [
           {
-            label: title,
-            backgroundColor: 'rgba(226, 212, 2,0.7)',
-            data: habits.map(h => h.successRate)
+            data: habits.map(h => h.successRate),
+            backgroundColor: [
+              '#0074D9',
+              '#FF4136',
+              '#2ECC40',
+              '#FF851B',
+              '#7FDBFF',
+              '#B10DC9',
+              '#FFDC00',
+              '#001f3f',
+              '#39CCCC',
+              '#01FF70',
+              '#85144b',
+              '#F012BE',
+              '#3D9970',
+              '#111111',
+              '#AAAAAA'
+            ]
           }
         ],
         options: {
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  color: 'rgb(94, 94, 94)'
-                }
-              }
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  color: 'rgb(94, 94, 94)'
-                }
-              }
-            ]
+          responsive: true,
+          legend: {
+            display: false
           }
         }
       }
-      groupedChallenges[category] = categoryChartData
+      groupedChallenges[category].chartData = categoryChartData
+      console.log(habits)
+
+      groupedChallenges[category].bestHabits = habits
+        .sort((a, b) => a.successRate > b.successRate)
+        .splice(0, 3)
+      groupedChallenges[category].worstHabits = habits
+        .sort((a, b) => a.successRate < b.successRate)
+        .splice(0, 3)
     }
 
     this.challengesByCategory = groupedChallenges
@@ -138,12 +159,26 @@ export default {
 </script>
 
 <style lang="scss">
+h6 {
+  margin: 20px 5px 5px 0px;
+}
 .category {
-  width: 100%;
+  width: 100vw;
   padding: 0 20px;
 
+  .category__performance {
+    display: flex;
+    justify-content: space-between;
+  }
   &__chart {
-    padding-bottom: 50px;
+    width: 50%;
+  }
+  &__top {
+    margin-right: 20px;
+    b:last-of-type {
+      margin-top: 10px;
+      display: inline-block;
+    }
   }
 }
 </style>
