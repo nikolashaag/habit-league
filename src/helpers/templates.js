@@ -54,7 +54,7 @@ export const HABIT_TEMPLATES = {
     },
     'no-sodas': {
       category: 'physical-health',
-      description: 'No fuzzy drinks with sugar, drink water instead',
+      description: 'No fuzzy drinks with sugar',
       duration: 31,
       frequency: 'daily',
       icon: 'drink',

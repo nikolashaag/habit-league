@@ -726,10 +726,12 @@ label {
   align-items: center;
   justify-content: center;
   margin-bottom: 32px;
-  padding-right: 30%;
+  padding-right: 130px;
+  text-align: center;
+  word-break: break-word;
 
   .title {
-    margin-left: -30%;
+    // margin-left: -30%;
     font-size: 24px;
   }
 
