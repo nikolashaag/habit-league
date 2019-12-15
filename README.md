@@ -1,4 +1,4 @@
-# Challenge me (challenge-me)
+# Habit league
 
 A Quasar Framework app automatically deployed to https://habit-run.netlify.com
 

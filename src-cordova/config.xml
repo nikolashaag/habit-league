@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.metanoia.habitLeague" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Challenge me</name>
+    <name>Habit league</name>
     <description>A Quasar Framework app</description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team

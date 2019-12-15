@@ -1,8 +1,8 @@
 {
-  "name": "challenge-me",
+  "name": "habit-league",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Challenge me",
+  "description": "A social habit tracker",
+  "productName": "Habit league",
   "cordovaId": "com.metanoia.habitLeague",
   "author": "Haag, Nikolas (656) <nikolas.haag@daimler.com>",
   "private": true,
