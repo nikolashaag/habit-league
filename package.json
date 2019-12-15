@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A Quasar Framework app",
   "productName": "Challenge me",
-  "cordovaId": "com.metanoia.swarm-habit-tracker",
+  "cordovaId": "com.metanoia.habitLeague",
   "author": "Haag, Nikolas (656) <nikolas.haag@daimler.com>",
   "private": true,
   "scripts": {

@@ -108,6 +108,11 @@ export default {
       firebase
         .auth()
         .signInWithPopup(provider)
+        // For android signInWithPopup is not possible
+        // .signInWithRedirect(provider)
+        // .then(function() {
+        //   return firebase.auth().getRedirectResult()
+        // })
         .then(result => {
           console.log('google success saveUser', result)
           console.log('prevRoute', this.prevRoute)
