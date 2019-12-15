@@ -119,9 +119,9 @@ module.exports = function(ctx) {
       workboxPluginMode: 'InjectManifest',
       // workboxOptions: {}, // only for NON InjectManifest
       manifest: {
-        // name: 'Challenge me',
-        // short_name: 'Challenge me',
-        // description: 'A Quasar Framework app',
+        name: 'Habit League - Social habit tracker',
+        short_name: 'Habit League',
+        description: 'A social habit tracker',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
