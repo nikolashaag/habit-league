@@ -66,35 +66,13 @@
         </div>
         <p v-if="options.expanded">{{ options.description }}</p>
       </div>
-      <div v-if="currentUser">
-        <div class="row results-row text-center">
-          <div class="col-xs-4 col-sm-4 col-md-4">
-            <div class="status">
-              <q-icon name="fas fa-trophy" />
-              {{ currentUser.bestStreak }}
-            </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4">
-            <div class="status">
-              <q-icon name="fas fa-check-double" />
-              {{ currentUser.completedDays }}
-            </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4">
-            <div class="name">
-              <q-icon name="fas fa-chart-line" />
-              {{ currentUser.score }} %
-            </div>
-          </div>
-        </div>
-      </div>
     </q-card-section>
     <q-card-section class="countdown flex flex-center" v-if="isInFuture">
       <h6>{{ countdown }}</h6>
     </q-card-section>
     <leader-board
       :members="sortedMembers"
-      v-if="options.expanded === true && options.members.length > 1"
+      v-if="options.expanded === true"
     ></leader-board>
 
     <div class="weeks">
@@ -234,6 +212,7 @@ export default {
     },
     sortedMembers: {
       get() {
+        console.log('this.sortMembers(this.options.members || [])', this.sortMembers(this.options.members || []))
         try {
           return this.sortMembers(this.options.members || [])
         } catch {

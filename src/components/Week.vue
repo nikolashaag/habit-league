@@ -150,7 +150,7 @@ export default {
             moment().format('YYYY/MM/DD') ===
             moment(day.date).format('YYYY/MM/DD')
           if (isToday) {
-            return 'amber-borderd'
+            return 'white'
           }
       }
       return 'amber'

@@ -6,7 +6,7 @@
           <div class="">Order</div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-2">
-          <div class="">Name</div>
+          <div class="">{{ activeMembers.length === 1 ? '' : 'Name' }}</div>
         </div>
         <div class="col-xs-2 col-sm-2 col-md-2">
           <div class="">Score</div>
@@ -24,10 +24,10 @@
         :key="key + 'member'"
       >
         <div class="col-xs-2 col-sm-2 col-md-1">
-          <div class="number">{{ member.position }}</div>
+          <div class="number">{{ activeMembers.length === 1 ? '#' : member.position }}</div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-2">
-          <div class="name">{{ getDisplayName(member.id) }}</div>
+          <div class="name">{{ activeMembers.length === 1 ? 'Your stats' : getDisplayName(member.id) }}</div>
         </div>
         <div class="col-xs-2 col-sm-2 col-md-2">
           <div class="status">{{ member.score }} %</div>
@@ -56,6 +56,9 @@ export default {
   computed: {
     activeMembers: function() {
       console.log('members', this.members)
+      if (this.members.length === 1) {
+        return this.members
+      }
       return this.members.filter(member => member.completedDays)
     }
   }
@@ -69,7 +72,7 @@ export default {
   max-height: 174px;
   transition: all 0.2s ease-in-out;
   padding-bottom: 0;
-  margin-bottom: 10px;
+  margin-bottom: 2rem;
   color: #1f1f1f;
 }
 .leaderboard-row {
