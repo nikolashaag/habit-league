@@ -72,6 +72,15 @@ const routes = [
     }
   },
   {
+    path: '/privacy',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Privacy.vue') }],
+    meta: {
+      requiresAuth: false,
+      title: 'Login'
+    }
+  },
+  {
     path: '/sign-up',
     component: () => import('layouts/MyLayout.vue'),
     children: [{ path: '', component: () => import('pages/Signup.vue') }],
