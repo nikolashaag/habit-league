@@ -77,7 +77,7 @@ const routes = [
     children: [{ path: '', component: () => import('pages/Privacy.vue') }],
     meta: {
       requiresAuth: false,
-      title: 'Login'
+      title: 'Privacy'
     }
   },
   {
