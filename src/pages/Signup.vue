@@ -107,12 +107,12 @@ export default {
       provider.addScope('https://www.googleapis.com/auth/calendar')
       firebase
         .auth()
-        .signInWithPopup(provider)
+        // .signInWithPopup(provider)
         // For android signInWithPopup is not possible
-        // .signInWithRedirect(provider)
-        // .then(function() {
-        //   return firebase.auth().getRedirectResult()
-        // })
+        .signInWithRedirect(provider)
+        .then(function() {
+          return firebase.auth().getRedirectResult()
+        })
         .then(result => {
           console.log('google success saveUser', result)
           console.log('prevRoute', this.prevRoute)
