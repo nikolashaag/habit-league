@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="localModel">
+  <q-dialog @hide="onHide" @input="onInput" v-model="localModel">
     <q-card>
       <q-card-section>
         <div class="text-h6">{{title}}</div>
@@ -29,12 +29,24 @@
 export default {
   name: 'DialogPopup',
   props: ['confirm', 'cancel', 'title', 'description', 'model', 'align'],
-  computed: {
-    localModel: {
-      get() {
-        return this.model
-      },
-      set() {}
+  data() {
+    return {
+      localModel: false
+    }
+  },
+  mounted () {
+    this.localModel = this.model
+  },
+  updated (updatedProps) {
+    if (this.model !== this.localModel) {
+      this.localModel = this.model
+    }
+  },
+  methods: {
+    onInput: function (model) {
+      if (!model) {
+        this.$emit('close')
+      }
     }
   }
 }

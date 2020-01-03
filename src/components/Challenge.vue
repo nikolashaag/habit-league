@@ -114,7 +114,7 @@
       color="warning"
       :value="progress"
     />
-    <dialog-popup title="Note day" :model="noteProgress" align="center">
+    <dialog-popup @close="closeDialog" title="Note day" :model="noteProgress" align="center">
       <q-btn label="Complete" color="green" @click="log('complete')" v-close-popup />
       <q-btn label="Skip" color="amber" class="text-dark" @click="log('skip')" v-close-popup />
       <q-btn label="Fail" color="red" @click="log('fail')" v-close-popup />
@@ -263,6 +263,9 @@ export default {
     }
   },
   methods: {
+    closeDialog: function () {
+      this.noteProgress = false
+    },
     deleteReminder: function() {
       this.$store.dispatch('app/deleteHabitReminder', {
         challenge: this.options
