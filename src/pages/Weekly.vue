@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center challenges-page">
+  <q-page class="flex flex-center challenges-page text-center text-white">
     <h5 v-if="!isLoading && challenges.length === 0">
       You don't have any challenges yet. Quick start one by clicking the plus
       button

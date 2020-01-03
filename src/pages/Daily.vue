@@ -25,7 +25,7 @@
 
     <h5
       v-if="challenges.length === 0 && completedToday.length === 0"
-      class="text-white"
+      class="text-white text-center"
     >You don't have any challenges yet. Quick start one by clicking the plus button</h5>
     <spinner v-if="isLoading" />
     <div class="wrapper" v-if="!isLoading">
