@@ -1,9 +1,9 @@
 {
   "name": "habit-league",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A social habit tracker",
   "productName": "Habit league",
-  "cordovaId": "com.metanoia.habitLeague",
+  "cordovaId": "com.metanoia.swarm_habit_tracker",
   "author": "Haag, Nikolas (656) <nikolas.haag@daimler.com>",
   "private": true,
   "scripts": {

@@ -84,6 +84,14 @@
             <q-item-label caption>Logout from the App</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item>
+          <q-item-section avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Version</q-item-label>
+            <q-item-label caption>Beta 0.0.4</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
