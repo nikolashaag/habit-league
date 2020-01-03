@@ -1,6 +1,6 @@
 {
   "name": "habit-league",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A social habit tracker",
   "productName": "Habit league",
   "cordovaId": "com.metanoia.swarm_habit_tracker",
