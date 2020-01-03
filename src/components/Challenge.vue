@@ -10,6 +10,23 @@
     v-if="!(!options.expanded && options.oneChallengeExpanded)"
   >
     <q-card-section class="menus">
+      <div class="icon-wrapper">
+        <q-icon
+          :name="getIconName(options.icon)"
+          class="category-icon"
+        ></q-icon>
+      </div>
+      <div class="header">
+        <div class="text-title">{{ options.title }}</div>
+        <div class="text-subtitle">
+          {{ readableFrequency }}
+          <reminder
+            :is-visible="isReminderVisible"
+            @close="isReminderVisible = false"
+            :challenge="options"
+          ></reminder>
+        </div>
+      </div>
       <q-btn
         color="white"
         round
@@ -27,19 +44,31 @@
       >
         <q-menu cover auto-close>
           <q-list>
-            <q-item v-if="iAmAuthor" clickable @click="() => (deleteChallenge = !deleteChallenge)">
+            <q-item
+              v-if="iAmAuthor"
+              clickable
+              @click="() => (deleteChallenge = !deleteChallenge)"
+            >
               <q-item-section>Delete Habit</q-item-section>
             </q-item>
             <q-item v-if="iAmAuthor" clickable @click="editHabit">
               <q-item-section>Edit Habit</q-item-section>
             </q-item>
-            <q-item v-if="!iAmAuthor" clickable @click="() => (leaveChallenge = !leaveChallenge)">
+            <q-item
+              v-if="!iAmAuthor"
+              clickable
+              @click="() => (leaveChallenge = !leaveChallenge)"
+            >
               <q-item-section>Leave Habit</q-item-section>
             </q-item>
             <q-item clickable @click="copyUrl">
               <q-item-section>Invite link</q-item-section>
             </q-item>
-            <q-item clickable v-if="!reminder" @click="isReminderVisible = true">
+            <q-item
+              clickable
+              v-if="!reminder"
+              @click="isReminderVisible = true"
+            >
               <q-item-section>Set a reminder</q-item-section>
             </q-item>
             <q-item clickable v-if="reminder" @click="deleteReminder">
@@ -51,20 +80,8 @@
     </q-card-section>
 
     <q-card-section class="content">
-      <div class="icon-wrapper">
-        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
-      </div>
-      <div class="header">
-        <div class="text-title">{{ options.title }}</div>
-        <div class="text-subtitle">
-          {{ readableFrequency }}
-          <reminder
-            :is-visible="isReminderVisible"
-            @close="isReminderVisible = false"
-            :challenge="options"
-          ></reminder>
-        </div>
-        <p v-if="options.expanded">{{ options.description }}</p>
+      <div v-if="options.expanded && options.description">
+        Description: <i v-if="options.expanded">{{ options.description }}</i>
       </div>
     </q-card-section>
     <q-card-section class="countdown flex flex-center" v-if="isInFuture">
@@ -76,14 +93,26 @@
     ></leader-board>
 
     <div class="weeks">
-      <div v-if="options.expanded && weeks.length > 5" class="justify-center pagination-wrapper">
-        <q-btn @click="onPaginationClick" color="amber" size="md" class="text-dark">
+      <div
+        v-if="options.expanded && weeks.length > 5"
+        class="justify-center pagination-wrapper"
+      >
+        <q-btn
+          @click="onPaginationClick"
+          color="amber"
+          size="md"
+          class="text-dark"
+        >
           <div class="row items-center no-wrap">
-            <div class="text-center">{{expandedPagination ? 'Show less' : 'Show more'}}</div>
+            <div class="text-center">
+              {{ expandedPagination ? 'Show less' : 'Show more' }}
+            </div>
             <q-icon
               right
               size="xs"
-              :name="expandedPagination ? 'fas fa-chevron-down' : 'fas fa-chevron-up'"
+              :name="
+                expandedPagination ? 'fas fa-chevron-down' : 'fas fa-chevron-up'
+              "
             />
           </div>
         </q-btn>
@@ -97,7 +126,7 @@
           <transition name="fade">
             <week
               v-if="shouldShowWeek(week, weeks.length, key)"
-              :challenge="{...options, endDate}"
+              :challenge="{ ...options, endDate }"
               :loggedDays="loggedDays"
               :week="week"
               @noteProgressForDay="(day, e) => noteProgressForDay(day, e)"
@@ -114,9 +143,25 @@
       color="warning"
       :value="progress"
     />
-    <dialog-popup @close="closeDialog" title="Note day" :model="noteProgress" align="center">
-      <q-btn label="Complete" color="green" @click="log('complete')" v-close-popup />
-      <q-btn label="Skip" color="amber" class="text-dark" @click="log('skip')" v-close-popup />
+    <dialog-popup
+      @close="closeDialog"
+      title="Note day"
+      :model="noteProgress"
+      align="center"
+    >
+      <q-btn
+        label="Complete"
+        color="green"
+        @click="log('complete')"
+        v-close-popup
+      />
+      <q-btn
+        label="Skip"
+        color="amber"
+        class="text-dark"
+        @click="log('skip')"
+        v-close-popup
+      />
       <q-btn label="Fail" color="red" @click="log('fail')" v-close-popup />
     </dialog-popup>
     <dialog-popup
@@ -212,7 +257,6 @@ export default {
     },
     sortedMembers: {
       get() {
-        console.log('this.sortMembers(this.options.members || [])', this.sortMembers(this.options.members || []))
         try {
           return this.sortMembers(this.options.members || [])
         } catch {
@@ -263,7 +307,7 @@ export default {
     }
   },
   methods: {
-    closeDialog: function () {
+    closeDialog: function() {
       this.noteProgress = false
     },
     deleteReminder: function() {
@@ -492,13 +536,17 @@ export default {
 @import './src/css/breakpoints.scss';
 
 .menus {
-  position: absolute;
-  right: 0;
-  top: -8px;
+  // position: absolute;
+  // right: 0;
+  // top: -8px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   padding: 0;
   font-size: 3rem;
   color: white;
   z-index: 2;
+  height: 64px;
 
   @include sm {
     top: 0;
@@ -508,7 +556,6 @@ export default {
   position: relative;
   margin-bottom: 16px;
   // transition: min-height 0.5s ease;
-  min-height: 192px;
 }
 
 .challenge.expanded {
@@ -580,7 +627,7 @@ export default {
 }
 
 .weeks {
-  padding: 8px 16px;
+  padding: 0px 16px 8px 16px;
 
   @include iphone5 {
     padding-left: 8px;
@@ -614,35 +661,38 @@ export default {
 
 .icon-wrapper {
   display: inline-block;
-  width: 48px;
+  width: 64px;
   font-size: 32px;
   height: 54px;
+  min-width: 64px;
   position: relative;
-}
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.icon-wrapper i {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 12px;
-  bottom: 0;
-  margin: auto;
+  @include sm {
+    left: 0;
+  }
 }
 
 .header {
   display: inline-block;
-  height: 54px;
-  margin-left: 4px;
-
-  @include sm {
-    margin-left: 8px;
-  }
+  vertical-align: top;
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  align-self: center;
 
   .text-title {
     font-size: 1rem;
     font-weight: 500;
     line-height: 1.5rem;
     letter-spacing: 0.0125em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
     @include sm {
       font-size: 1.25rem;
@@ -670,9 +720,18 @@ export default {
 .falafel,
 .caret {
   font-size: 16px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  align-self: center;
 
   @include sm {
     font-size: 20px;
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
+    min-height: 48px;
   }
 }
 

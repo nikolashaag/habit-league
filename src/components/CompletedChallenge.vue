@@ -10,6 +10,23 @@
     v-if="!(!options.expanded && options.oneChallengeExpanded)"
   >
     <q-card-section class="menus">
+      <div class="icon-wrapper">
+        <q-icon
+          :name="getIconName(options.icon)"
+          class="category-icon"
+        ></q-icon>
+      </div>
+      <div class="header">
+        <div class="text-title">{{ options.title }}</div>
+        <div class="text-subtitle">
+          {{ readableFrequency }}
+          <reminder
+            :is-visible="isReminderVisible"
+            @close="isReminderVisible = false"
+            :challenge="options"
+          ></reminder>
+        </div>
+      </div>
       <q-btn
         color="white"
         round
@@ -39,15 +56,9 @@
     </q-card-section>
 
     <q-card-section class="content">
-      <div class="icon-wrapper">
-        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
-      </div>
-      <div class="header">
-        <div class="text-title">{{ options.title }}</div>
-        <div class="text-subtitle">{{ readableFrequency }}</div>
-        <p v-if="options.expanded">{{ options.description }}</p>
-      </div>
-    </q-card-section>
+      <div v-if="options.expanded && options.description">
+        Description: <i v-if="options.expanded">{{ options.description }}</i>
+      </div>    </q-card-section>
     <q-card-section class="results flex flex-center">
       <div class="row results-row">
         <div class="col-xs-4 col-sm-4 col-md-4">
@@ -486,13 +497,14 @@ export default {
 @import './src/css/breakpoints.scss';
 
 .menus {
-  position: absolute;
-  right: 0;
-  top: -8px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   padding: 0;
   font-size: 3rem;
   color: white;
   z-index: 2;
+  height: 64px;
 
   @include sm {
     top: 0;
@@ -501,7 +513,6 @@ export default {
 .challenge {
   margin-bottom: 16px;
   transition: min-height 0.5s ease;
-  min-height: 192px;
 }
 
 .challenge.expanded {
@@ -577,6 +588,8 @@ export default {
 }
 
 .weeks {
+  padding: 0px 16px 8px 16px;
+
   padding-left: 16px;
   padding-right: 16px;
 }
@@ -596,35 +609,39 @@ export default {
 
 .icon-wrapper {
   display: inline-block;
-  width: 48px;
+  width: 64px;
   font-size: 32px;
   height: 54px;
+  min-width: 64px;
   position: relative;
-}
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.icon-wrapper i {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 12px;
-  bottom: 0;
-  margin: auto;
+  @include sm {
+    left: 0;
+  }
 }
 
 .header {
   display: inline-block;
-  height: 54px;
-  margin-left: 4px;
-
-  @include sm {
-    margin-left: 8px;
-  }
+  vertical-align: top;
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  align-self: center;
+  margin-left: 8px;
 
   .text-title {
     font-size: 1rem;
     font-weight: 500;
     line-height: 1.5rem;
     letter-spacing: 0.0125em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
     @include sm {
       font-size: 1.25rem;
@@ -652,9 +669,18 @@ export default {
 .falafel,
 .caret {
   font-size: 16px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  align-self: center;
 
   @include sm {
     font-size: 20px;
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
+    min-height: 48px;
   }
 }
 
