@@ -1,5 +1,5 @@
 <template>
-  <q-dialog @hide="onHide" @input="onInput" v-model="localModel">
+  <q-dialog @input="onInput" v-model="localModel">
     <q-card>
       <q-card-section>
         <div class="text-h6">{{title}}</div>
