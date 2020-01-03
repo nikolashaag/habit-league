@@ -189,7 +189,7 @@ export default {
 .background {
   background: #121212;
   &.not-authenticated {
-    background: #1f1f1f !important;
+    background: #232323 !important;
   }
 }
 

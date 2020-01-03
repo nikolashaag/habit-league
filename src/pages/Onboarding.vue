@@ -117,7 +117,7 @@ export default {
 
 .welcome {
   padding: 5% 0;
-  color: #1f1f1f;
+  color: #232323;
   max-height: 100vh;
   display: flex;
   flex-direction: column;

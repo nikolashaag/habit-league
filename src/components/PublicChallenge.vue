@@ -169,7 +169,7 @@ export default {
 }
 
 .join-button {
-  color: #1f1f1f !important;
+  color: #232323 !important;
 }
 .p-0 {
   padding: 0 10px;

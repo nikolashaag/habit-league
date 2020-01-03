@@ -199,7 +199,7 @@ export default {
       width: calc(100% + 2px);
       height: 20px;
       border-radius: 50%;
-      background-color: #1f1f1f;
+      background-color: #232323;
       display: inline-block;
       vertical-align: middle;
       /* margin-right: 10px; */
@@ -213,7 +213,7 @@ export default {
       width: 100%;
       height: 20px;
       border-radius: 50%;
-      background-color: #1f1f1f;
+      background-color: #232323;
       display: inline-block;
       vertical-align: middle;
       /* margin-right: 10px; */
