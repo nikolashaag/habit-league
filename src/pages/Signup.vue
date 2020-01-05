@@ -17,6 +17,19 @@
         color="amber"
         standout
         dark
+        v-model="displayName"
+        label="Display name"
+        type="text"
+        :error="Boolean(displayError)"
+      >
+        <template v-slot:error>
+          {{ displayError }}
+        </template>
+      </q-input>
+      <q-input
+        color="amber"
+        standout
+        dark
         v-model="email"
         label="Email"
         type="text"
@@ -65,10 +78,12 @@ export default {
   data() {
     return {
       email: '',
+      displayName: '',
       password: '',
       error: null,
       passwordError: null,
-      emailError: null
+      emailError: null,
+      displayError: null
     }
   },
   methods: {
@@ -83,7 +98,7 @@ export default {
         .then(
           user => {
             console.log('user', user)
-            this.$store.dispatch('user/saveUser', user.user)
+            this.$store.dispatch('user/saveUser', { ...user.user, displayName: this.displayName })
 
             this.$store.commit('user/setUser', {
               ...user.additionalUserInfo.profile,

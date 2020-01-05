@@ -10,8 +10,8 @@ export async function saveUser({ commit, state }, user) {
       .add({
         displayName: user.displayName,
         uid: user.uid,
-        googleToken: user.googleToken,
-        googleRefreshToken: user.refreshToken
+        ...(user.googleToken && { googleToken: user.googleToken }),
+        ...(user.refreshToken && { googleRefreshToken: user.refreshToken })
       })
       .then(function(docRef) {
         console.log('Document written with ID: ', docRef)

@@ -307,9 +307,19 @@ export default {
     this.updateLocalChallanges(this.challenges)
     this.isLoading = false
 
-    const currentToken = await initMessaging()
-    if (currentToken) {
-      this.$store.dispatch('user/saveToken', currentToken)
+    if (window.FCMPlugin) {
+      window.FCMPlugin.getToken((token) => {
+        this.$store.dispatch('user/saveToken', token)
+      })
+      window.FCMPlugin.onTokenRefresh((token) => {
+        this.$store.dispatch('user/saveToken', token)
+      })
+    } else {
+      // For PWA
+      const currentToken = await initMessaging()
+      if (currentToken) {
+        this.$store.dispatch('user/saveToken', currentToken)
+      }
     }
   }
 }
