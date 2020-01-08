@@ -91,6 +91,20 @@ export default {
       this.emailError = null
       this.passwordError = null
       this.error = null
+      this.displayError = null
+
+      if (!this.displayName) {
+        this.displayError = 'Field is mandatory'
+        return
+      }
+      if (!this.email) {
+        this.emailError = 'Field is mandatory'
+        return
+      }
+      if (!this.password) {
+        this.passwordError = 'Field is mandatory'
+        return
+      }
 
       firebase
         .auth()
