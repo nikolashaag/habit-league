@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.metanoia.swarm_habit_tracker" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.metanoia.swarm_habit_tracker" version="0.0.9" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Habit league</name>
     <description>A social habit tracker</description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
@@ -19,6 +19,7 @@
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
         </edit-config>
+        <preference name="android-minSdkVersion" value="19" />
         <icon density="ldpi" src="res/android/icon-36-ldpi.png" />
         <icon density="mdpi" src="res/android/icon-48-mdpi.png" />
         <icon density="hdpi" src="res/android/icon-72-hdpi.png" />
