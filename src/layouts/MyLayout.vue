@@ -89,7 +89,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Version</q-item-label>
-            <q-item-label caption>Beta 0.0.9</q-item-label>
+            <q-item-label caption>Beta 0.0.10</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
