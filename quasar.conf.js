@@ -7,7 +7,7 @@ module.exports = function(ctx) {
     // --> boot files are part of "main.js"
     boot: ['i18n', 'axios', 'firebase', 'scroll', 'sentry'],
 
-    css: ['app.styl'],
+    css: ['global.scss'],
 
     extras: [
       // 'ionicons-v4',

@@ -209,43 +209,43 @@ export default {
 
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: left 0.3s ease-out;
+  transition: transform 0.3s ease-out;
   min-height: 804px;
   position: absolute;
   width: 100%;
   height: 100%;
 }
 .slide-right-enter {
-  left: -100%;
+  transform: translateX(-100%);
 }
 .slide-right-enter-to {
-  left: 0;
+  transform: translateX(0);
 }
 .slide-right-leave {
-  left: 0;
+  transform: translateX(0);
 }
 .slide-right-leave-to {
-  left: 100%;
+  transform: translateX(100%);
 }
 .slide-left-enter-active,
 .slide-left-leave-active {
-  transition: left 0.3s ease-out;
+  transition: transform 0.3s ease-out;
   min-height: 804px;
   position: absolute;
   width: 100%;
   height: 100%;
 }
 .slide-left-enter {
-  left: 100%;
+  transform: translateX(100%);
 }
 .slide-left-enter-to {
-  left: 0;
+  transform: translateX(0);
 }
 .slide-left-leave {
-  left: 0;
+  transform: translateX(0);
 }
 .slide-left-leave-to {
-  left: -100%;
+  transform: translateX(-100%);
 }
 
 .secondary-nav {
