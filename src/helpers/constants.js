@@ -34,6 +34,42 @@ export const ICON_MAP = {
   coding: 'fas fa-code',
   sleep: 'fas fa-bed'
 }
+export const EMOJI_MAP = {
+  question: '❓',
+  meditate: '🧘',
+  run: '🏃',
+  bike: '🚴',
+  journal: '📔',
+  paint: '🎨',
+  writing: '✍️',
+  swim: '🏊',
+  guitar: '🎸',
+  exercise: '🏋️',
+  sweets: '🧁',
+  drink: '🍹',
+  water: '🚰',
+  coffee: '☕',
+  ball: '⚽',
+  smoking: '🚬',
+  dog: '🐶',
+  friends: '👨‍👩‍👧‍👦',
+  book: '📖',
+  pray: '🙏',
+  pills: '💊',
+  food: '🍽️',
+  veggetables: '🍽️',
+  fruits: '🍌',
+  money: '💶',
+  business: '💼',
+  phone: '📞',
+  smartphone: '📱',
+  listen: '🎧',
+  clean: '🧹',
+  shower: '🛀',
+  gaming: '🎮',
+  coding: '💻',
+  sleep: '🛌'
+}
 
 export const CATEGORY_MAP = [
   { label: 'Physical Health', value: 'physical-health' },

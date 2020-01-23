@@ -2,11 +2,7 @@
   <q-card class="template" @click="onTemlateClick">
     <div class="row">
       <div class="icon col-xs-2 col-sm-2 col-md-2">
-        <q-icon
-          :name="getIconName(challenge.icon)"
-          size="sm"
-          class="category-icon"
-        ></q-icon>
+        <icon :icon="challenge.icon" />
       </div>
       <div class="text col-xs-10 col-sm-10 col-md-10">
         <h6>{{ challenge.title }}</h6>
@@ -20,17 +16,15 @@
 </template>
 
 <script>
-import { ICON_MAP } from '../helpers/constants'
+import Icon from './Icon'
 
 export default {
   name: 'ChallengeTemplate',
-  components: {},
+  components: {
+    Icon
+  },
   props: ['challenge', 'onTemlateClick'],
-  methods: {
-    getIconName: function(value) {
-      return ICON_MAP[value]
-    }
-  }
+  methods: {}
 }
 </script>
 
@@ -54,6 +48,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .icon {
+    font-size: 24px;
   }
 }
 </style>

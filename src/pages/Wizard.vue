@@ -244,8 +244,8 @@
             >
               <template v-slot:option="scope">
                 <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
-                  <q-item-section avatar>
-                    <q-icon :name="iconMap[scope.opt.value]" />
+                  <q-item-section class="dropdown-icon" avatar>
+                    <icon :icon="scope.opt.value" />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label v-html="scope.opt.label" />
@@ -254,7 +254,7 @@
               </template>
               <template v-slot:append>
                 <q-avatar>
-                  <q-icon :name="iconMap[icon.value]" />
+                  <icon :icon="icon.value" />
                 </q-avatar>
               </template>
             </q-select>
@@ -368,15 +368,17 @@
 <style></style>
 
 <script>
-import { ICON_MAP, CATEGORY_MAP } from '../helpers/constants'
+import { CATEGORY_MAP } from '../helpers/constants'
 import { HABIT_TEMPLATES } from '../helpers/templates'
 import { date } from 'quasar'
+import Icon from 'components/Icon'
 import ChallengeTemplate from 'components/ChallengeTemplate.vue'
 
 export default {
   name: 'Wizard',
   components: {
-    ChallengeTemplate
+    ChallengeTemplate,
+    Icon
   },
   computed: {
     isEditMode: {
@@ -408,7 +410,6 @@ export default {
       step: 1,
       expandedCategory: null,
       title: '',
-      iconMap: ICON_MAP,
       description: '',
       frequency: { label: 'Daily', value: 'daily' },
       frequencyValues: [
@@ -757,5 +758,9 @@ label {
 }
 .q-stepper--vertical .q-stepper__step-inner {
   padding: 0 24px 32px 44px;
+}
+
+.dropdown-icon {
+  font-size: 24px;
 }
 </style>
