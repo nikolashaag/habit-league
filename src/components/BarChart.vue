@@ -1,8 +1,8 @@
 <script>
-import { Doughnut } from 'vue-chartjs'
+import { Bar } from 'vue-chartjs'
 
 export default {
-  extends: Doughnut,
+  extends: Bar,
   props: {
     data: {
       type: Object,
