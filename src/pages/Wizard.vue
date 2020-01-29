@@ -22,9 +22,15 @@
           >
             <q-card
               class="template-category physical-health"
-              v-if="!expandedCategory || expandedCategory === 'physical-health'"
               @click="() => expandCategory('physical-health')"
             >
+              <q-btn
+                color="white"
+                round
+                flat
+                :icon="expandedCategory === 'physical-health' ? 'expand_less' : 'expand_more'"
+                class="caret"
+              ></q-btn>
               <div class="title">Physical health</div>
             </q-card>
             <div
@@ -48,9 +54,15 @@
             </div>
             <q-card
               class="template-category mental-health"
-              v-if="!expandedCategory || expandedCategory === 'mental-health'"
               @click="() => expandCategory('mental-health')"
             >
+              <q-btn
+                color="white"
+                round
+                flat
+                :icon="expandedCategory === 'mental-health' ? 'expand_less' : 'expand_more'"
+                class="caret"
+              ></q-btn>
               <div class="title">Mental health</div>
             </q-card>
             <div
@@ -74,9 +86,15 @@
             </div>
             <q-card
               class="template-category relationships"
-              v-if="!expandedCategory || expandedCategory === 'relationships'"
               @click="() => expandCategory('relationships')"
             >
+              <q-btn
+                color="white"
+                round
+                flat
+                :icon="expandedCategory === 'relationships' ? 'expand_less' : 'expand_more'"
+                class="caret"
+              ></q-btn>
               <div class="title">Relationships</div>
             </q-card>
             <div
@@ -100,9 +118,15 @@
             </div>
             <q-card
               class="template-category career"
-              v-if="!expandedCategory || expandedCategory === 'career'"
               @click="() => expandCategory('career')"
             >
+              <q-btn
+                color="white"
+                round
+                flat
+                :icon="expandedCategory === 'career' ? 'expand_less' : 'expand_more'"
+                class="caret"
+              ></q-btn>
               <div class="title">Career</div>
             </q-card>
             <div
@@ -126,9 +150,15 @@
             </div>
             <q-card
               class="template-category hobbies"
-              v-if="!expandedCategory || expandedCategory === 'hobbies'"
               @click="() => expandCategory('hobbies')"
             >
+              <q-btn
+                color="white"
+                round
+                flat
+                :icon="expandedCategory === 'hobbies' ? 'expand_less' : 'expand_more'"
+                class="caret"
+              ></q-btn>
               <div class="title">Hobbies</div>
             </q-card>
             <div
@@ -561,7 +591,7 @@ export default {
       }
     },
     expandCategory(category) {
-      if (this.expandedCategory) {
+      if (this.expandedCategory === category) {
         this.expandedCategory = null
       } else {
         this.expandedCategory = category
