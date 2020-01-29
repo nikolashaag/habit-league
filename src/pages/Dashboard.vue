@@ -7,12 +7,6 @@
     >
       <h6>{{getCategory(category)}}</h6>
       <div class="category__performance">
-        <div class="category__top">
-          <b>Best 3</b>
-          <div v-for="(habit,index) in chartData.bestHabits" :key="index">{{habit.title}}</div>
-          <b>Worst 3</b>
-          <div v-for="(habit,index) in chartData.worstHabits" :key="index">{{habit.title}}</div>
-        </div>
         <div class="category__chart">
           <bar-chart :data="chartData.chartData"></bar-chart>
         </div>
@@ -75,15 +69,16 @@ export default {
         frequency = habit.perMonth
       }
 
-      let loggedDays = (habit.loggedDays || []).filter(
-        d =>
+      let loggedDays = (habit.loggedDays || []).filter(d => {
+        return (
           d.status === 'complete' &&
           d.user === currentUserId &&
           moment(d.date, 'YYYY/MM/DD').isBetween(
-            moment().day(0),
-            moment().day(7)
+            moment().day(-7),
+            moment().day(0)
           )
-      ).length
+        )
+      }).length
 
       return Math.ceil((loggedDays / frequency) * 100)
     },
@@ -143,14 +138,6 @@ export default {
         }
       }
       groupedChallenges[category].chartData = categoryChartData
-      console.log(habits)
-
-      groupedChallenges[category].bestHabits = habits
-        .sort((a, b) => a.successRate > b.successRate)
-        .splice(0, 3)
-      groupedChallenges[category].worstHabits = habits
-        .sort((a, b) => a.successRate < b.successRate)
-        .splice(0, 3)
     }
 
     this.challengesByCategory = groupedChallenges
@@ -171,7 +158,7 @@ h6 {
     justify-content: space-between;
   }
   &__chart {
-    width: 50%;
+    width: 100%;
   }
   &__top {
     margin-right: 20px;
