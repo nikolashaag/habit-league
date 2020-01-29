@@ -47,7 +47,7 @@ export const EMOJI_MAP = {
   exercise: '🏋️',
   sweets: '🧁',
   drink: '🍹',
-  water: '🚰',
+  water: '🌊',
   coffee: '☕',
   ball: '⚽',
   smoking: '🚬',
