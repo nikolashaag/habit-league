@@ -17,12 +17,10 @@
         text-color="black"
         @click="$emit('noteProgressForDay', day, $event)"
       >
-        <span v-if="!isLastDay(day.date)" class="date">
+        <span v-if="!isLastDay(day.date)" :class="{date: true, 'is-today': isToday(day)}">
           {{ day.date.getDate() }}
           <span class="month" v-if="day.date.getDate() === 1">
-            {{
-            getMonthWrittenLocal(day.date.getMonth())
-            }}
+            {{ getMonthWrittenLocal(day.date.getMonth()) }}
           </span>
         </span>
         <span v-if="isLastDay(day.date)" class="date">End</span>
@@ -146,14 +144,11 @@ export default {
         case 'fail':
           return 'red'
         default:
-          const isToday =
-            moment().format('YYYY/MM/DD') ===
-            moment(day.date).format('YYYY/MM/DD')
-          if (isToday) {
-            return 'white'
-          }
       }
       return 'amber'
+    },
+    isToday(day) {
+      return moment().format('YYYY/MM/DD') === moment(day.date).format('YYYY/MM/DD')
     },
     isLastDay: function(day) {
       return date.isSameDate(day, this.challenge.endDate, 'day')
@@ -234,6 +229,10 @@ export default {
   color: #e4e4e4;
   transform: translateY(-50%);
   text-transform: none;
+
+  &.is-today {
+    font-weight: bold;
+  }
 }
 
 .month {
