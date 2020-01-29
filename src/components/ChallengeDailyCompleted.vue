@@ -2,7 +2,7 @@
   <q-card class="challenge text-white flex row">
     <q-card-section class="col-8 main-header">
       <div class="icon-wrapper">
-        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
+        <icon :icon="options.icon" />
       </div>
       <div class="header">
         <div class="text-h6">{{options.title}}</div>
@@ -21,7 +21,7 @@
 </style>
 
 <script>
-import { ICON_MAP } from '../helpers/constants'
+import Icon from './Icon'
 import { date } from 'quasar'
 import { getReadableFrequency } from '../helpers/calendar'
 
@@ -32,6 +32,9 @@ export default {
       noteProgress: false,
       complete: true
     }
+  },
+  components: {
+    Icon
   },
   props: ['options', 'onComplete'],
   computed: {
@@ -72,9 +75,6 @@ export default {
         },
         challengeId: this.options.id
       })
-    },
-    getIconName: function(value) {
-      return ICON_MAP[value]
     },
     getDisplayName: function(id) {
       return this.$store.state.user.users.find(user => user.uid === id)

@@ -2,7 +2,7 @@
   <q-card class="challenge text-white bg-dark" @click="() => expanded = !expanded">
     <q-card-section class="challenge__header">
       <div class="icon-wrapper">
-        <q-icon :name="getIconName(options.icon)" class="category-icon"></q-icon>
+        <icon :icon="options.icon" />
       </div>
       <div class="header">
         <div class="text-h6">{{options.title}}</div>
@@ -31,13 +31,14 @@
 </style>
 
 <script>
-import { ICON_MAP } from '../helpers/constants'
 import DialogPopup from './DialogPopup.vue'
+import Icon from './Icon'
 
 export default {
   name: 'Challenge',
   components: {
-    DialogPopup
+    DialogPopup,
+    Icon
   },
   data() {
     return {
@@ -63,9 +64,6 @@ export default {
     }
   },
   methods: {
-    getIconName: function(value) {
-      return ICON_MAP[value]
-    },
     joinChallenge: function(e) {
       this.noteProgress = true
       e.preventDefault()
@@ -86,6 +84,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import './src/css/breakpoints.scss';
+
 .caret {
   position: absolute;
   right: 0.5rem;
@@ -158,10 +158,19 @@ export default {
 
 .icon-wrapper {
   display: inline-block;
-  width: 48px;
+  width: 54px;
   font-size: 32px;
   height: 54px;
+  min-width: 54px;
   position: relative;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include sm {
+    left: 0;
+  }
 }
 
 .icon-wrapper i {
@@ -170,6 +179,7 @@ export default {
 
 .join-button {
   color: #232323 !important;
+  margin-bottom: 1rem;
 }
 .p-0 {
   padding: 0 10px;

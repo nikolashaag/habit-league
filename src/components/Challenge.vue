@@ -11,10 +11,7 @@
   >
     <q-card-section class="menus">
       <div class="icon-wrapper">
-        <q-icon
-          :name="getIconName(options.icon)"
-          class="category-icon"
-        ></q-icon>
+        <icon :icon="options.icon" />
       </div>
       <div class="header">
         <div class="text-title">{{ options.title }}</div>
@@ -184,10 +181,10 @@
 
 <script>
 import { date } from 'quasar'
-import { ICON_MAP } from '../helpers/constants'
 import { sort } from '../helpers/utils'
 import week from './Week'
 import LeaderBoard from './Leaderboard'
+import Icon from './Icon'
 import DialogPopup from './DialogPopup.vue'
 import Reminder from './Reminder/Index.vue'
 import {
@@ -216,7 +213,8 @@ export default {
     week,
     LeaderBoard,
     DialogPopup,
-    Reminder
+    Reminder,
+    Icon
   },
   props: ['options', 'onExpand'],
   computed: {
@@ -432,9 +430,6 @@ export default {
         })
       }
       return withPosition
-    },
-    getIconName: function(value) {
-      return ICON_MAP[value]
     },
     getLoggedDaysPerUser: function(uid) {
       const challengeId = this.options.id
