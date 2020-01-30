@@ -12,6 +12,22 @@ export default async ({ app, router, store, Vue }) => {
 
   firebase.initializeApp(config)
 
+  firebase
+    .auth()
+    .getRedirectResult()
+    .then(function(result) {
+      if (!result.user) {
+        return
+      }
+      console.log('REDIRECT RESULT -------', result)
+      const googleToken = result.credential.accessToken
+      console.log('user', { ...result.user, googleToken })
+      store.dispatch('user/saveUser', { ...result.user, googleToken })
+    })
+    .catch(function(error) {
+      console.log('Google auth failed', error)
+    })
+
   await new Promise(resolve => {
     firebase.auth().onAuthStateChanged(() => {
       resolve()

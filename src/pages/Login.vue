@@ -109,15 +109,6 @@ export default {
         .then(function() {
           return firebase.auth().getRedirectResult()
         })
-        .then(result => {
-          console.log('google success saveUser', result)
-          console.log('prevRoute', this.prevRoute)
-          const googleToken = result.credential.accessToken
-          console.log('user', { ...result.user, googleToken })
-          this.$store.dispatch('user/saveUser', { ...result.user, googleToken })
-
-          this.$router.replace('/weekly')
-        })
         .catch(err => {
           alert('Oops. ' + err.message)
         })
