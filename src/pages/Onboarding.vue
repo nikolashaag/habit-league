@@ -124,6 +124,9 @@ export default {
   justify-content: flex-end;
   max-width: 360px;
   width: 90%;
+  .q-carousel {
+    background-color: #fee083;
+  }
 
   .q-carousel__slide {
     padding-left: 0;
