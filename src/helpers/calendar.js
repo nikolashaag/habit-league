@@ -39,9 +39,10 @@ export const getWeeks = ({ duration, startDate, endDate }) => {
     weekNumbers.unshift(weekNumber)
   }
   let actualWeeks = unique(weekNumbers, 'week').reverse()
-  return actualWeeks.map(week => {
+  return actualWeeks.map((week, i) => {
     const mondayOfTheWeek = moment(week.year, 'YYYY')
-      .isoWeek(week.week)
+      .isoWeekYear(week.year)
+      .isoWeek(week.week - 1)
       .day(1)
       .toDate()
     return WEEK_MASK.map((day, index) => {

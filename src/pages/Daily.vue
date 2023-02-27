@@ -22,7 +22,6 @@
         <span>Let's get started !</span>
       </template>
     </h5>
-
     <h5
       v-if="challenges.length === 0 && completedToday.length === 0"
       class="text-white text-center"
@@ -150,7 +149,7 @@ export default {
                     }
                     return (
                       new Date(log.date).setHours(0, 0, 0, 0) >=
-                      getMonday(log.date).setHours(0, 0, 0, 0)
+                      getMonday(new Date()).setHours(0, 0, 0, 0)
                     )
                   })
                 return loggedComplete.length < chal.perWeek
@@ -294,6 +293,7 @@ export default {
   margin-bottom: 16px;
   /* Override quasar selectors */
   border: none !important;
+  background: #0f0f0f;
 }
 
 .item-wrapper .q-item {

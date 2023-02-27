@@ -17,6 +17,9 @@
         },
         "pwa": {
           "iconHash": "d39f74a95017fafa3033cd28c83ed97e"
+        },
+        "spa": {
+          "iconHash": "d39f74a95017fafa3033cd28c83ed97e"
         }
       },
       "build": {

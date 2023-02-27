@@ -4,7 +4,7 @@
       'challenge',
       'bg-dark',
       'text-white',
-      options.expanded && 'expanded'
+      options.expanded && 'expanded',
     ]"
     @click="() => onExpand(options.id)"
     v-if="!(!options.expanded && options.oneChallengeExpanded)"
@@ -33,7 +33,7 @@
       ></q-btn>
       <q-btn
         color="white"
-        @click="e => e.stopPropagation()"
+        @click="(e) => e.stopPropagation()"
         round
         flat
         icon="more_vert"
@@ -576,7 +576,7 @@ export default {
 
 .leftover-wrapper,
 .week-wrapper {
-  max-height: 174px;
+  // max-height: 174px;
   transition: all 0.2s ease-in-out;
 }
 
@@ -633,8 +633,8 @@ export default {
 .challenge.expanded {
   .weeks {
     position: relative;
-    min-height: calc(100vh - 161px);
-    overflow: scroll;
+    // min-height: calc(100vh - 161px);
+    // overflow: scroll;
   }
 }
 
